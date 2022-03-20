@@ -1,0 +1,9 @@
+
+#upload_button input[type=file] {
+    display:none;
+  }
+
+#choose_file_button {
+    background-color: white;
+    border:1px solid #999999;
+}

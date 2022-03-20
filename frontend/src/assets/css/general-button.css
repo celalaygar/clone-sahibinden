@@ -1,0 +1,151 @@
+#search-button {
+    background: #2196f3;
+    color: white;
+}
+#search-button-logistic {
+    background: #2196f1;
+    color: white;
+    inline-size: 3.5cm;
+}
+
+#search-button-stock {
+    background: #2196f2;
+    color: white;
+    inline-size: 6.7cm;
+}
+
+#search-button2 {
+    background: #2196f4;
+    color: white;
+    font-size: 80%;
+    inline-size:5.1cm;
+
+}
+
+
+
+/* Genel Buton Yaılandırmaları */
+
+#clear-button {
+    background: #3d7cce;
+    color: white;
+    inline-size: 2.8cm;
+}
+#add-button {
+    background: #4caf4f;
+    color: white;
+    inline-size: 3.1cm;  
+}
+#delete-button {
+    background: #f44336;
+    color: white;
+    
+    inline-size: 0.8cm;
+}
+#standart-button {
+    background: #e22619c9;
+    color: white;
+    inline-size: 2.8cm;   
+}
+#close-order-button {
+    background: #e22619c9;
+    color: white;
+    inline-size: 3.5cm;  
+}
+#close-button {
+    background: #f44335;
+    color: white;
+    inline-size: 2.5cm;   
+}
+#save-button {
+    background: #4caf5f;
+    color: white;
+    inline-size: 2.5cm;  
+}
+#drugCard-button {
+    background: #4caf5f;
+    color: white;
+}
+
+#detail-button {
+    background: #3d7cce;
+    color: white;
+}
+#edit-button {
+    background: #3d7cce;
+    color: white;
+    inline-size: 2.8cm;
+}
+
+ /* Fiyatlandırma Ekranı Butonlar */
+#detail-button-serPrice {
+    background: #3d7cce;
+    color: white;
+    inline-size: 2.6cm;
+}
+#edit-button-setPriceDetail {
+    background: #3d7cce;
+    color: white;
+    inline-size: 0.9cm;
+}
+#save-button-setPrice {
+    background: #4caf5f;
+    color: white;
+    inline-size: 1.9cm;  
+}
+#detail-button-setPrice {
+    background: #4caf5f;
+    color: white;
+    inline-size: 1.3cm;  
+}
+#detail-button-savePrice {
+    background: #3d7cce;
+    color: white;
+    inline-size: 3.7cm;  
+}
+
+
+
+
+
+
+
+
+
+#add-button-logistic {
+    background: #4caf51;
+    color: white;
+    inline-size: 3.5cm;
+}
+
+.add-button {
+    background: #4caf50;
+    color: white;
+}
+
+#detail-button-navlun {
+    background: #26a68a;
+    color: white;
+    inline-size:4cm;
+}
+#detail-button-stock {
+    background: #26a68a;
+    color: white;
+    inline-size: 2.5cm;
+}
+
+#excel-upload-button {
+    background: #388e3c;
+    color: white;
+}
+
+#extra-button2 {
+    background: #2a6f98;
+    color: white;
+    inline-size: 4.2cm;
+}
+#extra-button {
+    background: #2a6f97;
+    color: white;
+    
+}
