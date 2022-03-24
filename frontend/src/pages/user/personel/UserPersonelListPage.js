@@ -27,7 +27,6 @@ class  UserPersonelListPage extends Component {
             repeatNewPassword: undefined,
             currentUserId: undefined,
             isdisable: true,
-            roles: [],
             pendingApiCall: false,
             errors: {
             },
