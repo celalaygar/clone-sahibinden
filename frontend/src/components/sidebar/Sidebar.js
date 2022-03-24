@@ -22,29 +22,28 @@ const SideBarMenu = () => {
   let links = null;
   if (isLoggedIn) {
     links = (
-      <nav id="sidebar" >
         <ul className="list-unstyled components" >
-          { linkList.map((link, index)=>
+          { linkList.map((link)=>
               link.role.some((personRole) => personRole === role) ?
                   link.submenu.length === 0 ?
-                    <li key={index} className={triggerUseEffect === index && "active"}>
-                      <Link to={link.to} onClick={() => setTriggerUseEffect(index)}>
+                    <li key={link.name} className={triggerUseEffect === link.name && "active"}>
+                      <Link to={link.to} onClick={() => setTriggerUseEffect(link.name)}>
                         <FontAwesomeIcon className="fa-sm" icon={link.icon}/>
                         &nbsp;&nbsp; {link.name}
                       </Link>
                     </li>
                     :
-                    <li key={index} id="menu-li">
+                    <li key={link.name} id="menu-li">
                       <a href="#homeSubmenu2"
                          data-toggle="collapse"
                          aria-expanded="false"
                          className="dropdown-toggle menu-toggle">
                         <FontAwesomeIcon className="fa-sm" icon={link.icon}/>&nbsp;&nbsp; {link.name}</a>
                       <ul className="collapse list-unstyled" id="homeSubmenu2">
-                        { link.submenu.map((link, index) =>
+                        { link.submenu.map((link) =>
                             link.role.some((personRole) => personRole === role) ?
-                                <li key={index} className={triggerUseEffect === index && "active"}>
-                                  <Link to={link.to} onClick={() => setTriggerUseEffect(index)}>
+                                <li key={link.name} className={triggerUseEffect === link.name && "active"}>
+                                  <Link to={link.to} onClick={() => setTriggerUseEffect(link.name)}>
                                     <FontAwesomeIcon className="fa-sm" icon={link.icon}/>
                                     &nbsp;&nbsp; {link.name}
                                   </Link>
@@ -56,7 +55,6 @@ const SideBarMenu = () => {
                   : ""
           )}
         </ul>
-      </nav>
     );
   };
 
@@ -66,7 +64,9 @@ const SideBarMenu = () => {
         <LogoComponent source={ICON.rent100}  width={"100px"} height={"100px"} />
       </div>
       <div className="list-group ">
-        {links}
+          <nav id="sidebar" >
+            {links}
+          </nav>
       </div>
     </div>
   )
