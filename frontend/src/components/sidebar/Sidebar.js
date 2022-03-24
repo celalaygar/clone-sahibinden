@@ -48,11 +48,11 @@ const SideBarMenu = () => {
                                     &nbsp;&nbsp; {link.name}
                                   </Link>
                                 </li>
-                                : ""
+                                : null
                         )}
                       </ul>
                     </li>
-                  : ""
+                  : null
           )}
         </ul>
     );
