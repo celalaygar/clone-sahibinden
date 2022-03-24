@@ -26,14 +26,14 @@ const SideBarMenu = () => {
           { linkList.map((link)=>
               link.role.some((personRole) => personRole === role) ?
                   link.submenu.length === 0 ?
-                    <li key={link.name} className={triggerUseEffect === link.name && "active"}>
-                      <Link to={link.to} onClick={() => setTriggerUseEffect(link.name)}>
+                    <li key={link.to} className={triggerUseEffect === link.to && "active"}>
+                      <Link to={link.to} onClick={() => setTriggerUseEffect(link.to)}>
                         <FontAwesomeIcon className="fa-sm" icon={link.icon}/>
                         &nbsp;&nbsp; {link.name}
                       </Link>
                     </li>
                     :
-                    <li key={link.name} id="menu-li">
+                    <li key={link.to} id="menu-li">
                       <a href="#homeSubmenu2"
                          data-toggle="collapse"
                          aria-expanded="false"
@@ -42,8 +42,8 @@ const SideBarMenu = () => {
                       <ul className="collapse list-unstyled" id="homeSubmenu2">
                         { link.submenu.map((link) =>
                             link.role.some((personRole) => personRole === role) ?
-                                <li key={link.name} className={triggerUseEffect === link.name && "active"}>
-                                  <Link to={link.to} onClick={() => setTriggerUseEffect(link.name)}>
+                                <li key={link.to} className={triggerUseEffect === link.to && "active"}>
+                                  <Link to={link.to} onClick={() => setTriggerUseEffect(link.to)}>
                                     <FontAwesomeIcon className="fa-sm" icon={link.icon}/>
                                     &nbsp;&nbsp; {link.name}
                                   </Link>
