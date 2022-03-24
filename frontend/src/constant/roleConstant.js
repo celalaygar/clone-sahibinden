@@ -1,3 +1,4 @@
+export const ROLE_ALL = "ALL";
 export const ROLE_ADMIN = "ADMIN";
 export const ROLE_EXPORTER = "EXPORTER";
 export const ROLE_MANAGER = "MANAGER";

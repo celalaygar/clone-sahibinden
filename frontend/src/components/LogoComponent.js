@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 const LogoComponent = (props) => {
 
-    const { width, height } = props;
-    let source = null;
+    const { source, width, height } = props;
+
     return (
         <Link to="/index">
         <img
@@ -14,7 +14,6 @@ const LogoComponent = (props) => {
             src={source}
             alt={"logo-icon"} />
         </Link>
-            
     )
 }
 
