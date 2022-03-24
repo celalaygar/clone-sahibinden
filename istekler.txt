@@ -1,0 +1,14 @@
+0 -> Response isteklerinde id
+1 -> Exception id + Özel hataların id
+2 -> Ekran numara tanıma
+3 -> Validation
+4 -> Login ekran tasarımı (Yusuf)
+5 -> Sidebar (Yusuf + Sefa)
+6 -> Logo ekleme için ekran 
+7 -> Görüntü işleme
+8 -> Role Router + List
+9 -> Terminal Logları tasarımı 
+10 -> Backend tasarım inceleme
+11 -> Backend base package BaseEntity
+12 -> mockUp + Tasarım belirleme
+13 -> BitBucket (Yusuf + Sefa)
