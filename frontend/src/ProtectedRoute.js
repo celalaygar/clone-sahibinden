@@ -4,13 +4,14 @@ import * as ROLE from "./constant/roleConstant";
 import { PATH_DEFAULT } from "./constant/linkConstant";
 import AlertifyService from "./services/AlertifyService";
 
-const ProtectedRoute = ({ roles, children, redirectTo, isLoggedIn, role }) => {
-    
-    let some = Array.from(roles).some(r => r === role || role === ROLE.ROLE_ALL)
-    if (some) return children;
+const ProtectedRoute = ({ roles, children, isLoggedIn, role }) => {
 
-    AlertifyService.alert("Giriş Yetkiniz Yoktur.");
-    return <Navigate to={redirectTo || PATH_DEFAULT} />;
+    return isLoggedIn
+        ? Array.from(roles).some(r => r === role || role === ROLE.ROLE_ALL)
+            ? children
+            : <Navigate to={PATH_DEFAULT} replace />
+        : <Navigate to="/login" />
+
 }
 
 const mapStateToProps = (store) => {
