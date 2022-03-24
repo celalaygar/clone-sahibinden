@@ -1,3 +1,4 @@
+export const PATH_LOGIN = "/login";
 export const PATH_DEFAULT = "/";
 export const PATH_INDEX = "/index";
 export const PATH_GET_ALL_USERS = "/get-all-users";

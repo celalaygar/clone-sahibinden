@@ -70,8 +70,8 @@ class App extends Component {
     let { isLoggedIn } = this.props;
     let routeList = (
         <>
-          <Route path="/Login" element={ isLoggedIn ? <HomePage/> : <UserLoginPage />} />
-          <Route path="*" element={<HomePage />} />
+          <Route path={PATH.PATH_LOGIN} element={ isLoggedIn ? <HomePage/> : <UserLoginPage />} />
+          <Route path="*" element={<Navigate to="/"/>} />
           <Route path={PATH.PATH_DEFAULT} element={
             <ProtectedRoute roles={[ROLE.ROLE_ADMIN]}>
               <HomePage />
