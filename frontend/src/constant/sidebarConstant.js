@@ -31,7 +31,7 @@ export const linkList = [
                 icon : "minus" ,
                 name : "Şirket İşlemleri",
                 submenu : [],
-                role : [ROLE.ROLE_MANAGER]
+                role : [ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]
             },{
                 to : "/search-customer",
                 icon : "minus" ,

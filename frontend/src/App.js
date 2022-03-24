@@ -15,7 +15,6 @@ import AlertifyService from './services/AlertifyService';
 import Axios from 'axios';
 import InfoPage from './pages/information/InfoPage';
 import UserPersonelSearchPage from './pages/user/personel/UserPersonelSearchPage';
-import UserListPage from './pages/user/personel/UserPersonelListPage';
 import MyAccountEditPage from './pages/user/myAccount/MyAccountEditPage';
 import NyAccountPage from './pages/user/myAccount/MyAccountPage';
 import UserUpdatePage from './pages/user/UserUpdatePage';
@@ -23,6 +22,7 @@ import UserSignUpPage from './pages/user/UserSignUpPage';
 import MyAccountPasswordEdiPage from './pages/user/myAccount/MyAccountPasswordEdiPage';
 import ContactPage from './pages/information/ContactPage';
 import ProtectedRoute from './ProtectedRoute';
+import UserListPage from './pages/user/UserListPage';
 
 class App extends Component {
   constructor(props) {
