@@ -1,13 +1,14 @@
+import React, { useState } from 'react';
 import './simple-sidebar.css';
-import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LogoComponent from '../LogoComponent';
-import * as ROLE from '../../constant/roleConstant';
+import * as ICON from '../../assets/icons';
+import { linkList } from '../../constant/sidebarConstant';
 
+const SideBarMenu = () => {
 
-const SideBarMenu = props => {
   const { isLoggedIn, role } = useSelector(store => {
     return {
       isLoggedIn: store.isLoggedIn,
@@ -15,60 +16,57 @@ const SideBarMenu = props => {
       role: store.role
     };
   });
-  const [triggerUseEffect, setTriggerUseEffect] = useState('initial');
 
- 
+  const [triggerUseEffect, setTriggerUseEffect] = useState(0);
 
-  // useEffect(() => {
-  // }, [triggerUseEffect])
-
-  let links;
-  if (isLoggedIn && role === ROLE.ROLE_ADMIN) {
+  let links = null;
+  if (isLoggedIn) {
     links = (
-      <nav id="sidebar" >
         <ul className="list-unstyled components" >
-          <li className={triggerUseEffect === "index" && "active"}> <Link to="/index" onClick={() => setTriggerUseEffect('index')}> <FontAwesomeIcon className="fa-sm" icon="home"></FontAwesomeIcon>&nbsp;&nbsp; Anasayfa</Link> </li>
-          <li className={triggerUseEffect === "search-user" && "active"}> <Link to="/search-user" onClick={() => setTriggerUseEffect('search-user')}> <FontAwesomeIcon className="fa-sm" icon="user-circle"></FontAwesomeIcon>&nbsp;&nbsp; Personel İşlemleri</Link> </li>
-          <li className={triggerUseEffect === "search-company" && "active"} > <Link to="/search-company" onClick={() => setTriggerUseEffect('search-company')}><FontAwesomeIcon icon="minus"></FontAwesomeIcon>&nbsp;&nbsp; Şirket İşlemleri</Link> </li>
-          <li id="menu-li">
-            <a href="#homeSubmenu2"
-              data-toggle="collapse"
-              aria-expanded="false"
-              className="dropdown-toggle menu-toggle"><FontAwesomeIcon className="fa-sm" icon="users"></FontAwesomeIcon>&nbsp;&nbsp;Müşteri İşlemleri</a>
-            <ul className="collapse list-unstyled" id="homeSubmenu2">
-              <li className={triggerUseEffect === "search-company" && "active"} > <Link to="/search-company" onClick={() => setTriggerUseEffect('search-company')}><FontAwesomeIcon icon="minus"></FontAwesomeIcon>&nbsp;&nbsp; Şirket İşlemleri</Link> </li>
-              <li className={triggerUseEffect === "search-customer" && "active"}> <Link to="/search-customer" onClick={() => setTriggerUseEffect('search-customer')}><FontAwesomeIcon icon="minus"></FontAwesomeIcon>&nbsp;&nbsp; Müşteri İşlemleri</Link> </li>
-              <li className={triggerUseEffect === "search-customer-orders" && "active"}> <Link to="/search-customer-orders" onClick={() => setTriggerUseEffect('search-customer-orders')}><FontAwesomeIcon className="fa-sm" icon="minus"></FontAwesomeIcon>&nbsp;&nbsp;&nbsp;Sipariş İşlemleri</Link> </li>
-            </ul>
-          </li>
-          <li className={triggerUseEffect === "reporting-page" && "active"}> <Link to="/reporting-page" onClick={() => setTriggerUseEffect('reporting-page')}><FontAwesomeIcon className="fa-sm" icon="chart-line"></FontAwesomeIcon>&nbsp;&nbsp; Raporlama İşlemleri</Link> </li>
-          <li className={triggerUseEffect === "contact-page" && "active"}> <Link to="/contact-page" onClick={() => setTriggerUseEffect('contact-page')}><FontAwesomeIcon className="fa-sm" icon="phone"></FontAwesomeIcon>&nbsp;&nbsp; İletişim</Link> </li>
-          <li className={triggerUseEffect === "info-page" && "active"}> <Link to="/info-page" onClick={() => setTriggerUseEffect('info-page')}><FontAwesomeIcon className="fa-sm" icon="question-circle"></FontAwesomeIcon>&nbsp;&nbsp; Bilgi</Link> </li>
+          { linkList.map((link)=>
+              link.role.some((personRole) => personRole === role) ?
+                  link.submenu.length === 0 ?
+                    <li key={link.to} className={triggerUseEffect === link.to && "active"}>
+                      <Link to={link.to} onClick={() => setTriggerUseEffect(link.to)}>
+                        <FontAwesomeIcon className="fa-sm" icon={link.icon}/>
+                        &nbsp;&nbsp; {link.name}
+                      </Link>
+                    </li>
+                    :
+                    <li key={link.to} id="menu-li">
+                      <a href="#homeSubmenu2"
+                         data-toggle="collapse"
+                         aria-expanded="false"
+                         className="dropdown-toggle menu-toggle">
+                        <FontAwesomeIcon className="fa-sm" icon={link.icon}/>&nbsp;&nbsp; {link.name}</a>
+                      <ul className="collapse list-unstyled" id="homeSubmenu2">
+                        { link.submenu.map((link) =>
+                            link.role.some((personRole) => personRole === role) ?
+                                <li key={link.to} className={triggerUseEffect === link.to && "active"}>
+                                  <Link to={link.to} onClick={() => setTriggerUseEffect(link.to)}>
+                                    <FontAwesomeIcon className="fa-sm" icon={link.icon}/>
+                                    &nbsp;&nbsp; {link.name}
+                                  </Link>
+                                </li>
+                                : null
+                        )}
+                      </ul>
+                    </li>
+                  : null
+          )}
         </ul>
-      </nav>
     );
   };
-  
-  if (isLoggedIn && role === "USER") {
-    links = (
-      <nav id="sidebar">
-        <ul className="list-unstyled components">
-          <li> <Link to="/index">Anasayfa</Link> </li>
 
-          <li> <Link to="/index">İletişim</Link> </li>
-        </ul>
-      </nav>
-    );
-  };
-  
-  
   return (
     <div className="text-white " id="sidebar-wrapper">
       <div className="sidebar-heading ml-auto">
-        <LogoComponent />
+        <LogoComponent source={ICON.rent100}  width={"100px"} height={"100px"} />
       </div>
       <div className="list-group ">
-        {links}
+          <nav id="sidebar" >
+            {links}
+          </nav>
       </div>
     </div>
   )

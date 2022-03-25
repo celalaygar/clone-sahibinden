@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
@@ -16,9 +15,14 @@ import AlertifyService from './services/AlertifyService';
 import Axios from 'axios';
 import InfoPage from './pages/information/InfoPage';
 import UserPersonelSearchPage from './pages/user/personel/UserPersonelSearchPage';
+import MyAccountEditPage from './pages/user/myAccount/MyAccountEditPage';
+import NyAccountPage from './pages/user/myAccount/MyAccountPage';
+import UserUpdatePage from './pages/user/UserUpdatePage';
+import UserSignUpPage from './pages/user/UserSignUpPage';
+import MyAccountPasswordEdiPage from './pages/user/myAccount/MyAccountPasswordEdiPage';
 import ContactPage from './pages/information/ContactPage';
 import ProtectedRoute from './ProtectedRoute';
-
+import UserListPage from './pages/user/UserListPage';
 
 class App extends Component {
   constructor(props) {
@@ -60,38 +64,26 @@ class App extends Component {
 
   toggle = () => {
     this.setState({ toggled: !this.state.toggled });
-
   }
 
   render() {
-    const { isLoggedIn, role } = this.props;
+    let { isLoggedIn } = this.props;
     let routeList = (
-      <>
-        <Route path={PATH.PATH_DEFAULT} element={<UserLoginPage />} />
-        <Route path="*" element={<Navigate to={PATH.PATH_DEFAULT} />} />;
-      </>
-    );
-    if (isLoggedIn) {
-      routeList = (
         <>
-          <Route path="*" element={<Navigate to={PATH.PATH_DEFAULT} />} />
+          <Route path={PATH.PATH_LOGIN} element={ isLoggedIn ? <HomePage/> : <UserLoginPage />} />
+          <Route path="*" element={<Navigate to="/"/>} />
           <Route path={PATH.PATH_DEFAULT} element={
             <ProtectedRoute roles={[ROLE.ROLE_ADMIN]}>
               <HomePage />
             </ProtectedRoute>
           } />
           <Route path={PATH.PATH_INDEX} element={
-            <ProtectedRoute path={PATH.PATH_INDEX} roles={[ROLE.ROLE_ADMIN]}>
+            <ProtectedRoute path={PATH.PATH_INDEX} roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
               <HomePage />
             </ProtectedRoute>
           } />
-          <Route path="/info-page" element={
-            <ProtectedRoute roles={[ROLE.ROLE_ADMIN]}>
-              <InfoPage />
-            </ProtectedRoute>
-          } />
           <Route path="/search-company" element={
-            <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
+            <ProtectedRoute roles={[ROLE.ROLE_MANAGER]}>
               <CompanySearchPage />
             </ProtectedRoute>
           } />
@@ -106,55 +98,54 @@ class App extends Component {
             </ProtectedRoute>
           } />
           <Route path="/contact-page" element={
-            <ProtectedRoute roles={[ ROLE.ROLE_MANAGER]} >
+            <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]} >
               <ContactPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/info-page" element={
+            <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
+              <InfoPage />
+            </ProtectedRoute>
+          } />
+          <Route path={PATH.PATH_GET_ALL_USERS} element={
+            <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
+              <UserListPage />
+            </ProtectedRoute>
+          } />
+          <Route path={PATH.PATH_SAVE_USER} element={
+            <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
+              <UserSignUpPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/user-detail" element={
+            <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
+              <NyAccountPage />
+            </ProtectedRoute>
+          } />
+          v
+          <Route path={PATH.PATH_USER_FIND_BY_ID} element={
+            <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
+              <UserPage />
+            </ProtectedRoute>
+          } />
+          <Route path={PATH.PATH_EDIT_USER} element={
+            <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
+              <UserUpdatePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/update-my-account-password" element={
+            <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
+              <MyAccountPasswordEdiPage />
+            </ProtectedRoute>
+          } />
+          v
+          <Route path={PATH.PATH_UPDATE_MY_ACCOUNT} element={
+            <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
+              <MyAccountEditPage />
             </ProtectedRoute>
           } />
         </>
       )
-    }
-    let links = (
-      <Routes>
-        {routeList}
-      </Routes>
-    );
-
-
-    // let links = null;
-    // if (!isLoggedIn) {
-    //   links = (
-    //     <Routes>
-    //       {/* <Route path="/deneme" element={<Deneme />} />
-    //       <Route path="/deneme2" element={<Deneme2 />} /> */}
-    //       <Route exact path="/login" element={<UserLoginPage />} />
-    //       <Route exact path="/" element={<UserLoginPage/>} />
-    //       <Route path="*" element={<Navigate to ="/" />}/>
-    //     </Routes>
-    //   );
-    // }
-    // if (isLoggedIn && role === ROLE.ROLE_ADMIN) {
-    //   links = (
-    //     <Routes>
-    //       <Route exact path={PATH.PATH_INDEX} element={<HomePage />} />
-    //       <Route path="/info-page" element={<InfoPage />} />
-    //       <Route path="/contact-page" element={<ContactPage/>}/>
-
-    //       <Route path={PATH.PATH_GET_ALL_USERS} element={<UserListPage/>}   />
-    //       <Route path={PATH.PATH_SAVE_USER} element={<UserSignUpPage/>}   />
-    //       <Route path="/user-detail" element={<NyAccountPage/>}   />
-    //       <Route path={PATH.PATH_USER_FIND_BY_ID} element={<UserPage/>}   />
-    //       <Route path={PATH.PATH_EDIT_USER} element={<UserUpdatePage/>}   />
-    //       <Route path={PATH.PATH_UPDATE_MY_ACCOUNT} element={<MyAccountEditPage/>}   />
-    //       <Route path="/update-my-account-password" element={<MyAccountPasswordEdiPage/>}   />
-
-    //       <Route path={"/search-user"} element={<UserPersonelSearchPage/>}   />
-    //       <Route path="/search-company" element={<CompanySearchPage/>}   />   />
-    //       {/* <AuthenticatedRoute path="/search-company" element={CompanySearchPage}   /> */}
-    //       <Route path="*" element={<Navigate to ="/index" />}/>
-    //     </Routes>
-    //   );
-    // }
-
 
     let controlToggle = "d-flex";
     if (this.state.toggled === true) {
@@ -168,7 +159,9 @@ class App extends Component {
           <div className="row">
             <div className="col-sm-12">
               <BrowserRouter>
-                {links}
+                <Routes>
+                  {routeList}
+                </Routes>
               </BrowserRouter>
             </div>
           </div>
@@ -183,7 +176,9 @@ class App extends Component {
             <div id="page-content-wrapper">
               <TopMenu toggle={this.toggle} />
               <div className="container-fluid">
-                {links}
+                <Routes>
+                  {routeList}
+                </Routes>
               </div>
             </div>
           </BrowserRouter>
