@@ -9,6 +9,7 @@ import UserPage from './pages/user/UserPage';
 import CompanySearchPage from './pages/company/CompanySearchPage';
 import * as PATH from './constant/linkConstant';
 import * as ROLE from './constant/roleConstant';
+import { RouteBaseList } from './constant/routeLinksConstant';
 import ApiService from './services/base/ApiService';
 import { logoutAction } from './redux/AuthenticationAction';
 import AlertifyService from './services/AlertifyService';
@@ -71,8 +72,22 @@ class App extends Component {
     let routeList = (
         <>
           <Route path={PATH.PATH_LOGIN} element={ isLoggedIn ? <HomePage/> : <UserLoginPage />} />
-          <Route path="*" element={<Navigate to="/"/>} />
-          <Route path={PATH.PATH_DEFAULT} element={
+          {/* <Route path="*" element={<Navigate to="/"/>} /> */}
+
+          {
+            RouteBaseList.map((route, index) =>
+              <Route path={route.path} element={
+                route.protectedRoute ?
+                <ProtectedRoute roles={[...route.roles]}>
+                  {route.element}
+                </ProtectedRoute>
+                : 
+                route.element
+              } />
+            )
+          }
+          
+          {/* <Route path={PATH.PATH_DEFAULT} element={
             <ProtectedRoute roles={[ROLE.ROLE_ADMIN]}>
               <HomePage />
             </ProtectedRoute>
@@ -143,7 +158,7 @@ class App extends Component {
             <ProtectedRoute roles={[ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]}>
               <MyAccountEditPage />
             </ProtectedRoute>
-          } />
+          } /> */}
         </>
       )
 
