@@ -1,4 +1,4 @@
-package com.project.ecza.company.exception;
+package com.project.ecza.error.exception;
 
 public enum HttpErrorType {
     VALIDATION("VALIDATION"),

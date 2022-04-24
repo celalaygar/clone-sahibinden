@@ -1,4 +1,4 @@
-package com.project.ecza.company.exception;
+package com.project.ecza.error.exception;
 
 
 import com.project.ecza.error.ApiError;
