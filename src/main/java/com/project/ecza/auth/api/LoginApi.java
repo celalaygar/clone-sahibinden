@@ -65,8 +65,8 @@ public class LoginApi {
 			User user = opt.get();
 
 			//  üye giriş yaparken login aktifliğinin 1 olup olmadığını kontrol eder
-			if(user.getIsLoggedIn() == 1)
-				return ResponseEntity.status(HttpStatus.CONFLICT).body("CONFLICT");
+//			if(user.getIsLoggedIn() == 1)
+//				return ResponseEntity.status(HttpStatus.CONFLICT).body("CONFLICT");
 
 			//  üye giriş yaparken login aktifliğini 1 e çeker
 			user.setIsLoggedIn(1);

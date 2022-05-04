@@ -36,7 +36,7 @@ public class CompanyApi {
     @PostMapping("/page")
     public ResponseEntity<Page<SingleCompanyDto>> getAllWithPagination(
             @RequestHeader("Authorization") String authHeader ,
-            @PageableDefault(size = 3,sort = "companyId",direction = Sort.Direction.DESC) Pageable page,
+            @PageableDefault(size = 3,direction = Sort.Direction.DESC) Pageable page,
     @RequestBody SearchCompanyDto dto) throws Exception {
         return ResponseEntity.ok(companyService.getAllWithPagination(authHeader, page,dto));
     }

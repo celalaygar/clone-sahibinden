@@ -104,117 +104,127 @@ public class CompanyManager implements CompanyService {
         Page<SingleCompanyDto> pageList = null;
         SingleCompanyDto[] dtos = null;
         StringBuilder createSqlQuery = null;
-        User user = controlService.getUserFromToken(authHeader);
-        if (user.getRole() == Role.ADMIN) {
-            createSqlQuery = new StringBuilder("select * from company where status=1 ");
-            if (dto.getCompanyName() != null)
-                createSqlQuery.append("and company_name ILIKE  '%" + dto.getCompanyName() + "%' ");
-            if (dto.getCountryId() != null) {
-                Optional<Country> optCountry = countryRepository.findById(dto.getCountryId());
-                if (!optCountry.isPresent()) {
-                    log.info("Seçili Ülke Kaydı Bulunamadı..");
-                } else {
-                    createSqlQuery.append("and countryid = " + dto.getCountryId() + " ");
-                }
-            }
-            if (dto.getCity() != null) createSqlQuery.append("and  city ILIKE  '%" + dto.getCity() + "%' ");
-
-            if (dto.getUserId() != null) createSqlQuery.append("and  userid = " + dto.getUserId() + " ");
-
-            if (dto.getCreatedDate() != null)
-                createSqlQuery.append("and  created_date = " + dto.getCreatedDate() + " ");
-
-            if (page.getPageNumber() == 0) {
-                createSqlQuery.append("order by company_name limit " + page.getPageSize() + " offset " + page.getPageNumber());
-            } else {
-                createSqlQuery.append("order by company_name limit " + page.getPageSize() + " offset " + (page.getPageSize() * page.getPageNumber()));
-            }
-
-            List<Object> list = entityManager.createNativeQuery(createSqlQuery.toString(), Company.class).getResultList();
-
-            dtos = mapper.map(list, SingleCompanyDto[].class);
-
-        } else if (user.getRole() == Role.EXPORTER) {
-            createSqlQuery = new StringBuilder("select * from company where status=1 and userid =" + user.getUserId() + " ");
-            if (dto.getCompanyName() != null)
-                createSqlQuery.append("and company_name ILIKE  '%" + dto.getCompanyName() + "%' ");
-            if (dto.getCountryId() != null) {
-                Optional<Country> optCountry = countryRepository.findById(dto.getCountryId());
-                if (!optCountry.isPresent()) {
-                    log.info("Seçili Ülke Kaydı Bulunamadı..");
-                } else {
-                    createSqlQuery.append("and countryid = " + dto.getCountryId() + " ");
-                }
-            }
-            if (dto.getCity() != null) createSqlQuery.append("and  city ILIKE  '%" + dto.getCity() + "%' ");
-
-            if (dto.getCreatedDate() != null)
-                createSqlQuery.append("and  created_date = " + dto.getCreatedDate() + " ");
-
-            if (page.getPageNumber() == 0) {
-                createSqlQuery.append("order by company_name limit " + page.getPageSize() + " offset " + page.getPageNumber());
-            } else {
-                createSqlQuery.append("order by company_name limit " + page.getPageSize() + " offset " + (page.getPageSize() * page.getPageNumber()));
-            }
-
-            List<Object> list = entityManager.createNativeQuery(createSqlQuery.toString(), Company.class).getResultList();
-
-            dtos = mapper.map(list, SingleCompanyDto[].class);
-
+        Optional<Country> cc = null;
+        if(dto.getCountryId() != null){
+            cc = countryRepository.findById(dto.getCountryId());
         }
-        List<SingleCompanyDto> dtosList = Arrays.asList(dtos);
-
-        int start = 0;
-        int end = dtosList.size();
-        int totalCount = 0;
-
-
-        if (user.getRole() == Role.ADMIN) {
-            createSqlQuery = new StringBuilder("select count(*) from company where status=1 ");
-            if (dto.getCompanyName() != null)
-                createSqlQuery.append("and company_name ILIKE  '%" + dto.getCompanyName() + "%' ");
-            if (dto.getCountryId() != null) {
-                Optional<Country> optCountry = countryRepository.findById(dto.getCountryId());
-                if (!optCountry.isPresent()) {
-                    log.info("Seçili Ülke Kaydı Bulunamadı..");
-                } else {
-                    createSqlQuery.append("and countryid = " + dto.getCountryId() + " ");
-                }
-            }
-            if (dto.getCity() != null) createSqlQuery.append("and  city ILIKE  '%" + dto.getCity() + "%' ");
-
-            if (dto.getUserId() != null) createSqlQuery.append("and  userid = " + dto.getUserId() + " ");
-
-            if (dto.getCreatedDate() != null)
-                createSqlQuery.append("and  created_date = " + dto.getCreatedDate() + " ");
-
-
-        } else if (user.getRole() == Role.EXPORTER) {
-            createSqlQuery = new StringBuilder("select count(*) from company where status=1 and userid =" + user.getUserId() + " ");
-            if (dto.getCompanyName() != null)
-                createSqlQuery.append("and company_name ILIKE  '%" + dto.getCompanyName() + "%' ");
-            if (dto.getCountryId() != null) {
-                Optional<Country> optCountry = countryRepository.findById(dto.getCountryId());
-                if (!optCountry.isPresent()) {
-                    log.info("Seçili Ülke Kaydı Bulunamadı..");
-                } else {
-                    createSqlQuery.append("and countryid = " + dto.getCountryId() + " ");
-                }
-            }
-            if (dto.getCity() != null) createSqlQuery.append("and  city ILIKE  '%" + dto.getCity() + "%' ");
-
-            if (dto.getCreatedDate() != null)
-                createSqlQuery.append("and  created_date = " + dto.getCreatedDate() + " ");
-
-
-        }
-
-        List<Object> countList = entityManager.createNativeQuery(createSqlQuery.toString()).getResultList();
-        for (Object data : countList) {
-            totalCount = Integer.valueOf(String.valueOf((BigInteger) data));
-        }
-
-        pageList = new PageImpl<>(dtosList.subList(start, end), page, totalCount);
+        Page<Company> pageListdata = companyRepository.findByFilterData(
+                dto.getCompanyName() == null ? "" : dto.getCompanyName(),
+                cc == null ? null : cc.get(),
+                dto.getCity() == null ? "" : dto.getCity(),
+                page);
+        pageList = pageListdata.map(SingleCompanyDto::new);
+//        User user = controlService.getUserFromToken(authHeader);
+//        if (user.getRole() == Role.ADMIN) {
+//            createSqlQuery = new StringBuilder("select * from company where status=1 ");
+//            if (dto.getCompanyName() != null)
+//                createSqlQuery.append("and company_name ILIKE  '%" + dto.getCompanyName() + "%' ");
+//            if (dto.getCountryId() != null) {
+//                Optional<Country> optCountry = countryRepository.findById(dto.getCountryId());
+//                if (!optCountry.isPresent()) {
+//                    log.info("Seçili Ülke Kaydı Bulunamadı..");
+//                } else {
+//                    createSqlQuery.append("and countryid = " + dto.getCountryId() + " ");
+//                }
+//            }
+//            if (dto.getCity() != null) createSqlQuery.append("and  city ILIKE  '%" + dto.getCity() + "%' ");
+//
+//            if (dto.getUserId() != null) createSqlQuery.append("and  userid = " + dto.getUserId() + " ");
+//
+//            if (dto.getCreatedDate() != null)
+//                createSqlQuery.append("and  created_date = " + dto.getCreatedDate() + " ");
+//
+//            if (page.getPageNumber() == 0) {
+//                createSqlQuery.append("order by company_name limit " + page.getPageSize() + " offset " + page.getPageNumber());
+//            } else {
+//                createSqlQuery.append("order by company_name limit " + page.getPageSize() + " offset " + (page.getPageSize() * page.getPageNumber()));
+//            }
+//
+//            List<Object> list = entityManager.createNativeQuery(createSqlQuery.toString(), Company.class).getResultList();
+//
+//            dtos = mapper.map(list, SingleCompanyDto[].class);
+//
+//        } else if (user.getRole() == Role.EXPORTER) {
+//            createSqlQuery = new StringBuilder("select * from company where status=1 and userid =" + user.getUserId() + " ");
+//            if (dto.getCompanyName() != null)
+//                createSqlQuery.append("and company_name ILIKE  '%" + dto.getCompanyName() + "%' ");
+//            if (dto.getCountryId() != null) {
+//                Optional<Country> optCountry = countryRepository.findById(dto.getCountryId());
+//                if (!optCountry.isPresent()) {
+//                    log.info("Seçili Ülke Kaydı Bulunamadı..");
+//                } else {
+//                    createSqlQuery.append("and countryid = " + dto.getCountryId() + " ");
+//                }
+//            }
+//            if (dto.getCity() != null) createSqlQuery.append("and  city ILIKE  '%" + dto.getCity() + "%' ");
+//
+//            if (dto.getCreatedDate() != null)
+//                createSqlQuery.append("and  created_date = " + dto.getCreatedDate() + " ");
+//
+//            if (page.getPageNumber() == 0) {
+//                createSqlQuery.append("order by company_name limit " + page.getPageSize() + " offset " + page.getPageNumber());
+//            } else {
+//                createSqlQuery.append("order by company_name limit " + page.getPageSize() + " offset " + (page.getPageSize() * page.getPageNumber()));
+//            }
+//
+//            List<Object> list = entityManager.createNativeQuery(createSqlQuery.toString(), Company.class).getResultList();
+//
+//            dtos = mapper.map(list, SingleCompanyDto[].class);
+//
+//        }
+//        List<SingleCompanyDto> dtosList = Arrays.asList(dtos);
+//
+//        int start = 0;
+//        int end = dtosList.size();
+//        int totalCount = 0;
+//
+//
+//        if (user.getRole() == Role.ADMIN) {
+//            createSqlQuery = new StringBuilder("select count(*) from company where status=1 ");
+//            if (dto.getCompanyName() != null)
+//                createSqlQuery.append("and company_name ILIKE  '%" + dto.getCompanyName() + "%' ");
+//            if (dto.getCountryId() != null) {
+//                Optional<Country> optCountry = countryRepository.findById(dto.getCountryId());
+//                if (!optCountry.isPresent()) {
+//                    log.info("Seçili Ülke Kaydı Bulunamadı..");
+//                } else {
+//                    createSqlQuery.append("and countryid = " + dto.getCountryId() + " ");
+//                }
+//            }
+//            if (dto.getCity() != null) createSqlQuery.append("and  city ILIKE  '%" + dto.getCity() + "%' ");
+//
+//            if (dto.getUserId() != null) createSqlQuery.append("and  userid = " + dto.getUserId() + " ");
+//
+//            if (dto.getCreatedDate() != null)
+//                createSqlQuery.append("and  created_date = " + dto.getCreatedDate() + " ");
+//
+//
+//        } else if (user.getRole() == Role.EXPORTER) {
+//            createSqlQuery = new StringBuilder("select count(*) from company where status=1 and userid =" + user.getUserId() + " ");
+//            if (dto.getCompanyName() != null)
+//                createSqlQuery.append("and company_name ILIKE  '%" + dto.getCompanyName() + "%' ");
+//            if (dto.getCountryId() != null) {
+//                Optional<Country> optCountry = countryRepository.findById(dto.getCountryId());
+//                if (!optCountry.isPresent()) {
+//                    log.info("Seçili Ülke Kaydı Bulunamadı..");
+//                } else {
+//                    createSqlQuery.append("and countryid = " + dto.getCountryId() + " ");
+//                }
+//            }
+//            if (dto.getCity() != null) createSqlQuery.append("and  city ILIKE  '%" + dto.getCity() + "%' ");
+//
+//            if (dto.getCreatedDate() != null)
+//                createSqlQuery.append("and  created_date = " + dto.getCreatedDate() + " ");
+//
+//
+//        }
+//
+//        List<Object> countList = entityManager.createNativeQuery(createSqlQuery.toString()).getResultList();
+//        for (Object data : countList) {
+//            totalCount = Integer.valueOf(String.valueOf((BigInteger) data));
+//        }
+//
+//        pageList = new PageImpl<>(dtosList.subList(start, end), page, totalCount);
         return pageList;
     }
 

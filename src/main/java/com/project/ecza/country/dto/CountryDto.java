@@ -1,12 +1,12 @@
 package com.project.ecza.country.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CountryDto {
 
     Long id;
