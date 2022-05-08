@@ -114,19 +114,12 @@ class UserInsertPage extends Component {
                 tcNo: this.state.tcNo,
                 phoneNumber:this.state.phoneNumber,
                 bloodType:this.state.bloodType,
-                role: this.state.role
+                role: this.state.role === "Seçiniz" ? null : this.state.role 
             }
-             if (this.state.role === undefined || this.state.role === null  || this.state.role === "Seçiniz") {
-                 let errors = {
-                     role: "Lütfen Rol Belirleyiniz",
-                 }
-                 this.setState({ errors: errors })
-            } else {
-                const response = await ApiService.post("/registration", body);
-                console.log(response.data)
-                AlertifyService.alert("Kayıt İşlemi Başarılı")
-                this.clearState();
-            }
+            const response = await ApiService.post("/registration", body);
+            console.log(response.data)
+            AlertifyService.alert("Kayıt İşlemi Başarılı")
+            this.clearState();
         } catch (error) {
             if (error.response) {
                 console.log(error.response);

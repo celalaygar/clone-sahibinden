@@ -1,6 +1,7 @@
 package com.project.ecza.user.dto;
 
 
+import com.project.ecza.error.validation.RoleTypeSubset;
 import com.project.ecza.user.entity.Role;
 import lombok.Data;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Getter
@@ -19,8 +22,8 @@ public class UserSaveDto {
 
     @NotEmpty
     @NotNull
-//    @Size(min=3, max=30)
-//    @Pattern(regexp="(([A-Za-zğüşöçıİĞÜŞÖÇ]{3,30})|([A-Za-zğüşöçıİĞÜŞÖÇ]{2}[A-Za-zğüşöçıİĞÜŞÖÇ\\s]{1,}[A-Za-zğüşöçıİĞÜŞÖÇ]{1}))",message = "Lütfen Özel Karakter Girmeyiniz")
+    @Size(min=3, max=30)
+    @Pattern(regexp="(([A-Za-zğüşöçıİĞÜŞÖÇ]{3,30})|([A-Za-zğüşöçıİĞÜŞÖÇ]{2}[A-Za-zğüşöçıİĞÜŞÖÇ\\s]{1,}[A-Za-zğüşöçıİĞÜŞÖÇ]{1}))",message = "Lütfen Özel Karakter Girmeyiniz")
     private String name;
 
     @NotEmpty
@@ -54,6 +57,7 @@ public class UserSaveDto {
 
     private String bloodType;
 
+
     @NotEmpty
     @NotNull
 //    @Pattern(regexp="([5]{1}+[1-9]{9})",message = "(5XX)XXXXXXX Şeklinde Giriniz")
@@ -61,5 +65,7 @@ public class UserSaveDto {
 
     private String realPassword;
 
+    @NotNull
+    @RoleTypeSubset
     private Role role;
 }
