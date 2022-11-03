@@ -34,7 +34,7 @@ public class LoginApi {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private ControlService controlService;
+		private ControlService controlService;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 

@@ -24,10 +24,10 @@ public class BaseExceptionController implements ErrorController {
     private ErrorAttributes errorAttributes;
 
     @ExceptionHandler(value = BaseException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ApiError> exception(BaseException exception) {
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST.value(), exception.getBaseStatus(), "path", "error", HttpErrorType.SPECIFIC);
-        return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
+        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getBaseStatus(), "path", "error", HttpErrorType.SPECIFIC);
+        return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping("/error")
