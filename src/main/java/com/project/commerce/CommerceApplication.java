@@ -20,6 +20,7 @@ public class CommerceApplication {
 
 	@Autowired
 	private CountryRepository countryRepository;
+
 	@Autowired
 	private JavaMailSender javaMailSender;
 
