@@ -48,6 +48,7 @@ public class BaseExceptionController implements ErrorController {
         int status		= (Integer) attributes.get("status");
         ApiError apiError = new ApiError(status, message, path, error);
         apiError.setHttpErrorType(HttpErrorType.STANDART);
+
         if(attributes.containsKey("errors")) {
             @SuppressWarnings("unchecked")
             List<FieldError> fieldErrors = (List<FieldError>)attributes.get("errors");
