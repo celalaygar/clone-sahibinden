@@ -54,6 +54,9 @@ public class LoginApi {
 			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
+			if(!authentication.isAuthenticated()){
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+			}
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtTokenProvider.generateToken(authentication);
 			String username = authenticationRequest.getUsername();
