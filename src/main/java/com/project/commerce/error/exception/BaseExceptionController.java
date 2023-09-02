@@ -2,6 +2,7 @@ package com.project.commerce.error.exception;
 
 
 import com.project.commerce.error.ApiError;
+import com.project.commerce.error.validation.ExceptionDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
@@ -12,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +48,15 @@ public class BaseExceptionController implements ErrorController {
         String path 	= (String) attributes.get("path");
         String error 	= (String) attributes.get("error");
         int status		= (Integer) attributes.get("status");
+        Date timestamp 	= (Date) attributes.get("timestamp");
+        String exception 	= (String) attributes.get("exception");
+        //String trace 	= (String) attributes.get("trace");
         ApiError apiError = new ApiError(status, message, path, error);
         apiError.setHttpErrorType(HttpErrorType.STANDART);
+        apiError.setCreatedDate(timestamp);
+        ExceptionDetail detail = new ExceptionDetail(status,message, exception, null, error, timestamp);
+        apiError.setDetail(detail);
+
 
         if(attributes.containsKey("errors")) {
             @SuppressWarnings("unchecked")

@@ -1,6 +1,7 @@
 package com.project.commerce.error;
 
 import com.project.commerce.error.exception.HttpErrorType;
+import com.project.commerce.error.validation.ExceptionDetail;
 import lombok.Data;
 
 import java.util.Date;
@@ -16,8 +17,9 @@ public class ApiError {
 	private String path;
 
 	private String error;
-	
-	private long timestamp = new Date().getTime();
+
+	private ExceptionDetail detail;
+
 
 	private Date createdDate = new Date();
 	
