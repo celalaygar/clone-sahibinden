@@ -1,4 +1,4 @@
-package com.project.commerce.error.validation;
+package com.project.commerce.error.exception.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExceptionDetail {
+public class ExceptionDetailDto {
 
 
     private int status;

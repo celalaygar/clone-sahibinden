@@ -1,8 +1,8 @@
 package com.project.commerce.error.exception;
 
 
-import com.project.commerce.error.ApiError;
-import com.project.commerce.error.validation.ExceptionDetail;
+import com.project.commerce.error.exception.dto.ApiErrorDto;
+import com.project.commerce.error.exception.dto.ExceptionDetailDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
@@ -20,29 +20,27 @@ import java.util.Map;
 
 @RestController
 @ControllerAdvice
-public class BaseExceptionController implements ErrorController {
+public class BaseExceptionHandler implements ErrorController {
 
     @Autowired
     private ErrorAttributes errorAttributes;
 
     @ExceptionHandler(value = BaseException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ApiError> exception(BaseException exception) {
-        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getBaseStatus(), "path", "error", HttpErrorType.SPECIFIC);
+    public ResponseEntity<ApiErrorDto> exception(BaseException exception) {
+        ApiErrorDto apiError = new ApiErrorDto(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                exception.getBaseStatus(),
+                "path", "error",
+                HttpErrorType.SPECIFIC);
         return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping("/error")
-    ApiError handleError(WebRequest webRequest) {
-
+    ApiErrorDto handleError(WebRequest webRequest) {
         ErrorAttributeOptions options = ErrorAttributeOptions
                 .defaults()
-                .including(ErrorAttributeOptions.Include.MESSAGE,
-                        ErrorAttributeOptions.Include.STACK_TRACE,
-                        ErrorAttributeOptions.Include.EXCEPTION,
-                        ErrorAttributeOptions.Include.BINDING_ERRORS);
-
-
+                .including(ErrorAttributeOptions.Include.values());
         Map<String, Object> attributes = this.errorAttributes.getErrorAttributes(webRequest, options);
         String message	= (String) attributes.get("message");
         String path 	= (String) attributes.get("path");
@@ -51,13 +49,11 @@ public class BaseExceptionController implements ErrorController {
         Date timestamp 	= (Date) attributes.get("timestamp");
         String exception 	= (String) attributes.get("exception");
         //String trace 	= (String) attributes.get("trace");
-        ApiError apiError = new ApiError(status, message, path, error);
+        ApiErrorDto apiError = new ApiErrorDto(status, message, path, error);
         apiError.setHttpErrorType(HttpErrorType.STANDART);
         apiError.setCreatedDate(timestamp);
-        ExceptionDetail detail = new ExceptionDetail(status,message, exception, null, error, timestamp);
+        ExceptionDetailDto detail = new ExceptionDetailDto(status,message, exception, null, error, timestamp);
         apiError.setDetail(detail);
-
-
         if(attributes.containsKey("errors")) {
             @SuppressWarnings("unchecked")
             List<FieldError> fieldErrors = (List<FieldError>)attributes.get("errors");

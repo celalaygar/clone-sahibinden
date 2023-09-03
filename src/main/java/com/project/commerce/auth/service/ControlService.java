@@ -1,7 +1,7 @@
 package com.project.commerce.auth.service;
 
 import com.project.commerce.user.entity.User;
-import com.project.commerce.error.ApiError;
+import com.project.commerce.error.exception.dto.ApiErrorDto;
 import com.project.commerce.webConfig.jwt.JwtTokenProvider;
 import com.project.commerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class ControlService {
 		String userNameFromToken = getUsernameFromToken(authHeader);
 		if(!userNameFromToken.equals(username)){
 			logger.error("User Names cannot match");
-			ApiError error = new ApiError(403, "User Names cannot match", "api/user/"+authHeader);
+			ApiErrorDto error = new ApiErrorDto(403, "User Names cannot match", "api/user/"+authHeader);
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
 		}
 		return ResponseEntity.ok(true);

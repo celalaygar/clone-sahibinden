@@ -1,14 +1,13 @@
-package com.project.commerce.error;
+package com.project.commerce.error.exception.dto;
 
 import com.project.commerce.error.exception.HttpErrorType;
-import com.project.commerce.error.validation.ExceptionDetail;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.Map;
 
 @Data
-public class ApiError {
+public class ApiErrorDto {
 	
 	private int status;
 	
@@ -18,26 +17,25 @@ public class ApiError {
 
 	private String error;
 
-	private ExceptionDetail detail;
-
+	private ExceptionDetailDto detail;
 
 	private Date createdDate = new Date();
 	
 	private Map<String, String> validationErrors;
 
 	private HttpErrorType httpErrorType;
-	public ApiError(int status, String message, String path) {
+	public ApiErrorDto(int status, String message, String path) {
 		this.status = status;
 		this.message = message;
 		this.path = path;
 	}
-	public ApiError(int status, String message, String path, String error) {
+	public ApiErrorDto(int status, String message, String path, String error) {
 		this.status = status;
 		this.message = message;
 		this.path = path;
 		this.error = error;
 	}
-	public ApiError(int status, String message, String path, String error, HttpErrorType httpErrorType) {
+	public ApiErrorDto(int status, String message, String path, String error, HttpErrorType httpErrorType) {
 		this.status = status;
 		this.message = message;
 		this.path = path;
