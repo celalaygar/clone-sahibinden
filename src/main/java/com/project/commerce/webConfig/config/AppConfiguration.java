@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties  // application.properties deki değerleri bu class a assign eder.
+@ConfigurationProperties  // application.yml deki değerleri bu class a assign eder.
 public class AppConfiguration {
     String uploadPath;
     String uploadBarcodePath;

@@ -1,0 +1,65 @@
+
+server:
+  port: 8500
+
+# local
+spring:
+  mail:
+    properties:
+      mail:
+        transport:
+          protocol: smtps
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
+    host: smtp.gmail.com
+    port: 587
+    username: username
+    password: password
+  datasource:
+    url: jdbc:postgresql://localhost:5432/eczane
+    password: celal371
+    username: postgres
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: never
+    platform: postgresql
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    properties:
+      hibernate:
+        show_sql=false:
+      jakarta:
+        persistence:
+          validation:
+            mode: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  main:
+    allow-circular-references: true
+  data:
+    web:
+      pageable:
+        default-page-size: 5
+        max-page-size: 100
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+
+
+
+
+eczaneLink: http://222.111.7.222:1212/
+upload-path: image
+upload-barcode-path:  barcode
+upload-docs-path:  docs
+
+app.jwt.expiration-in-ms: 86400000
+app.jwt.token.prefix: Bearer
+app.jwt.header.string: Authorization
+app.jwt.secret: RandomSecretKey
