@@ -29,18 +29,14 @@ public class BaseExceptionHandler implements ErrorController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ApiErrorDto> exception(BaseException exception) {
         ApiErrorDto apiError = new ApiErrorDto(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                exception.getBaseStatus(),
-                "path", "error",
-                HttpErrorType.SPECIFIC);
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getBaseStatus(),
+                "path", "error",HttpErrorType.SPECIFIC);
         return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping("/error")
     ApiErrorDto handleError(WebRequest webRequest) {
-        ErrorAttributeOptions options = ErrorAttributeOptions
-                .defaults()
-                .including(ErrorAttributeOptions.Include.values());
+        ErrorAttributeOptions options = ErrorAttributeOptions.defaults().including(ErrorAttributeOptions.Include.values());
         Map<String, Object> attributes = this.errorAttributes.getErrorAttributes(webRequest, options);
         String message	= (String) attributes.get("message");
         String path 	= (String) attributes.get("path");
