@@ -3,7 +3,11 @@ server:
   port: 8500
 
 # local
+
 spring:
+  output:
+    ansi:
+      enabled: always
   mail:
     properties:
       mail:
