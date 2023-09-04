@@ -70,24 +70,24 @@ class App extends Component {
   render() {
     let { isLoggedIn } = this.props;
     let routeList = (
-        <>
-          <Route path={PATH.PATH_LOGIN} element={ isLoggedIn ? <HomePage/> : <UserLoginPage />} />
-          {/* <Route path="*" element={<Navigate to="/"/>} /> */}
+      <>
+        <Route path={PATH.PATH_LOGIN} element={isLoggedIn ? <HomePage /> : <UserLoginPage />} />
+        {/* <Route path="*" element={<Navigate to="/"/>} /> */}
 
-          {
-            RouteBaseList.map((route, index) =>
-              <Route path={route.path} element={
-                route.protectedRoute ?
+        {
+          RouteBaseList.map((route, index) =>
+            <Route path={route.path} element={
+              route.protectedRoute ?
                 <ProtectedRoute roles={[...route.roles]}>
                   {route.element}
                 </ProtectedRoute>
-                : 
+                :
                 route.element
-              } />
-            )
-          }
-          
-          {/* <Route path={PATH.PATH_DEFAULT} element={
+            } />
+          )
+        }
+
+        {/* <Route path={PATH.PATH_DEFAULT} element={
             <ProtectedRoute roles={[ROLE.ROLE_ADMIN]}>
               <HomePage />
             </ProtectedRoute>
@@ -159,8 +159,8 @@ class App extends Component {
               <MyAccountEditPage />
             </ProtectedRoute>
           } /> */}
-        </>
-      )
+      </>
+    )
 
     let controlToggle = "d-flex";
     if (this.state.toggled === true) {
@@ -185,7 +185,7 @@ class App extends Component {
     }
     if (isLoggedIn) {
       view = (
-        <div className={controlToggle} id="wrapper">
+        <div className={controlToggle && controlToggle} id="wrapper">
           <BrowserRouter>
             <SideBarMenu />
             <div id="page-content-wrapper">

@@ -18,14 +18,13 @@ import "alertifyjs/build/css/themes/default.min.css";
 import "alertifyjs/build/css/themes/bootstrap.min.css";
 import "alertifyjs/build/css/alertify.min.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { createRoot } from 'react-dom/client'
+const store = configureStore();
 
-const store = configureStore(); 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root')
-);
+createRoot(document.getElementById('root')).render(<Provider store={store}>
+  <App />
+</Provider>)
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

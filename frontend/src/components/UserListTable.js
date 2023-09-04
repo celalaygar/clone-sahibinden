@@ -216,7 +216,7 @@ class UserListTable extends Component {
                                                 data-toggle="modal"
                                                 data-target="#openUserModal">
                                                 Aç
-                                                </button>
+                                            </button>
                                             {/* <Link className="dropdown-item btn-sm" to={"/user/find-by-id/" + user.userId} >Aç </Link> */}
                                             {/* <Link className="dropdown-item btn-sm" to={"/edit-user/" + user.userId}>Bilgileri Güncelle </Link> */}
                                             <button
@@ -264,7 +264,7 @@ class UserListTable extends Component {
 
                         {
                             this.state.pendingApiCall ? <Spinner /> :
-                                <div class="modal-footer">
+                                <div className="modal-footer">
                                     {/* <button
                                         className="btn btn-sm btn-primary"
                                         type="button"

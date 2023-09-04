@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import alertify from 'alertifyjs';
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { Spinner } from 'reactstrap';
+import Spinner from '../../components/Spinner';
 import Input from '../../components/Input';
 import { ROLE_PHARMACY } from '../../constant/roleConstant';
 import AdminService from '../../services/AdminService';
@@ -275,11 +275,11 @@ class UserUpdatePage extends Component {
 
                                     <div className="form-group">
                                         <label htmlFor="exampleInputEmail1">Rol</label>
-                                        <select 
-                                        disabled={this.state.role === ROLE_PHARMACY ? true : false}
-                                        className={role ? "form-control is-invalid" : "form-control"} 
-                                        value={this.state.role} 
-                                        onChange={e => this.onChangeData("role", e.target.value)}>
+                                        <select
+                                            disabled={this.state.role === ROLE_PHARMACY ? true : false}
+                                            className={role ? "form-control is-invalid" : "form-control"}
+                                            value={this.state.role}
+                                            onChange={e => this.onChangeData("role", e.target.value)}>
                                             <option key={1} value={"Seçiniz"}>{"Seçiniz"}</option>
                                             {this.state.roles.map((role, index) =>
                                                 <option key={index} value={role.role}>{role.value}</option>

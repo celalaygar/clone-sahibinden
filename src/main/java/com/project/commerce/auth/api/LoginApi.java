@@ -43,11 +43,6 @@ public class LoginApi {
     @Autowired
     private UserRepository repository;
 
-
-    // login olmak için kullanılan linktir
-	// username: -----
-	// password: -----
-	// parametreleri almaktadır.
 	@PostMapping("/api/login")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthDto authenticationRequest) throws Exception {
 		try {
@@ -66,12 +61,8 @@ public class LoginApi {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
 			}
 			User user = opt.get();
-
-			//  üye giriş yaparken login aktifliğinin 1 olup olmadığını kontrol eder
 //			if(user.getIsLoggedIn() == 1)
 //				return ResponseEntity.status(HttpStatus.CONFLICT).body("CONFLICT");
-
-			//  üye giriş yaparken login aktifliğini 1 e çeker
 			user.setIsLoggedIn(1);
 			user = userRepository.save(user);
 			return ResponseEntity.ok(new JwtResponse(user.getUserId(), username,jwt,null,user.getRole()));
@@ -117,11 +108,6 @@ public class LoginApi {
 //	}
 
 
-
-
-
-	// WebSecurityConfig linkinde permit all edilmiş bir linktir.
-	// jwt tokenı yenilemek için kullanılacaktır.
 	@GetMapping("/refresh-token")
 	public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
 		// From the HttpRequest get the claims

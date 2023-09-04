@@ -14,12 +14,12 @@ const DrugCard = (props) => {
                         <h5 className="card-title"><b>{props.drugName}</b></h5>
                     </div>
                     <ul className="list-group list-group-flush">
-                         <li className="list-group-item">Barkodu : {props.drugCode} </li>
-                        <li className="list-group-item">Atc Kodu : {props.atcCode} </li>
-                        <li className="list-group-item">Atc Adı : {props.atcName} </li>
-                        <li className="list-group-item">Üretici Firma : {props.company} </li>
-                        
-                        <li className="list-group-item"></li>
+                        <li key={1} className="list-group-item">Barkodu : {props.drugCode} </li>
+                        <li key={2} className="list-group-item">Atc Kodu : {props.atcCode} </li>
+                        <li key={3} className="list-group-item">Atc Adı : {props.atcName} </li>
+                        <li key={4} className="list-group-item">Üretici Firma : {props.company} </li>
+
+                        <li key={5} className="list-group-item"></li>
                     </ul>
                 </div>
             </div>

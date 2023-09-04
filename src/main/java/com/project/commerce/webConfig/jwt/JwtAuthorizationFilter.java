@@ -21,9 +21,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Component
@@ -41,6 +39,27 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String header = req.getHeader(HEADER_STRING);
         String username = null;
         String authToken = null;
+
+
+        Enumeration<String> headerNames = req.getHeaderNames();
+
+        HashMap<String, List<String>> set = new HashMap<>();
+        while (headerNames.hasMoreElements()) {
+
+            String headerName = headerNames.nextElement();
+
+            List<String> fake = new ArrayList<>();
+            Enumeration<String> headers = req.getHeaders(headerName);
+            while (headers.hasMoreElements()) {
+                String headerValue = headers.nextElement();
+                fake.add(headerValue);
+            }
+
+            set.put(headerName,fake);
+        }
+
+
+
         if (header != null && header.startsWith(TOKEN_PREFIX)) {
             authToken = header.replace(TOKEN_PREFIX, "");
             try {
@@ -90,7 +109,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
         }
 
-        chain.doFilter(req, res);
+
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Max-Age", "3600");
+        res.setHeader("Access-Control-Allow-Headers", "authorization, isrefreshtoken, content-type, xsrf-token");
+        res.addHeader("Access-Control-Expose-Headers", "xsrf-token");
+        if ("OPTIONS".equals(req.getMethod())) {
+            res.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            chain.doFilter(req, res);
+        }
     }
 
     private void allowForRefreshToken(ExpiredJwtException ex, HttpServletRequest request) {

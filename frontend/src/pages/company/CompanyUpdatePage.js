@@ -3,8 +3,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { Spinner } from 'reactstrap';
 import BackButton from '../../components/BackButton';
+import Spinner from '../../components/Spinner';
 import Input from '../../components/Input';
 import AlertifyService from '../../services/AlertifyService';
 import CompanyService from '../../services/CompanyService';
@@ -21,7 +21,7 @@ class CompanyUpdatePage extends Component {
             companyPhone: '',
             companyMobilePhone: '',
             companyFax: '',
-            emailAddress:undefined,
+            emailAddress: undefined,
             countryId: undefined,
             country: {},
             city: '',
@@ -67,7 +67,7 @@ class CompanyUpdatePage extends Component {
         //localhost:8500/api/admin/company/find-by-id/3
         try {
             const response = await CompanyService.get("/find-by-id/" + companyId);
-            
+
             this.setState({ ...response.data, countryId: response.data.country.countryId })
 
         } catch (error) {
@@ -103,16 +103,16 @@ class CompanyUpdatePage extends Component {
             let body = {
                 ...this.state
             }
-            const response = await CompanyService.update(this.props.singleCompany.companyId, body); 
- 
-            AlertifyService.delaySuccessMessage(5,"Güncelleme İşlemi Başarılı");
+            const response = await CompanyService.update(this.props.singleCompany.companyId, body);
+
+            AlertifyService.delaySuccessMessage(5, "Güncelleme İşlemi Başarılı");
             this.props.closeCompanyUpdatePanel()
         } catch (error) {
             if (error.response) {
                 console.log(error.response);
                 if (error.response.data.status === 500) {
                     console.log(error.response.data.status);
-                    AlertifyService.delayErrorMessage(8,"Güncelleme İşlemi Sırasında Bir Hata Oluştu. Lütfen Tekrar Deneyiniz");
+                    AlertifyService.delayErrorMessage(8, "Güncelleme İşlemi Sırasında Bir Hata Oluştu. Lütfen Tekrar Deneyiniz");
                 }
                 if (error.response.data.validationErrors) {
                     console.log(error.response.data.validationErrors);
@@ -145,17 +145,17 @@ class CompanyUpdatePage extends Component {
         const { companyName, taxNo, address, companyPhone, companyFax, city, companyMobilePhone } = this.state.errors;
         const { countries } = this.state;
         return (
-                <div className="card m-1">
-                    <div className="card-header">
-                        <h5  className="card-title mb-0">
-                            Şirket Bilgilerini Düzenle
-                        </h5>
-                    </div>
+            <div className="card m-1">
+                <div className="card-header">
+                    <h5 className="card-title mb-0">
+                        Şirket Bilgilerini Düzenle
+                    </h5>
+                </div>
 
-                    <hr />
-                    <p className="description-p" style={{ color: "red" }}>  ( * ) Zorunlu alanlar </p>
-                    
-                    <div className="card-body">
+                <hr />
+                <p className="description-p" style={{ color: "red" }}>  ( * ) Zorunlu alanlar </p>
+
+                <div className="card-body">
                     <form >
                         <div className="row">
                             <div className="col-lg-4">
@@ -256,7 +256,7 @@ class CompanyUpdatePage extends Component {
                                     </select>
                                 </div>
                             </div>
-                            </div>
+                        </div>
                         {
                             this.state.pendingApiCall ? <Spinner /> :
                                 <button
@@ -268,16 +268,16 @@ class CompanyUpdatePage extends Component {
                         }
 
                     </form>
-                            </div>
-                    <br />
-                    {this.state.error &&
-                        <div className="alert alert-danger" role="alert">
-                            {this.state.error}
-                        </div>
-
-
-                    }
                 </div>
+                <br />
+                {this.state.error &&
+                    <div className="alert alert-danger" role="alert">
+                        {this.state.error}
+                    </div>
+
+
+                }
+            </div>
         )
     }
 }

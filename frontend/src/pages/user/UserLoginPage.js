@@ -34,9 +34,8 @@ class UserLoginPage extends Component {
         //     throw error;
         // });
     }
-    componentWillUnmount(){
-        // fix Warning: Can't perform a React state update on an unmounted component
-        this.setState = (state,callback)=>{
+    componentWillUnmount() {
+        this.setState = (state, callback) => {
             return;
         };
     }
@@ -112,12 +111,12 @@ class UserLoginPage extends Component {
                     this.setState({ error: error.response.data })
                 }
             }
-            else if (error.request){
-                
-            this.setState({ error: "NETWORK" })
-            console.log(error.request );
+            else if (error.request) {
+
+                this.setState({ error: "NETWORK" })
+                console.log(error.request);
             }
-            else{
+            else {
                 this.setState({ error: "Hay Aksi 2" })
                 console.log(error.message);
             }
@@ -129,73 +128,61 @@ class UserLoginPage extends Component {
         const { username, password } = this.state.errors;
         const btnEnable = this.state.username && this.state.password;
         return (
-
-
             <div className="container">
-                <div className="row mgTp ">
-                    <div className="col-lg-3"></div>
-                    <div className="col-lg-6">
+                <div className="row mt-5">
+                    <div className="col-lg-2"></div>
+                    <div className="col-lg-8">
                         <div id="formContent">
-
                             <div id="formFooter">
                                 {/* <h3 className="panel-title col-md-4 offset-md-4">Giriş Yap</h3> */}
-                                <img className="img" src={""} width="100" height="100"/>
+                                <img className="img" src={""} width="100" height="100" />
                             </div>
-                            <div className="col-md-12 offset-md-12" >
+                            <div className="col-md-12 offset-md-12 p-5" >
                                 <br />
-                                    <form onKeyPress={this.onKeyPressLogin}  >
-                                        <Input
-                                            label={"Üye Adı"}
-                                            error={username}
-                                            type="text"
-                                            name="username"
-                                            placeholder={"Üye Adı"}
-                                            valueName={this.state.username}
-                                            onChangeData={this.onChangeData}
-                                        />
-                                        <Input
-                                            label={"Şifre"}
-                                            error={password}
-                                            type="password"
-                                            name="password"
-                                            placeholder={"Şifre"}
-                                            valueName={this.state.password}
-                                            onChangeData={this.onChangeData}
-                                        />
-                                        </form>
-                                    {
-                                        this.state.pendingApiCall ? <Spinner /> :
-                                            <button
-                                                className="btn"
-                                                id="search-button"
-                                                type="button"
-                                                disabled={!btnEnable}
-                                                onClick={this.onClickLogin}><FontAwesomeIcon icon="sign-out-alt"></FontAwesomeIcon> Giriş Yap</button>
-                                    }
-
-                            </div>
-
-
-                                <br />
-                                {this.state.error &&
-                                    <div className="alert alert-danger" role="alert">
-                                        {this.state.error === "UNAUTHORIZED" && "Hata : Kullanıcı Adı veya Şifre Hatalı"} 
-                                        {this.state.error === "CONFLICT" && "Hata : Üye Girişi Zaten Yapıldı"} 
-                                        {this.state.error === "NETWORK" && "Hata : Sistem ile İlgili Bir Problem Oluştu. Yetkiliye Başvurunuz"} 
-                        </div>
-
-
+                                <form onKeyPress={this.onKeyPressLogin}  >
+                                    <Input
+                                        label={"Üye Adı"}
+                                        error={username}
+                                        type="text"
+                                        name="username"
+                                        placeholder={"Üye Adı"}
+                                        valueName={this.state.username}
+                                        onChangeData={this.onChangeData}
+                                    />
+                                    <Input
+                                        label={"Şifre"}
+                                        error={password}
+                                        type="password"
+                                        name="password"
+                                        placeholder={"Şifre"}
+                                        valueName={this.state.password}
+                                        onChangeData={this.onChangeData}
+                                    />
+                                </form>
+                                {
+                                    this.state.pendingApiCall ? <Spinner /> :
+                                        <button
+                                            className="btn"
+                                            id="search-button"
+                                            type="button"
+                                            disabled={!btnEnable}
+                                            onClick={this.onClickLogin}><FontAwesomeIcon icon="sign-out-alt"></FontAwesomeIcon> Giriş Yap</button>
                                 }
 
+                            </div>
+                            <br />
+                            {this.state.error &&
+                                <div className="alert alert-danger" role="alert">
+                                    {this.state.error === "UNAUTHORIZED" && "Hata : Kullanıcı Adı veya Şifre Hatalı"}
+                                    {this.state.error === "CONFLICT" && "Hata : Üye Girişi Zaten Yapıldı"}
+                                    {this.state.error === "NETWORK" && "Hata : Sistem ile İlgili Bir Problem Oluştu. Yetkiliye Başvurunuz"}
+                                </div>
+                            }
                         </div>
-                        </div>
-
-                        <div className="col-lg-3"></div>
                     </div>
+                    <div className="col-lg-2"></div>
                 </div>
-
-
-
+            </div>
         )
     }
 }

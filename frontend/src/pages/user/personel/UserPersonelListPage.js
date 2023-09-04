@@ -13,7 +13,7 @@ import ApiService from "../../../services/base/ApiService";
 import UserService from "../../../services/UserService";
 import UserUpdatePage from "../UserUpdatePage";
 
-class  UserPersonelListPage extends Component {
+class UserPersonelListPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -198,206 +198,206 @@ class  UserPersonelListPage extends Component {
             <div className="row">
                 <div className="col-lg-12 mt-0">
                     <div className="card ">
-                        
+
                         <div className=" card-header">
-                            <h5  className="mb-0">Tüm Kullanıcılar</h5>
+                            <h5 className="mb-0">Tüm Kullanıcılar</h5>
                         </div>
                         {this.state.pendingApiCall ? (
                             <Preloader width={50} height={50} />
                         ) : (
-                                <div className="row">
-                                    <>
-                                        <div className="col-lg-12">
-                                            {/* <UserListTable users={this.state.page} roles={roles} /> */}
+                            <div className="row">
+                                <>
+                                    <div className="col-lg-12">
+                                        {/* <UserListTable users={this.state.page} roles={roles} /> */}
 
-                                            <div className="d-flex">
-                                                <table className="table table-hover table-sm ml-0">
-                                                    <thead>
-                                                        <tr className="d-flex">
-                                                           
-                                                            <th scope="col" className="col-4">İşlemler</th>
-                                                            <th scope="col" className="col-2">İsim</th>
-                                                            <th scope="col" className="col-2">Soyisim</th>
-                                                            <th scope="col" className="col-2">Kullanıcı Adı</th>
-                                                            <th scope="col" className="col-2">Rolü</th>
-                                                            
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {users && users.map((user, index) =>
-                                                            <tr 
-                                                                key={index}
-                                                                className={user.isLoggedIn === 1 ? "table-danger d-flex" : "d-flex"}
-                                                            >
-                                                                   <td className="col-4 d-flex" >
-                                                                    <div className="dropdown">
-                                                                        <button className="btn btn-sm btn-secondary dropdown-toggle"
-                                                                            id="clear-button"
-                                                                            type="button" id="clear-button"
-                                                                            data-toggle="dropdown"
-                                                                            aria-haspopup="true"
-                                                                            aria-expanded="false"> İşlemler </button>
-                                                                        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                            <button
-                                                                                type="button"
-                                                                                onClick={e => this.loadSingUser(e, user)}
-                                                                                className="dropdown-item btn-sm"
-                                                                                data-toggle="modal"
-                                                                                data-target="#openUserModal">
-                                                                                Aç</button>
-                                                                            <button
-                                                                                className="dropdown-item btn-sm"
-                                                                                type="button"
-                                                                                onClick={e => this.handleClickUpdateOpen(user.userId)} > Bilgileri Güncelle  </button>
+                                        <div className="d-flex">
+                                            <table className="table table-hover table-sm ml-0">
+                                                <thead>
+                                                    <tr className="d-flex">
 
-                                                                            <button
-                                                                                className="dropdown-item btn-sm"
-                                                                                type="button"
-                                                                                onClick={e => this.handleClickOpen(user.userId)} > Şifre Güncelle  </button>
+                                                        <th scope="col" className="col-4">İşlemler</th>
+                                                        <th scope="col" className="col-2">İsim</th>
+                                                        <th scope="col" className="col-2">Soyisim</th>
+                                                        <th scope="col" className="col-2">Kullanıcı Adı</th>
+                                                        <th scope="col" className="col-2">Rolü</th>
 
-                                                                        </div>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {users && users.map((user, index) =>
+                                                        <tr
+                                                            key={index}
+                                                            className={user.isLoggedIn === 1 ? "table-danger d-flex" : "d-flex"}
+                                                        >
+                                                            <td className="col-4 d-flex" >
+                                                                <div className="dropdown">
+                                                                    <button className="btn btn-sm btn-secondary dropdown-toggle"
+                                                                        id="clear-button"
+                                                                        type="button" id="clear-button"
+                                                                        data-toggle="dropdown"
+                                                                        aria-haspopup="true"
+                                                                        aria-expanded="false"> İşlemler </button>
+                                                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={e => this.loadSingUser(e, user)}
+                                                                            className="dropdown-item btn-sm"
+                                                                            data-toggle="modal"
+                                                                            data-target="#openUserModal">
+                                                                            Aç</button>
+                                                                        <button
+                                                                            className="dropdown-item btn-sm"
+                                                                            type="button"
+                                                                            onClick={e => this.handleClickUpdateOpen(user.userId)} > Bilgileri Güncelle  </button>
+
+                                                                        <button
+                                                                            className="dropdown-item btn-sm"
+                                                                            type="button"
+                                                                            onClick={e => this.handleClickOpen(user.userId)} > Şifre Güncelle  </button>
+
                                                                     </div>
-                                                                    
+                                                                </div>
+
                                                                 {user.isLoggedIn === 1 &&
                                                                     <button
                                                                         onClick={e => this.makeLogOut(e, user)}
                                                                         type="button"
                                                                         className="btn btn-sm btn-danger ml-2 float-right">
                                                                         <FontAwesomeIcon icon="times"></FontAwesomeIcon> Çıkış Yaptır</button>}
-                                                                </td>
-                                                                <td className="col-2">{user.name}</td>
-                                                                <td className="col-2">{user.surname}</td>
-                                                                <td className="col-2">{user.username}</td>
-                                                                <td className="col-2">
-                                                                    {this.props.roles && this.props.roles.map((role, index) => role.role === user.role && role.value)}
-                                                                </td>
-                                                                
-                                                             
-                                                            </tr>
-                                                        )
-                                                        }
-                                                    </tbody>
-                                                </table>
-
-                                                <UserCardModal title="Kullanıcı Bilgileri" user={this.state.singleUser} roles={this.props.roles} />
-
-                                                <Dialog
-                                                    fullWidth={true}
-                                                    maxWidth={"md"}
-                                                    open={this.state.openUpdateUserModal}
-                                                    onClose={this.handleUpdateUserClose}
-                                                    aria-labelledby="alert-dialog-title"
-                                                    aria-describedby="alert-dialog-description"
-                                                >
-                                                    <div className="card">
-
-                                                        <UserUpdatePage
-                                                            userId={this.state.currentUpdateUserId}
-                                                            closeUpdateUser={this.handleUpdateUserClose} />
+                                                            </td>
+                                                            <td className="col-2">{user.name}</td>
+                                                            <td className="col-2">{user.surname}</td>
+                                                            <td className="col-2">{user.username}</td>
+                                                            <td className="col-2">
+                                                                {this.props.roles && this.props.roles.map((role, index) => role.role === user.role && role.value)}
+                                                            </td>
 
 
-                                                        {
-                                                            this.state.pendingApiCall ? <Spinner /> :
-                                                                <div class="modal-footer">
-                                                                    <button
-                                                                        className="btn btn-sm"
-                                                                        id="close-button"
-                                                                        type="button"
-                                                                        onClick={this.handleUpdateUserClose}>
-                                                                        <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
-                                                                    </button>
-                                                                </div>
+                                                        </tr>
+                                                    )
+                                                    }
+                                                </tbody>
+                                            </table>
 
-                                                        }
+                                            <UserCardModal title="Kullanıcı Bilgileri" user={this.state.singleUser} roles={this.props.roles} />
 
-                                                    </div>
+                                            <Dialog
+                                                fullWidth={true}
+                                                maxWidth={"md"}
+                                                open={this.state.openUpdateUserModal}
+                                                onClose={this.handleUpdateUserClose}
+                                                aria-labelledby="alert-dialog-title"
+                                                aria-describedby="alert-dialog-description"
+                                            >
+                                                <div className="card">
 
-                                                </Dialog>
+                                                    <UserUpdatePage
+                                                        userId={this.state.currentUpdateUserId}
+                                                        closeUpdateUser={this.handleUpdateUserClose} />
 
-                                                <Dialog
-                                                    fullWidth={true}
-                                                    maxWidth={"sm"}
-                                                    open={this.state.openChangePasswordModal}
-                                                    onClose={this.handleClosePassword}
-                                                    aria-labelledby="alert-dialog-title"
-                                                    aria-describedby="alert-dialog-description"
-                                                >
-                                                    <div className="card">
-                                                        <div className="card-header">
-                                                            <h4>Şifreyi Güncelle</h4>
-                                                        </div>
 
-                                                        <div className="card-body">
-                                                            <div className="row">
-                                                                <div className="col-lg-12">
-
-                                                                    <Input
-                                                                        label={"Yeni Şifre"}
-                                                                        type="password"
-                                                                        name="newPassword"
-                                                                        error={newPassword}
-                                                                        placeholder={"Yeni Şifre"}
-                                                                        valueName={this.state.newPassword}
-                                                                        onChangeData={this.onChangeData}
-                                                                    />
-                                                                </div>
-                                                                <div className="col-lg-12">
-                                                                    <Input
-                                                                        label={"Yeni Şifre (Tekrar)"}
-                                                                        type="password"
-                                                                        name="repeatNewPassword"
-                                                                        placeholder={"Yeni Şifre (Tekrar)"}
-                                                                        valueName={this.state.repeatNewPassword}
-                                                                        onChangeData={this.onChangeData}
-                                                                    />
-                                                                </div>
+                                                    {
+                                                        this.state.pendingApiCall ? <Spinner /> :
+                                                            <div className="modal-footer">
+                                                                <button
+                                                                    className="btn btn-sm"
+                                                                    id="close-button"
+                                                                    type="button"
+                                                                    onClick={this.handleUpdateUserClose}>
+                                                                    <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
+                                                                </button>
                                                             </div>
 
+                                                    }
+
+                                                </div>
+
+                                            </Dialog>
+
+                                            <Dialog
+                                                fullWidth={true}
+                                                maxWidth={"sm"}
+                                                open={this.state.openChangePasswordModal}
+                                                onClose={this.handleClosePassword}
+                                                aria-labelledby="alert-dialog-title"
+                                                aria-describedby="alert-dialog-description"
+                                            >
+                                                <div className="card">
+                                                    <div className="card-header">
+                                                        <h4>Şifreyi Güncelle</h4>
+                                                    </div>
+
+                                                    <div className="card-body">
+                                                        <div className="row">
+                                                            <div className="col-lg-12">
+
+                                                                <Input
+                                                                    label={"Yeni Şifre"}
+                                                                    type="password"
+                                                                    name="newPassword"
+                                                                    error={newPassword}
+                                                                    placeholder={"Yeni Şifre"}
+                                                                    valueName={this.state.newPassword}
+                                                                    onChangeData={this.onChangeData}
+                                                                />
+                                                            </div>
+                                                            <div className="col-lg-12">
+                                                                <Input
+                                                                    label={"Yeni Şifre (Tekrar)"}
+                                                                    type="password"
+                                                                    name="repeatNewPassword"
+                                                                    placeholder={"Yeni Şifre (Tekrar)"}
+                                                                    valueName={this.state.repeatNewPassword}
+                                                                    onChangeData={this.onChangeData}
+                                                                />
+                                                            </div>
                                                         </div>
-
-
-                                                        {
-                                                            this.state.pendingApiCall ? <Spinner /> :
-                                                                <div class="modal-footer">
-                                                                    <button
-                                                                        className="btn btn-sm"
-                                                                        id="search-button"
-                                                                        type="button"
-                                                                        //disabled={!btnEnable}
-                                                                        onClick={this.onChangePassword}> <FontAwesomeIcon icon="save"></FontAwesomeIcon>  Güncelle</button>
-                                                                    <button
-                                                                        className="btn btn-sm"
-                                                                        id="close-button"
-                                                                        type="button"
-                                                                        onClick={this.handleClosePassword}>
-                                                                        <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
-                                                                    </button>
-                                                                </div>
-
-                                                        }
 
                                                     </div>
 
-                                                </Dialog>
-                                            </div>
 
+                                                    {
+                                                        this.state.pendingApiCall ? <Spinner /> :
+                                                            <div clclassNameass="modal-footer">
+                                                                <button
+                                                                    className="btn btn-sm"
+                                                                    id="search-button"
+                                                                    type="button"
+                                                                    //disabled={!btnEnable}
+                                                                    onClick={this.onChangePassword}> <FontAwesomeIcon icon="save"></FontAwesomeIcon>  Güncelle</button>
+                                                                <button
+                                                                    className="btn btn-sm"
+                                                                    id="close-button"
+                                                                    type="button"
+                                                                    onClick={this.handleClosePassword}>
+                                                                    <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
+                                                                </button>
+                                                            </div>
+
+                                                    }
+
+                                                </div>
+
+                                            </Dialog>
                                         </div>
-                                    </>
-                                </div>
-                            )}
+
+                                    </div>
+                                </>
+                            </div>
+                        )}
                     </div>
-                    
+
                 </div>
-              
+
                 <div className="col-lg-12 mt-1">
-                         <PageSizeComponent
+                    <PageSizeComponent
                         onChangeData={this.props.onChangeData}
                         page={this.props.page} />
-                        </div>
-                
+                </div>
+
             </div>
-            
-        
+
+
         );
     }
 }
@@ -410,4 +410,4 @@ const mapStateToProps = (store) => {
     };
 };
 
-export default connect(mapStateToProps)( UserPersonelListPage);
+export default connect(mapStateToProps)(UserPersonelListPage);

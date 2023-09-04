@@ -1,9 +1,8 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux';
-import {Navigate, Route} from 'react-router-dom';
+import React, { Component } from 'react'
+import { connect } from 'react-redux';
 import Input from '../../components/Input';
 import Spinner from '../../components/Spinner';
-import {ROLE_PHARMACY} from '../../constant/roleConstant';
+import { ROLE_PHARMACY } from '../../constant/roleConstant';
 import AlertifyService from '../../services/AlertifyService';
 import ApiService from '../../services/base/ApiService';
 
@@ -27,15 +26,15 @@ class UserSignUpPage extends Component {
             role: undefined,
             roles: [],
             bloodTypes: [
-                {value: "Seçiniz", name: "Seçiniz"},
-                {value: "0 RH -", name: "0 RH -"},
-                {value: "0 RH +", name: "0 RH +"},
-                {value: "A RH -", name: "A RH -"},
-                {value: "A RH +", name: "A RH +"},
-                {value: "B RH -", name: "B RH -"},
-                {value: "B RH +", name: "B RH +"},
-                {value: "AB RH -", name: "AB RH -"},
-                {value: "AB RH +", name: "AB RH +"},
+                { value: "Seçiniz", name: "Seçiniz" },
+                { value: "0 RH -", name: "0 RH -" },
+                { value: "0 RH +", name: "0 RH +" },
+                { value: "A RH -", name: "A RH -" },
+                { value: "A RH +", name: "A RH +" },
+                { value: "B RH -", name: "B RH -" },
+                { value: "B RH +", name: "B RH +" },
+                { value: "AB RH -", name: "AB RH -" },
+                { value: "AB RH +", name: "AB RH +" },
             ],
             errors: {},
             pendingApiCall: false
@@ -51,7 +50,7 @@ class UserSignUpPage extends Component {
 
         try {
             const roles = await ApiService.get("/roles");
-            this.setState({roles: roles.data}, () => {
+            this.setState({ roles: roles.data }, () => {
                 console.log(this.state.roles)
             })
         } catch (error) {
@@ -62,11 +61,11 @@ class UserSignUpPage extends Component {
                 }
                 if (error.response.data.validationErrors) {
                     console.log(error.response.data.validationErrors);
-                    this.setState({errors: error.response.data.validationErrors})
+                    this.setState({ errors: error.response.data.validationErrors })
                 }
                 if (error.response.status === 401 && error.response.data) {
                     console.log(error.response.data)
-                    this.setState({error: error.response.data})
+                    this.setState({ error: error.response.data })
                 }
                 console.log(error.response);
                 if (error.response.data.status === 500) {
@@ -83,7 +82,7 @@ class UserSignUpPage extends Component {
 
     onChangeData = (type, event) => {
 
-        const errors = {...this.state.errors}
+        const errors = { ...this.state.errors }
         errors[type] = undefined;
 
         const stateData = this.state;
@@ -92,14 +91,14 @@ class UserSignUpPage extends Component {
         else
             stateData[type] = event
 
-        this.setState({stateData, errors: errors});
+        this.setState({ stateData, errors: errors });
     }
     onSave = async (event) => {
-        this.setState({pendingApiCall: true})
+        this.setState({ pendingApiCall: true })
 
         event.preventDefault();
         if (this.state.error) {
-            this.setState({error: null});
+            this.setState({ error: null });
         }
 
         try {
@@ -129,14 +128,14 @@ class UserSignUpPage extends Component {
 
                 if (error.response.data.validationErrors) {
                     console.log(error.response.data.validationErrors);
-                    this.setState({errors: error.response.data.validationErrors})
+                    this.setState({ errors: error.response.data.validationErrors })
                 }
             } else if (error.request)
                 console.log(error.request);
             else
                 console.log(error.message);
         }
-        this.setState({pendingApiCall: false})
+        this.setState({ pendingApiCall: false })
 
     }
     clearState = () => {
@@ -162,7 +161,7 @@ class UserSignUpPage extends Component {
 
     render() {
         if (this.props.role === "ADMIN" || this.props.match.params.username === this.props.username) {
-            const {name, surname, username, password, email, role, phoneNumber} = this.state.errors;
+            const { name, surname, username, password, email, role, phoneNumber } = this.state.errors;
             //const btnEnable = this.state.username && this.state.password;
             return (
                 <div className="row">
@@ -274,7 +273,7 @@ class UserSignUpPage extends Component {
                                         <div className="form-group">
                                             <label htmlFor="exampleInputEmail1">Kan Grubu</label>
                                             <select className="form-control" value={this.state.bloodType}
-                                                    onChange={e => this.onChangeData("bloodType", e.target.value)}>
+                                                onChange={e => this.onChangeData("bloodType", e.target.value)}>
 
                                                 {this.state.bloodTypes.map((type, index) =>
                                                     <option key={index} value={type.value}>{type.name}</option>
@@ -288,8 +287,8 @@ class UserSignUpPage extends Component {
                                         <div className="form-group">
                                             <label htmlFor="exampleInputEmail1">Rol</label>
                                             <select className={role ? "form-control is-invalid" : "form-control"}
-                                                    value={this.state.role}
-                                                    onChange={e => this.onChangeData("role", e.target.value)}>
+                                                value={this.state.role}
+                                                onChange={e => this.onChangeData("role", e.target.value)}>
                                                 <option key={1} value={"Seçiniz"}>{"Seçiniz"}</option>
                                                 {this.state.roles.map((role, index) =>
                                                     role.role !== ROLE_PHARMACY &&
@@ -308,7 +307,7 @@ class UserSignUpPage extends Component {
                                 <form>
 
                                     {
-                                        this.state.pendingApiCall ? <Spinner/> :
+                                        this.state.pendingApiCall ? <Spinner /> :
                                             <button
                                                 className="btn"
                                                 id="search-button"
@@ -316,10 +315,7 @@ class UserSignUpPage extends Component {
                                                 //disabled={!btnEnable}
                                                 onClick={this.onSave}>Kaydet</button>
                                     }
-
                                 </form>
-
-
                             </div>
                         </div>
                     </div>
