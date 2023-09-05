@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logoutAction } from '../../redux/AuthenticationAction';
@@ -16,10 +16,27 @@ const TopMenu = props => {
             role: store.role
         };
     });
+    const [navbarClassName, setNavbarClassName] = useState("navbar-toggler collapsed");
+    const [ariaExpanded, setAriaExpanded] = useState("false");
+    const [navbarTargetDivClassName, setNavbarTargetDivClassName] = useState("navbar-collapse collapse");
+
     const dispatch = useDispatch();
 
-
-
+    const onclickNavbar = (event) => {
+        event.preventDefault();
+        console.log(0)
+        if (navbarClassName.includes("collapsed")) {
+            console.log(1)
+            setNavbarClassName("navbar-toggler");
+            setAriaExpanded("false");
+            setNavbarTargetDivClassName("navbar-collapse collapse");
+        } else {
+            setNavbarClassName("navbar-toggler collapsed");
+            setAriaExpanded("true");
+            setNavbarTargetDivClassName("navbar-collapse collapse show");
+            console.log(2)
+        }
+    }
     const onLogout = async () => {
 
         try {
@@ -52,15 +69,23 @@ const TopMenu = props => {
                         <FontAwesomeIcon icon="bars" size="lg" />
                     </span>
                 }
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button
+                    className={navbarClassName}
+                    onClick={e => onclickNavbar(e)}
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded={ariaExpanded}
+                    aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav ml-auto p-1">
-                        <li className="nav-item active">
+                <div className={navbarTargetDivClassName} id="navbarSupportedContent">
+                    <ul className="navbar-nav mr-auto p-1">
+                        <li className="nav-item ">
                             <Link className="nav-link" to="/index">Anasayfa </Link>
                         </li>
-                        <li className="nav-item dropdown  pl-1">
+                        <li className="nav-item dropdown">
                             <div className="dropdown">
                                 <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {username}
@@ -88,15 +113,23 @@ const TopMenu = props => {
                         <FontAwesomeIcon icon="bars" size="lg" />
                     </span>
                 }
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button
+                    className={navbarClassName}
+                    onClick={e => onclickNavbar(e)}
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded={ariaExpanded}
+                    aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <div className={navbarTargetDivClassName} id="navbarSupportedContent">
                     <ul className="navbar-nav ml-auto ">
                         <li className="nav-item active">
                             <Link className="nav-link" to="/index">Anasayfa </Link>
                         </li>
-                        <li className="nav-item dropdown  pl-1">
+                        <li className="nav-item dropdown">
                             <div className="dropdown">
                                 <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {username}

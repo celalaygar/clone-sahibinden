@@ -6,19 +6,20 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 //import './bootstrap-override.scss';
 import configureStore from './redux/configureStore';
-import 'bootstrap/dist/js/bootstrap.js';
-import 'jquery/dist/jquery.min.js';
 import 'popper.js/dist/umd/popper.min.js';
 import './components/FontawesomeIcons/FontawesomeIcons';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/checkbox.css';
 import './assets/css/co-detail.css';
 import './assets/css/general-button.css';
 import "alertifyjs/build/css/themes/default.min.css";
 import "alertifyjs/build/css/themes/bootstrap.min.css";
 import "alertifyjs/build/css/alertify.min.css";
+import 'bootstrap/dist/js/bootstrap.js';
+import 'jquery/dist/jquery.slim.js';
+import '@popperjs/core/dist/cjs/popper.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { createRoot } from 'react-dom/client'
+
 const store = configureStore();
 
 createRoot(document.getElementById('root')).render(<Provider store={store}>

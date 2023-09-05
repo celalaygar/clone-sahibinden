@@ -5,25 +5,13 @@ import UserLoginPage from './pages/user/UserLoginPage';
 import { connect } from 'react-redux';
 import SideBarMenu from './components/sidebar/Sidebar';
 import TopMenu from './components/topmenu/TopMenu';
-import UserPage from './pages/user/UserPage';
-import CompanySearchPage from './pages/company/CompanySearchPage';
 import * as PATH from './constant/linkConstant';
-import * as ROLE from './constant/roleConstant';
 import { RouteBaseList } from './constant/routeLinksConstant';
 import ApiService from './services/base/ApiService';
 import { logoutAction } from './redux/AuthenticationAction';
 import AlertifyService from './services/AlertifyService';
 import Axios from 'axios';
-import InfoPage from './pages/information/InfoPage';
-import UserPersonelSearchPage from './pages/user/personel/UserPersonelSearchPage';
-import MyAccountEditPage from './pages/user/myAccount/MyAccountEditPage';
-import NyAccountPage from './pages/user/myAccount/MyAccountPage';
-import UserUpdatePage from './pages/user/UserUpdatePage';
-import UserSignUpPage from './pages/user/UserSignUpPage';
-import MyAccountPasswordEdiPage from './pages/user/myAccount/MyAccountPasswordEdiPage';
-import ContactPage from './pages/information/ContactPage';
 import ProtectedRoute from './ProtectedRoute';
-import UserListPage from './pages/user/UserListPage';
 
 class App extends Component {
   constructor(props) {
