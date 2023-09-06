@@ -3,8 +3,8 @@ import React from 'react';
 import UserCard from './UserCard';
 
 const UserCardModal = (props) => {
-    
-    const{title, user,roles} = props;
+
+    const { title, user, roles } = props;
     return (
         <div className="modal fade" id="openUserModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
             <div className="modal-dialog modal-dialog-centered  modal-lm" role="document">
@@ -18,15 +18,15 @@ const UserCardModal = (props) => {
                     <div className="modal-body">
                         <div className="row">
 
-                        <div className="col-lg-12">
-                            <UserCard user={user} roles={roles} />
-                        </div>
-                    
+                            <div className="col-lg-12">
+                                <UserCard user={user} roles={roles} />
+                            </div>
+
                         </div>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn" id="close-button" data-dismiss="modal">
-                        <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat</button>
+                            <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat</button>
                     </div>
                 </div>
             </div>

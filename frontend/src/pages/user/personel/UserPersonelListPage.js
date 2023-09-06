@@ -7,7 +7,7 @@ import Input from "../../../components/Input";
 import PageSizeComponent from "../../../components/PageSizeComponent";
 import Preloader from "../../../components/preloader/Preloader";
 import Spinner from "../../../components/Spinner";
-import UserCardModal from "../../../components/UserCardModal";
+import UserCardModal from "../UserCardModal";
 import AlertifyService from "../../../services/AlertifyService";
 import ApiService from "../../../services/base/ApiService";
 import UserService from "../../../services/UserService";
@@ -37,8 +37,6 @@ class UserPersonelListPage extends Component {
 
     handleClickOpen = (rowUserId) => {
         this.setState({ currentUserId: rowUserId, openChangePasswordModal: true });
-        // setCurrentUserId(rowUserId)
-        // setOpenChangePasswordModal(true);
     }
     handleClickUpdateOpen = (userId) => {
         this.setState({ currentUpdateUserId: userId, openUpdateUserModal: true });
@@ -51,10 +49,6 @@ class UserPersonelListPage extends Component {
             currentUserId: undefined,
             openChangePasswordModal: false
         });
-        // setOpenChangePasswordModal(false);
-        // setNewPassword(undefined);
-        // setRepeatNewPassword(undefined);
-        // setCurrentUserId(undefined)
     }
 
     handleUpdateUserClose = () => {
@@ -83,7 +77,6 @@ class UserPersonelListPage extends Component {
             const response = await UserService.changePassword(this.state.currentUserId, body);
             console.log(response)
 
-            // setOpenChangePasswordModal(false);
             this.setState({
                 openChangePasswordModal: false,
                 newPassword: undefined,
@@ -92,11 +85,9 @@ class UserPersonelListPage extends Component {
             AlertifyService.alert("Şifre Güncelleme İşlemi Başarılı.");
         } catch (error) {
             if (error.response) {
-                //console.log(error.response.data.message);
                 console.log(error.response);
                 if (error.response.data.status === 500) {
                     console.log(error.response.data.status);
-                    //AlertifyService.alert("Lütfen Tekrar giriş yapınız...");
                 }
             }
             else if (error.request) {

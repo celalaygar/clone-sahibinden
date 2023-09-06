@@ -62,9 +62,6 @@ class MyAccountEditPage extends Component {
         if (this.state.error) {
             this.setState({ error: null });
         }
-        // const { dispatch, history } = this.props;
-        // const { username, password } = this.state;
-        // const creds = { username, password };
 
         try {
             console.log(this.state)
@@ -185,8 +182,8 @@ class MyAccountEditPage extends Component {
             )
         } else {
             return (
-            // <Navigate to="/index" replace={true} />
-             null)
+                // <Navigate to="/index" replace={true} />
+                null)
         }
     }
 }

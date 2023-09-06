@@ -1,14 +1,14 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog } from '@material-ui/core';
-import AlertifyService from '../services/AlertifyService';
-import UserService from '../services/UserService';
+import AlertifyService from '../../services/AlertifyService';
+import UserService from '../../services/UserService';
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import Input from './Input';
-import Spinner from './Spinner';
+import Input from '../../components/Input';
+import Spinner from '../../components/Spinner';
 import UserCardModal from './UserCardModal';
-import UserUpdatePage from '../pages/user/UserUpdatePage';
+import UserUpdatePage from './UserUpdatePage';
 
 class UserListTable extends Component {
     constructor(props) {
@@ -35,8 +35,6 @@ class UserListTable extends Component {
 
     handleClickOpen = (rowUserId) => {
         this.setState({ currentUserId: rowUserId, openChangePasswordModal: true });
-        // setCurrentUserId(rowUserId)
-        // setOpenChangePasswordModal(true);
     }
     handleClickUpdateOpen = (userId) => {
         this.setState({ currentUpdateUserId: userId, openUpdateUserModal: true });
@@ -49,10 +47,6 @@ class UserListTable extends Component {
             currentUserId: undefined,
             openChangePasswordModal: false
         });
-        // setOpenChangePasswordModal(false);
-        // setNewPassword(undefined);
-        // setRepeatNewPassword(undefined);
-        // setCurrentUserId(undefined)
     }
 
     handleUpdateUserClose = () => {
@@ -108,11 +102,7 @@ class UserListTable extends Component {
             }
         };
         this.setState({ pendingApiCall: false })
-
-
-
     }
-
     onChangeData = (type, event) => {
         if (this.state.error)
             this.setState({ error: null })
@@ -177,7 +167,6 @@ class UserListTable extends Component {
     }
 
     render() {
-        //const { users, roles } = this.state;
         const { newPassword } = this.state.errors;
         return (
             <div>
@@ -217,8 +206,6 @@ class UserListTable extends Component {
                                                 data-target="#openUserModal">
                                                 Aç
                                             </button>
-                                            {/* <Link className="dropdown-item btn-sm" to={"/user/find-by-id/" + user.userId} >Aç </Link> */}
-                                            {/* <Link className="dropdown-item btn-sm" to={"/edit-user/" + user.userId}>Bilgileri Güncelle </Link> */}
                                             <button
                                                 className="dropdown-item btn-sm"
                                                 type="button"
@@ -265,18 +252,6 @@ class UserListTable extends Component {
                         {
                             this.state.pendingApiCall ? <Spinner /> :
                                 <div className="modal-footer">
-                                    {/* <button
-                                        className="btn btn-sm btn-primary"
-                                        type="button"
-                                        onClick={this.onChangePassword}>
-                                        <FontAwesomeIcon icon="save"></FontAwesomeIcon>  Kaydet
-                                    </button> */}
-                                    {/* <button
-                                        className="btn  btn-sm btn-primary"
-                                        type="button"
-                                        //disabled={!btnEnable}
-                                        disabled={this.state.isdisable ? true : ""}
-                                        onClick={this.onChangeUpdateUser}> <FontAwesomeIcon icon="save"></FontAwesomeIcon>  Güncelle</button> */}
                                     <button
                                         className="btn btn-sm btn-dark"
                                         type="button"
@@ -284,13 +259,9 @@ class UserListTable extends Component {
                                         <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
                                     </button>
                                 </div>
-
                         }
-
                     </div>
-
                 </Dialog>
-
                 <Dialog
                     fullWidth={true}
                     maxWidth={"sm"}
@@ -329,26 +300,10 @@ class UserListTable extends Component {
                                     />
                                 </div>
                             </div>
-
-                            {/* <input type="password" value={this.state.newPassword}  onChange={e=>   setNewPassword(e.target.value)} className="form-control" placeholder="Yeni Şifre" /> */}
-                            {/* </div> */}
-                            {/* <div className="form-group">
-                            <label >Yeni Şifre (Tekrar)</label>
-                            <input type="password" value={this.state.repeatNewPassword} onChange={e=>setRepeatNewPassword(e.target.value)} className="form-control" placeholder="Yeni Şifre (Tekrar)" />
-                        </div> */}
-
                         </div>
-
-
                         {
                             this.state.pendingApiCall ? <Spinner /> :
                                 <div class="modal-footer">
-                                    {/* <button
-                                        className="btn btn-sm btn-primary"
-                                        type="button"
-                                        onClick={this.onChangePassword}>
-                                        <FontAwesomeIcon icon="save"></FontAwesomeIcon>  Kaydet
-                                    </button> */}
                                     <button
                                         className="btn  btn-sm btn-primary"
                                         type="button"
@@ -361,11 +316,8 @@ class UserListTable extends Component {
                                         <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
                                     </button>
                                 </div>
-
                         }
-
                     </div>
-
                 </Dialog>
             </div>
         )

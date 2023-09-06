@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react'
 import Spinner from '../../components/Spinner';
-import UserCard from '../../components/UserCard';
+import UserCard from './UserCard';
 import AdminService from '../../services/AdminService';
 import AlertifyService from '../../services/AlertifyService';
 import ApiService from '../../services/base/ApiService';
@@ -11,12 +11,12 @@ export default class UserPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id:this.props.match.params.userid,
+            id: this.props.match.params.userid,
             name: '',
             surname: '',
             username: '',
             email: '',
-            roles:[],
+            roles: [],
             error: null,
             errors: {
             },
@@ -25,7 +25,7 @@ export default class UserPage extends Component {
         };
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.loadUser();
         this.loadRoles();
 
@@ -53,13 +53,13 @@ export default class UserPage extends Component {
                 console.log(error.message);
         }
     }
-    loadUser = async ()=>{
-        this.setState({pendingApiCall:true});
+    loadUser = async () => {
+        this.setState({ pendingApiCall: true });
         console.log(this.props.match.params.userId)
         try {
-            const response = await AdminService.get("/user/find-by-id/"+this.props.match.params.userid);
+            const response = await AdminService.get("/user/find-by-id/" + this.props.match.params.userid);
             //console.log(response.data)
-            this.setState({...response.data})
+            this.setState({ ...response.data })
         } catch (error) {
             if (error.response) {
                 console.log(error.response)
@@ -71,17 +71,17 @@ export default class UserPage extends Component {
             else
                 console.log(error.message);
         }
-        this.setState({pendingApiCall:false});
+        this.setState({ pendingApiCall: false });
     }
 
     render() {
         return (
             <div className="row">
-            <div className="col-lg-6">
-                {this.state.pendingApiCall ? <Spinner /> : 
-                
-                    <UserCard roles={this.state.roles} {...this.state} />
-                }
+                <div className="col-lg-6">
+                    {this.state.pendingApiCall ? <Spinner /> :
+
+                        <UserCard roles={this.state.roles} {...this.state} />
+                    }
                 </div>
             </div>
         )

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PaginationComponent from "../../components/PaginationComponent";
 import Preloader from "../../components/preloader/Preloader";
-import UserListTable from "../../components/UserListTable";
+import UserListTable from "./UserListTable";
 import ApiService from "../../services/base/ApiService";
 import UserService from "../../services/UserService";
 
@@ -15,7 +15,7 @@ class UserListPage extends Component {
       page: {
         content: [],
         number: 0,
-        size: 10,       
+        size: 10,
       },
       pendingApiCall: false,
     };
@@ -26,8 +26,8 @@ class UserListPage extends Component {
     this.loadRoles();
   }
   resetPage = () => {
-      const nextPage = 0;
-      this.getUsersWithPagination(nextPage, this.state.page.size);
+    const nextPage = 0;
+    this.getUsersWithPagination(nextPage, this.state.page.size);
   }
   onClickPagination = (event, value) => {
     event.preventDefault();
@@ -49,27 +49,22 @@ class UserListPage extends Component {
   getUsersWithPagination = async (number, size) => {
     this.setState({ pendingApiCall: true });
     try {
-      // let pageSize = null;
-      // let pageNo = null;
-      // let sortBy = "userId";
 
-      // if(typeof(number) !== 'undefined' && number != null){pageNo=number}else{pageNo=this.state.page.number}
-      // if(typeof(size) !== 'undefined' && size != null){pageSize=size}else{pageSize=this.state.page.size}
 
-      const response = await UserService.getUsersWithPagination(number,size);
+      const response = await UserService.getUsersWithPagination(number, size);
       this.setState({ page: response.data });
 
-    }catch (error) {
+    } catch (error) {
       if (error.response) {
-          console.log(error.response)
+        console.log(error.response)
       }
       else if (error.request)
-          console.log(error.request);
+        console.log(error.request);
       else
-          console.log(error.message);
-  }
+        console.log(error.message);
+    }
 
-  this.setState({ pendingApiCall: false })
+    this.setState({ pendingApiCall: false })
   };
 
   loadRoles = async () => {
@@ -92,42 +87,10 @@ class UserListPage extends Component {
       else console.log(error.message);
     }
   };
-  // loadUsers = async () => {
-  //   this.setState({ pendingApiCall: true });
-  //   try {
-  //     //get-all-users
-  //     const response = await AdminService.get("/get-all-users");
-  //     this.setState({ users: response.data });
-  //   } catch (error) {
-  //     if (error.response) {
-  //       //console.log(error.response.data.message);
-  //       console.log(error.response);
-  //       if (error.response.data.status === 500) {
-  //         console.log(error.response.data.status);
-  //         AlertifyService.alert("Lütfen Tekrar giriş yapınız...");
-  //       }
-  //     } else if (error.request) {
-  //       console.log(error.request);
-  //       AlertifyService.alert(error.request);
-  //     } else {
-  //       console.log(error.message);
-  //       AlertifyService.alert(error.message);
-  //     }
-  //   }
-  //   this.setState({ pendingApiCall: false });
-  //   const nextPage = 0;
-  //   this.pageUserList(nextPage, this.state.page.size);
-  // };
 
   render() {
     const { roles } = this.state;
-    // const {
-    //   content: userPage,
-    //   first,
-    //   last,
-    //   number,
-    //   totalPages,
-    // } = this.state.page;
+
     return (
       <div className="row">
         <div className="col-lg-12">
@@ -141,10 +104,10 @@ class UserListPage extends Component {
               <div className="row">
                 <>
                   <div className="col-lg-12">
-                    <UserListTable 
-                    resetPage={this.resetPage}
-                    users={this.state.page} 
-                    roles={roles} />
+                    <UserListTable
+                      resetPage={this.resetPage}
+                      users={this.state.page}
+                      roles={roles} />
                   </div>
                   {this.state.page.content.length > 0 ? (
                     <div className="col-sm-12 mt-3 ">

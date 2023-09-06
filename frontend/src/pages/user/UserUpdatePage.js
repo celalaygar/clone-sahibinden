@@ -291,15 +291,6 @@ class UserUpdatePage extends Component {
 
                                 </div>
                             </div>
-                            {/* <div className="form-group">
-                                    <label htmlFor="exampleInputEmail1">Role</label>
-                                    <select className="form-control" value={this.state.role} onChange={e => this.onChangeData("role", e.target.value)}>
-                                        {this.state.roles.map((role, index) =>
-                                            <option key={index} value={role}>{role}</option>
-                                        )
-                                        }
-                                    </select>
-                                </div> */}
                             {
                                 this.state.pendingApiCall ? <Spinner /> :
                                     <div>

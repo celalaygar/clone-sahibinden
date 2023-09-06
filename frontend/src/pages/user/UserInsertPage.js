@@ -50,7 +50,7 @@ class UserInsertPage extends Component {
 
         try {
             const roles = await ApiService.get("/roles");
-            this.setState({ roles: roles.data }, ()=>{
+            this.setState({ roles: roles.data }, () => {
                 console.log(this.state.roles)
             })
         } catch (error) {
@@ -82,7 +82,7 @@ class UserInsertPage extends Component {
 
 
     onChangeData = (type, event) => {
- 
+
         const errors = { ...this.state.errors }
         errors[type] = undefined;
 
@@ -92,7 +92,7 @@ class UserInsertPage extends Component {
         else
             stateData[type] = event
 
-        this.setState({ stateData, errors: errors  });
+        this.setState({ stateData, errors: errors });
     }
     onSave = async (event) => {
         this.setState({ pendingApiCall: true })
@@ -112,9 +112,9 @@ class UserInsertPage extends Component {
                 motherName: this.state.motherName,
                 fatherName: this.state.fatherName,
                 tcNo: this.state.tcNo,
-                phoneNumber:this.state.phoneNumber,
-                bloodType:this.state.bloodType,
-                role: this.state.role === "Seçiniz" ? null : this.state.role 
+                phoneNumber: this.state.phoneNumber,
+                bloodType: this.state.bloodType,
+                role: this.state.role === "Seçiniz" ? null : this.state.role
             }
             const response = await ApiService.post("/registration", body);
             console.log(response.data)
@@ -303,7 +303,6 @@ class UserInsertPage extends Component {
                                     </div>
                                 </div>
                                 <form >
-
                                     {
                                         this.state.pendingApiCall ? <Spinner /> :
                                             <button
@@ -314,10 +313,7 @@ class UserInsertPage extends Component {
                                                 onClick={this.onSave}>
                                                 <FontAwesomeIcon icon="save" > </FontAwesomeIcon> Kaydet</button>
                                     }
-
                                 </form>
-
-
                             </div>
                         </div>
                     </div>
@@ -325,7 +321,7 @@ class UserInsertPage extends Component {
             )
         } else {
             return (null
-            // <Navigate to="/index" replace={true} />
+                // <Navigate to="/index" replace={true} />
             )
         }
     }

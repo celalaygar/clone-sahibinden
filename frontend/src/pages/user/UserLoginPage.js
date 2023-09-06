@@ -116,7 +116,7 @@ const UserLoginPage = (props) => {
                             {/* <h3 className="panel-title col-md-4 offset-md-4">Giriş Yap</h3> */}
                             <img className="img" src={"https://cdn-icons-png.flaticon.com/512/295/295128.png"} width="150" height="150" />
                         </div>
-                        <div className="col-lg-12 offset-p-1 " >
+                        <div className="col-lg-12 offset-p-1 p-3" >
                             <br />
                             <form onKeyPress={onKeyPressLogin}  >
                                 <Input

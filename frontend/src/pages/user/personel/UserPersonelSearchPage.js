@@ -330,12 +330,7 @@ class UserPersonelSearchPage extends Component {
                             </div>
                         }
                     </div>
-
-
-
                 </div>
-
-
             </div>
         );
     }
