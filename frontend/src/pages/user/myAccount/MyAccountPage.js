@@ -65,7 +65,7 @@ const MyAccountPage = () => {
     return (
         <div className="row">
             <div className="col-lg-6">
-                {this.state.pendingApiCall ? <Spinner /> :
+                {pendingApiCall ? <Spinner /> :
 
                     <>
                         <UserCard user={myAccountDetail} roles={roles} />
