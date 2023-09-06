@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Spinner from '../../../components/Spinner';
 import UserCard from '../UserCard';
 import ApiService from '../../../services/base/ApiService';
@@ -60,8 +60,10 @@ const MyAccountPage = () => {
         }
         setPendingApiCall(false);
     }
-    loadUser();
-    loadRoles();
+    useEffect(() => {
+        loadUser();
+        loadRoles();
+    }, []);
     return (
         <div className="row">
             <div className="col-lg-6">
