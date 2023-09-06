@@ -1,6 +1,6 @@
 
 
-import React, { Component, useState } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import { connect } from 'react-redux';
 import Input from '../../../components/Input';
 import Spinner from '../../../components/Spinner';
@@ -31,8 +31,7 @@ const MyAccountEditPage = (props) => {
     const loadUser = async () => {
         try {
             const response = await UserService.get("/my-account");
-            //console.log(response.data)
-            myAccountDetail({ ...response.data })
+            setMyAccountDetail({ ...response.data })
         } catch (error) {
             if (error.response) {
                 console.log(error.response)
@@ -44,7 +43,6 @@ const MyAccountEditPage = (props) => {
                 console.log(error.message);
         }
     }
-    loadUser();
 
     const onChangeData = (type, event) => {
         if (error) {
@@ -53,8 +51,11 @@ const MyAccountEditPage = (props) => {
         const stateData = myAccountDetail;
         stateData[type] = event
 
-        setMyAccountDetail({ stateData });
+        setMyAccountDetail({ ...stateData });
     }
+    useEffect(() => {
+        loadUser();
+    }, []);
 
     const onClickUpdate = async (event) => {
         setPendingApiCall(true);
@@ -76,6 +77,9 @@ const MyAccountEditPage = (props) => {
                 if (error.response.status === 401 && error.response.data) {
                     console.log(error.response.data)
                     setError(error.response.data)
+                } else {
+                    console.log(error.response.data.validationErrors);
+                    setErrors({ ...error.response.data.validationErrors })
                 }
             }
             else if (error.request)
@@ -88,7 +92,7 @@ const MyAccountEditPage = (props) => {
     }
 
     if (props.role === "ADMIN" || props.match.params.username === props.username) {
-        const { name, surname, username, /*password ,*/ email } = errors;
+        const { name, surname, username, /*password ,*/ email, motherName, fatherName, tcNo } = errors;
         return (
             <div className="row">
                 <div className="col-lg-8">
@@ -136,7 +140,7 @@ const MyAccountEditPage = (props) => {
                                 />
                                 <Input
                                     label={"Anne Adı"}
-                                    error={email}
+                                    error={motherName}
                                     type="text"
                                     name="motherName"
                                     placeholder={"Anne Adı"}
@@ -145,7 +149,7 @@ const MyAccountEditPage = (props) => {
                                 />
                                 <Input
                                     label={"Baba Adı"}
-                                    error={email}
+                                    error={fatherName}
                                     type="text"
                                     name="fatherName"
                                     placeholder={"Baba Adı"}
@@ -154,6 +158,7 @@ const MyAccountEditPage = (props) => {
                                 />
                                 <Input
                                     label={"TC NO"}
+                                    error={tcNo}
                                     type="text"
                                     name="tcNo"
                                     placeholder={"TC NO"}

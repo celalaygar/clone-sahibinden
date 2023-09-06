@@ -2,6 +2,7 @@ package com.project.commerce.user.dto;
 
 import com.project.commerce.user.entity.Role;
 import com.project.commerce.user.entity.User;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,10 +20,14 @@ public class UserDto {
 	private Date bornDate;
 	private Date createdDate;
     private String username;
+    @NotNull
     private String email;
     private Role role;
+    @NotNull
     private String tcNo;
+    @NotNull
     private String motherName;
+    @NotNull
     private String fatherName;
     private String password;
     private String bloodType;
