@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { connect } from 'react-redux';
 import { loginHandler } from './../../redux/AuthenticationAction';
 import Spinner from '../../components/Spinner';
@@ -7,55 +7,37 @@ import '../../assets/css/UserLoginPage.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-class UserLoginPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            email: null,
-            password: '',
-            error: null,
-            errors: {
-            },
-            pendingApiCall: false
+const UserLoginPage = (props) => {
+    const [formData, setformData] = useState({
+        username: "",
+        email: null,
+        password: ""
+    });
 
-        };
-    }
-    componentDidMount() {
-        // Axios.interceptors.request.use(request => {
-        //     this.setState({ pendingApiCall: true })
-        //     return request;
-        // });
-        // Axios.interceptors.response.use(request => {
-        //     this.setState({ pendingApiCall: false })
-        //     return request;
-        // }, error => {
-        //     this.setState({ pendingApiCall: false })
-        //     throw error;
-        // });
-    }
-    componentWillUnmount() {
-        this.setState = (state, callback) => {
-            return;
-        };
-    }
-    onChangeData = (type, event) => {
-        if (this.state.error)
-            this.setState({ error: null })
-        const stateData = this.state;
+    const [btnEnable, setBtnEnable] = useState(false);
+    const [error, setError] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [pendingApiCall, setPendingApiCall] = useState(false);
+
+    const onChangeData = (type, event) => {
+        if (error) {
+            setError(null)
+        }
+        const stateData = formData;
         stateData[type] = event
 
-        this.setState({ stateData });
+        setformData({ ...stateData });
+        setBtnEnable(formData.username && formData.password)
     }
-    onClickLogin = async (event) => {
-        this.setState({ pendingApiCall: true })
+    const onClickLogin = async (event) => {
+        setPendingApiCall(true)
 
         event.preventDefault();
-        if (this.state.error) {
-            this.setState({ error: null });
+        if (error) {
+            setError(null)
         }
-        const { dispatch, history } = this.props;
-        const { username, password } = this.state;
+        const { dispatch, history } = props;
+        const { username, password } = formData;
         const creds = { username, password };
 
         try {
@@ -66,11 +48,11 @@ class UserLoginPage extends Component {
                 console.log(error.response)
                 if (error.response.status === 401 && error.response.data) {
                     console.log(error.response.data)
-                    this.setState({ error: error.response.data })
+                    setError(error.response.data)
                 }
                 if (error.response.status === 409 && error.response.data) {
                     console.log(error.response.data)
-                    this.setState({ error: error.response.data })
+                    setError(error.response.data)
                 }
             }
             else if (error.request)
@@ -78,18 +60,18 @@ class UserLoginPage extends Component {
             else
                 console.log(error.message);
         }
-        this.setState({ pendingApiCall: false })
+        setPendingApiCall(false)
 
     }
-    onKeyPressLogin = async (event) => {
-        this.setState({ pendingApiCall: true })
+    const onKeyPressLogin = async (event) => {
+        setPendingApiCall(true)
 
         // event.preventDefault();
-        if (this.state.error) {
-            this.setState({ error: null });
+        if (error) {
+            setError(null)
         }
-        const { dispatch, history } = this.props;
-        const { username, password } = this.state;
+        const { dispatch, history } = props;
+        const { username, password } = formData;
         const creds = { username, password };
 
         try {
@@ -104,88 +86,84 @@ class UserLoginPage extends Component {
                 console.log(error.response)
                 if (error.response.status === 401 && error.response.data) {
                     console.log(error.response.data)
-                    this.setState({ error: error.response.data })
+                    setError(error.response.data)
                 }
                 if (error.response.status === 409 && error.response.data) {
                     console.log(error.response.data)
-                    this.setState({ error: error.response.data })
+                    setError(error.response.data)
                 }
             }
             else if (error.request) {
-
-                this.setState({ error: "NETWORK" })
+                setError("NETWORK")
                 console.log(error.request);
             }
             else {
-                this.setState({ error: "Hay Aksi 2" })
+                setError("Hay Aksi ")
                 console.log(error.message);
             }
         }
-        this.setState({ pendingApiCall: false })
+        setPendingApiCall(false)
 
     }
-    render() {
-        const { username, password } = this.state.errors;
-        const btnEnable = this.state.username && this.state.password;
-        return (
-            <div className="container">
-                <div className="row mt-5">
-                    <div className="col-lg-2"></div>
-                    <div className="col-lg-8">
-                        <div id="formContent">
-                            <div id="formFooter">
-                                {/* <h3 className="panel-title col-md-4 offset-md-4">Giriş Yap</h3> */}
-                                <img className="img" src={""} width="100" height="100" />
-                            </div>
-                            <div className="col-md-12 offset-md-12 p-5" >
-                                <br />
-                                <form onKeyPress={this.onKeyPressLogin}  >
-                                    <Input
-                                        label={"Üye Adı"}
-                                        error={username}
-                                        type="text"
-                                        name="username"
-                                        placeholder={"Üye Adı"}
-                                        valueName={this.state.username}
-                                        onChangeData={this.onChangeData}
-                                    />
-                                    <Input
-                                        label={"Şifre"}
-                                        error={password}
-                                        type="password"
-                                        name="password"
-                                        placeholder={"Şifre"}
-                                        valueName={this.state.password}
-                                        onChangeData={this.onChangeData}
-                                    />
-                                </form>
-                                {
-                                    this.state.pendingApiCall ? <Spinner /> :
-                                        <button
-                                            className="btn"
-                                            id="search-button"
-                                            type="button"
-                                            disabled={!btnEnable}
-                                            onClick={this.onClickLogin}><FontAwesomeIcon icon="sign-out-alt"></FontAwesomeIcon> Giriş Yap</button>
-                                }
-
-                            </div>
-                            <br />
-                            {this.state.error &&
-                                <div className="alert alert-danger" role="alert">
-                                    {this.state.error === "UNAUTHORIZED" && "Hata : Kullanıcı Adı veya Şifre Hatalı"}
-                                    {this.state.error === "CONFLICT" && "Hata : Üye Girişi Zaten Yapıldı"}
-                                    {this.state.error === "NETWORK" && "Hata : Sistem ile İlgili Bir Problem Oluştu. Yetkiliye Başvurunuz"}
-                                </div>
-                            }
+    const { username, password } = errors;
+    return (
+        <div className="container">
+            <div className="row mt-5">
+                <div className="col-lg-3"></div>
+                <div className="col-lg-6">
+                    <div id="formContent">
+                        <div id="formFooter">
+                            {/* <h3 className="panel-title col-md-4 offset-md-4">Giriş Yap</h3> */}
+                            <img className="img" src={"https://cdn-icons-png.flaticon.com/512/295/295128.png"} width="150" height="150" />
                         </div>
+                        <div className="col-lg-12 offset-p-1 " >
+                            <br />
+                            <form onKeyPress={onKeyPressLogin}  >
+                                <Input
+                                    label={"Üye Adı"}
+                                    error={username}
+                                    type="text"
+                                    name="username"
+                                    placeholder={"Üye Adı"}
+                                    valueName={formData.username}
+                                    onChangeData={onChangeData}
+                                />
+                                <Input
+                                    label={"Şifre"}
+                                    error={password}
+                                    type="password"
+                                    name="password"
+                                    placeholder={"Şifre"}
+                                    valueName={formData.password}
+                                    onChangeData={onChangeData}
+                                />
+                            </form>
+                            {
+                                pendingApiCall ? <Spinner /> :
+                                    <button
+                                        className="btn"
+                                        id="search-button"
+                                        type="button"
+                                        disabled={!btnEnable}
+                                        onClick={onClickLogin}><FontAwesomeIcon icon="sign-out-alt"></FontAwesomeIcon> Giriş Yap</button>
+                            }
+
+                        </div>
+                        <br />
+                        {error &&
+                            <div className="alert alert-danger" role="alert">
+                                {error === "UNAUTHORIZED" && "Hata : Kullanıcı Adı veya Şifre Hatalı"}
+                                {error === "CONFLICT" && "Hata : Üye Girişi Zaten Yapıldı"}
+                                {error === "NETWORK" && "Hata : Sistem ile İlgili Bir Problem Oluştu. Yetkiliye Başvurunuz"}
+                            </div>
+                        }
                     </div>
-                    <div className="col-lg-2"></div>
                 </div>
+                <div className="col-lg-3"></div>
             </div>
-        )
-    }
-}
-// withTranslation to change language (turkısh <=> english)
-// connect for redux
+        </div>
+    );
+};
+
 export default connect()(UserLoginPage);
+
