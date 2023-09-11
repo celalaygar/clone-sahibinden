@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 //import './bootstrap-override.scss';
-import configureStore from './redux/configureStore';
 import 'popper.js/dist/umd/popper.min.js';
 import './components/FontawesomeIcons/FontawesomeIcons';
 import './assets/css/checkbox.css';
@@ -19,8 +18,10 @@ import 'jquery/dist/jquery.slim.js';
 import '@popperjs/core/dist/cjs/popper.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { createRoot } from 'react-dom/client'
+import { store } from './redux/redux-toolkit/ReduxStore';
 
-const store = configureStore();
+
+//const store = configureStore();
 
 createRoot(document.getElementById('root')).render(<Provider store={store}>
   <App />

@@ -81,7 +81,6 @@ class UserListPage extends Component {
         console.log(error.response);
         if (error.response.data.status === 500) {
           console.log(error.response.data.status);
-          //AlertifyService.alert("Lütfen Tekrar giriş yapınız...");
         }
       } else if (error.request) console.log(error.request);
       else console.log(error.message);

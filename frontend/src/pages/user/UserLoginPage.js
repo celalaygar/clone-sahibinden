@@ -1,10 +1,11 @@
 import React, { Component, useState } from 'react'
-import { connect } from 'react-redux';
-import { loginHandler } from './../../redux/AuthenticationAction';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import Spinner from '../../components/Spinner';
 import Input from '../../components/Input';
 import '../../assets/css/UserLoginPage.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { loginAsync, selectedAuthentication } from '../../redux/redux-toolkit/authentication/AuthenticationSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const UserLoginPage = (props) => {
@@ -13,11 +14,13 @@ const UserLoginPage = (props) => {
         email: null,
         password: ""
     });
-
+    let navigate = useNavigate();
+    const dispatch = useDispatch();
     const [btnEnable, setBtnEnable] = useState(false);
     const [error, setError] = useState(null);
     const [errors, setErrors] = useState({});
     const [pendingApiCall, setPendingApiCall] = useState(false);
+    const selectedAuth = useSelector(selectedAuthentication);
 
     const onChangeData = (type, event) => {
         if (error) {
@@ -36,13 +39,14 @@ const UserLoginPage = (props) => {
         if (error) {
             setError(null)
         }
-        const { dispatch, history } = props;
         const { username, password } = formData;
         const creds = { username, password };
 
         try {
-            await dispatch(loginHandler(creds));
-            history.push("/index");
+            await dispatch(loginAsync({
+                ...creds
+            }))
+            navigate("/index");
         } catch (error) {
             if (error.response) {
                 console.log(error.response)
@@ -64,23 +68,22 @@ const UserLoginPage = (props) => {
 
     }
     const onKeyPressLogin = async (event) => {
-        setPendingApiCall(true)
 
-        // event.preventDefault();
+        if (event.key !== "Enter") {
+            return;
+        }
+        setPendingApiCall(true)
         if (error) {
             setError(null)
         }
-        const { dispatch, history } = props;
         const { username, password } = formData;
         const creds = { username, password };
 
         try {
-            if (event.charCode === 13) {
-                await dispatch(loginHandler(creds));
-                history.push("/index");
-            } else {
-                // this.onChangeData(event);
-            }
+            await dispatch(loginAsync({
+                ...creds
+            }))
+            navigate("/index");
         } catch (error) {
             if (error.response) {
                 console.log(error.response)
@@ -114,7 +117,7 @@ const UserLoginPage = (props) => {
                     <div id="formContent">
                         <div id="formFooter">
                             {/* <h3 className="panel-title col-md-4 offset-md-4">Giriş Yap</h3> */}
-                            <img className="img" src={"https://cdn-icons-png.flaticon.com/512/295/295128.png"} width="150" height="150" />
+                            <img className="img" src={"https://cdn-icons-png.flaticon.com/512/272/272354.png"} width="150" height="150" />
                         </div>
                         <div className="col-lg-12 offset-p-1 p-3" >
                             <br />
@@ -165,5 +168,5 @@ const UserLoginPage = (props) => {
     );
 };
 
-export default connect()(UserLoginPage);
+export default UserLoginPage;
 

@@ -33,7 +33,7 @@ public class JwtTokenProvider {
     @Value("${app.jwt.header.string}")
     private String jwtHeaderString;
     //@Value("${app.jwt.expiration-in-ms}")
-    private static final Long jwtExpirationInMs = 10 * 60 * 60 * 1000L;
+    private static final Long jwtExpirationInMs = 1000L;
 
     private static final Long  refreshExpirationDateInMs = 8 * 60 * 60 * 1000L;
 

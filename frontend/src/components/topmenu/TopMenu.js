@@ -2,20 +2,16 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logoutAction } from '../../redux/AuthenticationAction';
 import ApiService from '../../services/base/ApiService';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './TopMenu.css';
+import { logoutAsync, selectedAuthentication } from '../../redux/redux-toolkit/authentication/AuthenticationSlice';
 
 
 const TopMenu = props => {
-    const { isLoggedIn, username, role } = useSelector(store => {
-        return {
-            isLoggedIn: store.isLoggedIn,
-            username: store.username,
-            role: store.role
-        };
-    });
+    const selectedAuth = useSelector(selectedAuthentication);
+    const { isLoggedIn, username, role } = selectedAuth;
+
     const [navbarClassName, setNavbarClassName] = useState("navbar-toggler collapsed");
     const [ariaExpanded, setAriaExpanded] = useState("false");
     const [navbarTargetDivClassName, setNavbarTargetDivClassName] = useState("navbar-collapse collapse");
@@ -41,6 +37,8 @@ const TopMenu = props => {
 
         try {
             await ApiService.logout();
+            ApiService.changeAuthToken(null);
+            await dispatch(logoutAsync(null));
         } catch (error) {
             if (error.response) {
                 console.log(error.response.data)
@@ -51,8 +49,6 @@ const TopMenu = props => {
                 console.log(error.message);
         }
 
-        ApiService.changeAuthToken(null);
-        dispatch(logoutAction());
     }
     let links = (
         <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom ">

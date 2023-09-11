@@ -33,21 +33,9 @@ class CompanyInsertPage extends Component {
     }
 
     componentDidMount() {
-        //const country = CountryService.getAll()
         this.loadCountry();
         this.setState({ errors: {} })
 
-        // Axios.interceptors.request.use(request => {
-        //     this.setState({ pendingApiCall: true })
-        //     return request;
-        // });
-        // Axios.interceptors.response.use(request => {
-        //     this.setState({ pendingApiCall: false })
-        //     return request;
-        // }, error => {
-        //     this.setState({ pendingApiCall: false })
-        //     throw error;
-        // });
     }
     loadCountry = async () => {
         this.setState({ pendingApiCall: true })
@@ -95,7 +83,6 @@ class CompanyInsertPage extends Component {
                 console.log(error.response);
                 if (error.response.data.status === 500) {
                     console.log(error.response.data.status);
-                    AlertifyService.delayErrorMessage(8,"Lütfen Tekrar giriş yapınız");
                 }
                 if (error.response.data.validationErrors) {
                     console.log(error.response.data.validationErrors);
@@ -135,7 +122,7 @@ class CompanyInsertPage extends Component {
         return (
             <div className="row">
                 <div className="col-lg-12">
-                    <div className="card-header"><h5  clasName="mb-0" className="card-title">Şirket Ekle</h5></div>
+                    <div className="card-header"><h5 clasName="mb-0" className="card-title">Şirket Ekle</h5></div>
 
                     <p className="description-p ml-3 mt-2" style={{ color: "red" }}>  ( * ) Zorunlu alanlar </p>
                     <form >

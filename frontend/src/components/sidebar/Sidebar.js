@@ -6,27 +6,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LogoComponent from '../LogoComponent';
 import * as ICON from '../../assets/icons';
 import { linkList } from '../../constant/sidebarConstant';
+import { selectedAuthentication } from '../../redux/redux-toolkit/authentication/AuthenticationSlice';
+import SecureLS from 'secure-ls';
 
 const SideBarMenu = () => {
 
-  const { isLoggedIn, role } = useSelector(store => {
-    return {
-      isLoggedIn: store.isLoggedIn,
-      username: store.username,
-      role: store.role
-    };
-  });
-
+  const secureLS = new SecureLS();
+  const selectedAuth = useSelector(selectedAuthentication);
   const [triggerUseEffect, setTriggerUseEffect] = useState(0);
 
+  const clickc = (e) => {
+    console.log("selectedAuth " + selectedAuth);
+    console.log(selectedAuth);
+    console.log("secureLS " + secureLS.get("auth"));
+    console.log(secureLS.get("auth"));
+  }
+
   let links = null;
-  if (isLoggedIn) {
+  if (selectedAuth.isLoggedIn) {
     links = (
       <ul className="list-unstyled components" >
         {linkList.map((link) =>
-          link.role.some((personRole) => personRole === role) ?
+          link.role.some((personRole) => personRole === selectedAuth.role) ?
             link.submenu.length === 0 ?
-              <li key={link.to} className={triggerUseEffect === link.to && "active"}>
+              <li onClick={e => clickc(e)} key={link.to} className={triggerUseEffect === link.to && "active"}>
                 <Link to={link.to} onClick={() => setTriggerUseEffect(link.to)}>
                   <FontAwesomeIcon className="fa-sm" icon={link.icon} />
                   &nbsp;&nbsp; {link.name}
@@ -41,7 +44,7 @@ const SideBarMenu = () => {
                   <FontAwesomeIcon className="fa-sm" icon={link.icon} />&nbsp;&nbsp; {link.name}</a>
                 <ul className="collapse list-unstyled" id="homeSubmenu2">
                   {link.submenu.map((link) =>
-                    link.role.some((personRole) => personRole === role) ?
+                    link.role.some((personRole) => personRole === selectedAuth.role) ?
                       <li key={link.to} className={triggerUseEffect === link.to && "active"}>
                         <Link to={link.to} onClick={() => setTriggerUseEffect(link.to)}>
                           <FontAwesomeIcon className="fa-sm" icon={link.icon} />

@@ -1,18 +1,21 @@
 
 
 import React, { Component, useEffect, useState } from 'react'
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import Input from '../../../components/Input';
 import Spinner from '../../../components/Spinner';
-import { logoutAction } from '../../../redux/AuthenticationAction';
 import AlertifyService from '../../../services/AlertifyService';
 import ApiService from '../../../services/base/ApiService';
 import UserService from '../../../services/UserService';
+import { logoutAsync, selectedAuthentication } from '../../../redux/redux-toolkit/authentication/AuthenticationSlice';
+import { useParams } from 'react-router-dom';
 
 
 
 const MyAccountEditPage = (props) => {
 
+    const { username: paramUsername } = useParams();
+    const selectedAuth = useSelector(selectedAuthentication);
     const [myAccountDetail, setMyAccountDetail] = useState({
         name: "",
         surname: "",
@@ -23,6 +26,7 @@ const MyAccountEditPage = (props) => {
         tcNo: "",
     });
 
+    const dispatch = useDispatch();
     const [roles, setRoles] = useState();
     const [error, setError] = useState(null);
     const [errors, setErrors] = useState({});
@@ -69,13 +73,11 @@ const MyAccountEditPage = (props) => {
             const response = await UserService.updateYourSelves(props.username, myAccountDetail);
             AlertifyService.alert("Bilgileriniz Güncellendi. Lütfen Tekrar Giriş Yapınız")
             ApiService.changeAuthToken(null);
-            props.dispatch(logoutAction());
-            // history.push("/index");
+            await dispatch(logoutAsync(null));
         } catch (error) {
             if (error.response) {
                 console.log(error.response)
                 if (error.response.status === 401 && error.response.data) {
-                    console.log(error.response.data)
                     setError(error.response.data)
                 } else {
                     console.log(error.response.data.validationErrors);
@@ -90,8 +92,7 @@ const MyAccountEditPage = (props) => {
         setPendingApiCall(false);
 
     }
-
-    if (props.role === "ADMIN" || props.match.params.username === props.username) {
+    if (props.role === "ADMIN" || paramUsername === selectedAuth.username) {
         const { name, surname, username, /*password ,*/ email, motherName, fatherName, tcNo } = errors;
         return (
             <div className="row">
@@ -192,13 +193,5 @@ const MyAccountEditPage = (props) => {
 
 
 
-const mapStateToProps = (store) => {
-    return {
-        isLoggedIn: store.isLoggedIn,
-        username: store.username,
-        jwttoken: store.jwttoken,
-        role: store.role
-    };
-};
 
-export default connect(mapStateToProps)(MyAccountEditPage);
+export default MyAccountEditPage;

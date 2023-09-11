@@ -3,9 +3,17 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import Input from '../../../components/Input';
 import Spinner from '../../../components/Spinner';
-import { logoutAction } from '../../../redux/AuthenticationAction';
+//import { logoutAction } from '../../../redux/AuthenticationAction';
 import AlertifyService from '../../../services/AlertifyService';
 import UserService from '../../../services/UserService';
+
+
+
+
+
+
+
+
 
 class MyAccountPasswordEdiPage extends Component {
 
@@ -13,8 +21,8 @@ class MyAccountPasswordEdiPage extends Component {
         super(props);
         this.state = {
             oldPassword: '',
-            newPassword:'',
-            repeatNewPassword:'',
+            newPassword: '',
+            repeatNewPassword: '',
             isdisable: true,
             tcNo: undefined,
             errors: {
@@ -48,17 +56,17 @@ class MyAccountPasswordEdiPage extends Component {
             this.setState({ error: null })
         const stateData = this.state;
         stateData[type] = event;
-        if(stateData["newPassword"]){
-            if(stateData["newPassword"] === stateData["repeatNewPassword"]){
+        if (stateData["newPassword"]) {
+            if (stateData["newPassword"] === stateData["repeatNewPassword"]) {
                 stateData["isdisable"] = false;
-                stateData["errors"]={newPassword: undefined}
-            }else{
-                stateData["errors"]={newPassword: "Şifreler Uyuşmuyor"}
+                stateData["errors"] = { newPassword: undefined }
+            } else {
+                stateData["errors"] = { newPassword: "Şifreler Uyuşmuyor" }
             }
-        }else if (stateData["newPassword"] || stateData["repeatNewPassword"]) {
-            stateData["errors"]={newPassword: "Şifreler Uyuşmuyor"}
-        }else if ( !stateData["newPassword"] || !stateData["repeatNewPassword"]) {
-            stateData["errors"]={newPassword: undefined}
+        } else if (stateData["newPassword"] || stateData["repeatNewPassword"]) {
+            stateData["errors"] = { newPassword: "Şifreler Uyuşmuyor" }
+        } else if (!stateData["newPassword"] || !stateData["repeatNewPassword"]) {
+            stateData["errors"] = { newPassword: undefined }
         }
 
         this.setState({ stateData });
@@ -80,10 +88,10 @@ class MyAccountPasswordEdiPage extends Component {
             }
             const response = await UserService.updateMyPassword(body);
             console.log(response.data)
-            if(response.data.body=== true){
+            if (response.data.body === true) {
                 AlertifyService.alert("Şifreniz Güncellendi. Lütfen Tekrar Giriş Yapınız")
-                this.props.dispatch(logoutAction());
-            }else{
+                //this.props.dispatch(logoutAction());
+            } else {
                 AlertifyService.alert(response.data)
             }
 
@@ -104,76 +112,76 @@ class MyAccountPasswordEdiPage extends Component {
 
     }
     render() {
-        const {oldPassword,newPassword} =  this.state.errors;
+        const { oldPassword, newPassword } = this.state.errors;
         return (
             <div className="row">
-            <div className="col-lg-8">
-                <div className="card">
-                    <div className="card-header">
-                        <h5 className="mb-0">Şifremi Güncelle</h5>
-                    </div>
-                    <div className="card-body">
-                        <form >
-                            <Input
-                                label={"Mevcut Şifreniz *"}
-                                error={oldPassword}
-                                type="password"
-                                name="oldPassword"
-                                placeholder={"Mevcut Şifreniz *"}
-                                valueName={this.state.oldPassword}
-                                onChangeData={this.onChangeData}
-                            />
-                            <Input
-                                label={"Yeni Şifreniz *"}
-                                error={newPassword}
-                                type="password"
-                                name="newPassword"
-                                placeholder={"Yeni Şifreniz *"}
-                                valueName={this.state.newPassword}
-                                onChangeData={this.onChangeData}
-                            />
-                            <Input
-                                label={"Yeni Şifreniz (Tekrar) *"} 
-                                type="password"
-                                name="repeatNewPassword"
-                                placeholder={"Yeni Şifreniz (Tekrar)) *"}
-                                valueName={this.state.repeatNewPassword}
-                                onChangeData={this.onChangeData}
-                            />
-                            
-                            {
-                                this.state.pendingApiCall ? <Spinner /> :
-                                    <button
-                                        className="btn"
-                                        id="search-button"
-                                        type="button"
-                                        //disabled={!btnEnable}
-                                        disabled={this.state.isdisable? true:""}
-                                        onClick={this.onClickUpdate}>Güncelle</button>
+                <div className="col-lg-8">
+                    <div className="card">
+                        <div className="card-header">
+                            <h5 className="mb-0">Şifremi Güncelle</h5>
+                        </div>
+                        <div className="card-body">
+                            <form >
+                                <Input
+                                    label={"Mevcut Şifreniz *"}
+                                    error={oldPassword}
+                                    type="password"
+                                    name="oldPassword"
+                                    placeholder={"Mevcut Şifreniz *"}
+                                    valueName={this.state.oldPassword}
+                                    onChangeData={this.onChangeData}
+                                />
+                                <Input
+                                    label={"Yeni Şifreniz *"}
+                                    error={newPassword}
+                                    type="password"
+                                    name="newPassword"
+                                    placeholder={"Yeni Şifreniz *"}
+                                    valueName={this.state.newPassword}
+                                    onChangeData={this.onChangeData}
+                                />
+                                <Input
+                                    label={"Yeni Şifreniz (Tekrar) *"}
+                                    type="password"
+                                    name="repeatNewPassword"
+                                    placeholder={"Yeni Şifreniz (Tekrar)) *"}
+                                    valueName={this.state.repeatNewPassword}
+                                    onChangeData={this.onChangeData}
+                                />
+
+                                {
+                                    this.state.pendingApiCall ? <Spinner /> :
+                                        <button
+                                            className="btn"
+                                            id="search-button"
+                                            type="button"
+                                            //disabled={!btnEnable}
+                                            disabled={this.state.isdisable ? true : ""}
+                                            onClick={this.onClickUpdate}>Güncelle</button>
+                                }
+
+                            </form>
+                            <br />
+                            {this.state.error &&
+                                <div className="alert alert-danger" role="alert">
+                                    {this.state.error}
+                                </div>
+
+
                             }
-
-                        </form>
-                        <br />
-                        {this.state.error &&
-                            <div className="alert alert-danger" role="alert">
-                                {this.state.error}
-                            </div>
-
-
-                        }
-                    </div>
-                    <div className="col"></div>
-                    <div className="col-lg-12">
-                        <hr />
-                        <hr />
-                        <hr />
+                        </div>
+                        <div className="col"></div>
+                        <div className="col-lg-12">
+                            <hr />
+                            <hr />
+                            <hr />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         )
     }
-} 
+}
 const mapStateToProps = (store) => {
     return {
         isLoggedIn: store.isLoggedIn,

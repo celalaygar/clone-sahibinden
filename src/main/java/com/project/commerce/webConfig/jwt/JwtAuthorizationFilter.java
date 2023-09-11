@@ -136,28 +136,4 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         request.setAttribute("claims", ex.getClaims());
 
     }
-
-
-
-
-    /*
-    private JwtTokenProvider jwtTokenProvider;
-
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
-        super(authenticationManager);
-        jwtTokenProvider = tokenProvider;
-    }
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-        Authentication authentication = jwtTokenProvider.getAuthentication(request);
-
-        if(authentication != null && jwtTokenProvider.validateToken(request)){
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-        chain.doFilter(request, response);
-
-    }*/
 }
