@@ -85,7 +85,7 @@ const App = () => {
   }
   if (selectedAuth.isLoggedIn) {
     view = (
-      <div className={controlToggle && controlToggle} id="wrapper">
+      <div className={controlToggle ? controlToggle : undefined} id="wrapper">
         <BrowserRouter>
           <SideBarMenu />
           <div id="page-content-wrapper">

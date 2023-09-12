@@ -16,7 +16,7 @@ const Input = (props) => {
             <label htmlFor="exampleInputEmail1">{label}</label>
             <input
                 type={type}
-                className={className && className + " mt-2 "}
+                className={className ? className + " mt-2 " : undefined}
                 name={name}
                 disabled={disabled && disabled}
                 onChange={event => onChangeData(name, type === "file" ? event : event.target.value)}

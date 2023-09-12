@@ -71,9 +71,7 @@ class UserPersonelSearchPage extends Component {
 
         try {
             const roles = await ApiService.get("/roles");
-            this.setState({ roles: roles.data }, () => {
-                console.log(this.state.roles)
-            })
+            this.setState({ roles: roles.data })
         } catch (error) {
             if (error.response) {
                 console.log(error.response);
@@ -112,8 +110,6 @@ class UserPersonelSearchPage extends Component {
             }
             const response = await UserService.search(number, size, body);
             this.setState({ page: response.data });
-            //     const response = await CountryService.getAll();
-            //    this.setState({ countries: response.data });
         } catch (error) {
             if (error.response) {
                 console.log(error.response)

@@ -46,10 +46,8 @@ const UserListPage = () => {
   const getUsersWithPagination = async (number, size) => {
     setIsLoading(true);
     try {
-      console.log("response");
       const response = await UserService.getUsersWithPagination(number, size);
       setPage({ ...response.data });
-      console.log(response);
     } catch (error) {
       if (error.response) {
         console.log(error.response)

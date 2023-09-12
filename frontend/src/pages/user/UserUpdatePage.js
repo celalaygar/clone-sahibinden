@@ -58,10 +58,7 @@ const UserUpdatePage = (props) => {
     const loadUser = async (userId) => {
         setIsLoading(true);
         try {
-
-            console.log("userId " + userId);
             const response = await AdminService.get("/user/find-by-id/" + userId);
-            console.log(response);
             setformData({ ...response.data })
 
         } catch (error) {
@@ -117,7 +114,6 @@ const UserUpdatePage = (props) => {
             };
             if (formData.role !== undefined) {
                 const response = await AdminService.update("/user/" + props.userId, body);
-                console.log(response.data)
                 props.closeUpdateUser();
                 alertify.alert('Uyarı', "Güncelleme İşlemi Başarılı").set({ onclosing: function () { window.location.reload(); } });
 
