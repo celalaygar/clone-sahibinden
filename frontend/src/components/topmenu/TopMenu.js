@@ -77,7 +77,7 @@ const TopMenu = props => {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className={navbarTargetDivClassName} id="navbarSupportedContent">
-                    <ul className="navbar-nav mr-auto p-1">
+                    <ul className="navbar-nav mr-auto">
                         <li className="nav-item ">
                             <Link className="nav-link" to="/index">Anasayfa </Link>
                         </li>
@@ -96,6 +96,9 @@ const TopMenu = props => {
 
                                 </ul>
                             </div>
+                        </li>
+                        <li className="nav-item ">
+                            <div className="nav-link" onClick={onLogout} style={{ cursor: "pointer" }}>Çıkış</div>
                         </li>
                     </ul>
                 </div>
@@ -139,6 +142,9 @@ const TopMenu = props => {
 
                                 </ul>
                             </div>
+                        </li>
+                        <li className="nav-item ">
+                            <div className="nav-link" onClick={onLogout} style={{ cursor: "pointer" }}>Çıkış</div>
                         </li>
                     </ul>
                 </div>
