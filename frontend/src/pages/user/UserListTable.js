@@ -3,85 +3,78 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog } from '@material-ui/core';
 import AlertifyService from '../../services/AlertifyService';
 import UserService from '../../services/UserService';
-import React, { Component } from 'react'
-import { connect } from 'react-redux';
+import React, { Component, useState } from 'react'
+import { connect, useSelector } from 'react-redux';
 import Input from '../../components/Input';
 import Spinner from '../../components/Spinner';
 import UserCardModal from './UserCardModal';
 import UserUpdatePage from './UserUpdatePage';
+import { selectedAuthentication } from '../../redux/redux-toolkit/authentication/AuthenticationSlice';
 
-class UserListTable extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            users: props.users,
-            roles: props.roles,
-            singleUser: {},
-            currentUpdateUserId: {},
-            openChangePasswordModal: false,
-            openUpdateUserModal: false,
+const UserListTable = (props) => {
+
+
+    const [singleUser, setsingleUser] = useState(undefined);
+    const [currentUpdateUserId, setCurrentUpdateUserId] = useState();
+    const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false);
+    const [openUpdateUserModal, setOpenUpdateUserModal] = useState(false);
+    const [formPassword, setFormPassword] = useState({
+        newPassword: undefined,
+        repeatNewPassword: undefined,
+    });
+    const [newPassword, setNewPassword] = useState();
+    const [repeatNewPassword, setRepeatNewPassword] = useState();
+    const [currentUserId, setCurrentUserId] = useState();
+    const [isdisable, setIsdisable] = useState(true);
+    const [users, setusers] = useState(props.users);
+    const [roles, setroles] = useState(props.roles);
+    const selectedAuth = useSelector(selectedAuthentication);
+    const [error, setError] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleClickOpen = (rowUserId) => {
+        setCurrentUserId(rowUserId);
+        setOpenChangePasswordModal(true);
+    }
+    const handleClickUpdateOpen = (userId) => {
+        setCurrentUpdateUserId(userId);
+        setOpenUpdateUserModal(true);
+    }
+
+    const handleClosePassword = () => {
+        setFormPassword({
             newPassword: undefined,
             repeatNewPassword: undefined,
-            currentUserId: undefined,
-            isdisable: true,
-            //roles: [],
-            pendingApiCall: false,
-            errors: {
-            },
-        };
-    }
-
-
-
-    handleClickOpen = (rowUserId) => {
-        this.setState({ currentUserId: rowUserId, openChangePasswordModal: true });
-    }
-    handleClickUpdateOpen = (userId) => {
-        this.setState({ currentUpdateUserId: userId, openUpdateUserModal: true });
-    }
-
-    handleClosePassword = () => {
-        this.setState({
-            newPassword: undefined,
-            repeatNewPassword: undefined,
-            currentUserId: undefined,
-            openChangePasswordModal: false
         });
+        setCurrentUserId(undefined);
+        setOpenChangePasswordModal(false);
     }
 
-    handleUpdateUserClose = () => {
-        this.setState({
-            name: undefined,
-            surname: undefined,
-            role: undefined,
-            email: undefined,
-            username: undefined,
-            motherName: undefined,
-            fatherName: undefined,
-            tcNo: undefined,
-            openUpdateUserModal: false
-        });
+    const handleUpdateUserClose = () => {
+        setsingleUser(undefined);
+        setOpenUpdateUserModal(false);
 
     }
 
-    onChangePassword = async () => {
-        this.setState({ pendingApiCall: true })
+    const onChangePassword = async () => {
+        setIsLoading(true)
 
         try {
             let body = {
-                newPassword: this.state.newPassword,
-                repeatNewPassword: this.state.repeatNewPassword,
+                newPassword: formPassword.newPassword,
+                repeatNewPassword: formPassword.repeatNewPassword,
 
             }
-            const response = await UserService.changePassword(this.state.currentUserId, body);
+            const response = await UserService.changePassword(currentUserId, body);
             console.log(response);
 
-            // setOpenChangePasswordModal(false);
-            this.setState({
-                openChangePasswordModal: false,
+            setFormPassword({
                 newPassword: undefined,
                 repeatNewPassword: undefined,
-            });
+            })
+            setOpenChangePasswordModal(false);
+
             AlertifyService.alert("Şifre Güncelleme işlemi başarılı.");
         } catch (error) {
             if (error.response) {
@@ -100,24 +93,14 @@ class UserListTable extends Component {
                 AlertifyService.alert(error.message);
             }
         };
-        this.setState({ pendingApiCall: false })
-    }
-    onChangeData = (type, event) => {
-        if (this.state.error)
-            this.setState({ error: null })
-        const stateData = this.state;
-        if (event === "" || event === "Seçiniz")
-            stateData[type] = undefined
-        else
-            stateData[type] = event
-
-        this.setState({ stateData });
+        setIsLoading(false)
     }
 
-    onChangeData = (type, event) => {
-        if (this.state.error)
-            this.setState({ error: null })
-        const stateData = this.state;
+
+    const onChangeData = (type, event) => {
+        if (error)
+            setError(null)
+        const stateData = formPassword;
         stateData[type] = event;
         if (stateData["newPassword"]) {
             if (stateData["newPassword"] === stateData["repeatNewPassword"]) {
@@ -132,18 +115,23 @@ class UserListTable extends Component {
             stateData["errors"] = { newPassword: undefined }
         }
 
-        this.setState({ stateData });
+        setFormPassword({
+            newPassword: stateData["newPassword"],
+            repeatNewPassword: stateData["repeatNewPassword"]
+        });
+        setErrors({ ...stateData["errors"] });
+        setIsdisable(stateData["isdisable"]);
     }
 
-    makeLogOut = async (event, user) => {
-        this.setState({ pendingApiCall: true })
+    const makeLogOut = async (event, user) => {
+        setIsLoading(true)
         try {
             const response = await UserService.makeLogOut(user.username);
             if (response.data === true)
                 AlertifyService.alert("Üyelik Çıkış Yaptırıldı.");
             if (response.data === false)
                 AlertifyService.alert("Sistemde Bir Hata Oluştu. Lütfen Yetkiliye Başvurunuz");
-            this.props.resetPage()
+            props.resetPage()
         } catch (error) {
             if (error.response) {
                 //console.log(error.response.data.message);
@@ -158,179 +146,172 @@ class UserListTable extends Component {
                 AlertifyService.alert(error.message);
             }
         };
-        this.setState({ pendingApiCall: false })
+        setIsLoading(false)
     }
 
-    loadSingUser = (e, user) => {
-        this.setState({ singleUser: user })
+    const loadSingUser = (e, user) => {
+        setsingleUser(user)
+        setOpenUpdateUserModal(true);
     }
 
-    render() {
-        const { newPassword } = this.state.errors;
-        return (
-            <div>
-                <table className="table table-hover table-sm">
-                    <thead>
-                        <tr>
-                            <th scope="col">Kullanıcı İsmi</th>
-                            <th scope="col">Adı</th>
-                            <th scope="col">Soyadı</th>
-                            <th scope="col">Role</th>
-                            <th scope="col">İşlemler</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.props.users.content.map((user, index) =>
-                            <tr key={index} className={user.isLoggedIn === 1 && "table-danger"}>
-                                <td>{user.username}</td>
-                                <td>{user.name}</td>
-                                <td>{user.surname}</td>
-                                <td >
-                                    {/* {" ("+user.role +") "}      */}
-                                    {this.props.roles && this.props.roles.map((role, index) => role.role === user.role && role.value)}
-                                </td>
-                                <td className="d-flex">
+    return (
+        <div>
+
+            <table className="table table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Kullanıcı İsmi</th>
+                        <th scope="col">Adı</th>
+                        <th scope="col">Soyadı</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {props.users.content.map((user, index) =>
+                        <tr key={index} className={user.isLoggedIn === 1 && "table-danger"}>
+                            <td>{user.username}</td>
+                            <td>{user.name}</td>
+                            <td>{user.surname}</td>
+                            <td >
+                                {/* {" ("+user.role +") "}      */}
+                                {props.roles && props.roles.map((role, index) => role.role === user.role && role.value)}
+                            </td >
+                            <td className="d-flex">
+
+                                <li className="nav-item dropdown dropdown-item">
                                     <div className="dropdown">
-                                        <button className="btn btn-secondary btn-sm dropdown-toggle"
-                                            type="button" id="dropdownMenuButton"
-                                            data-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="false"> İşlemler </button>
-                                        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <button
-                                                type="button"
-                                                onClick={e => this.loadSingUser(e, user)}
-                                                className="dropdown-item btn-sm"
-                                                data-toggle="modal"
-                                                data-target="#openUserModal">
-                                                Aç
-                                            </button>
-                                            <button
-                                                className="dropdown-item btn-sm"
-                                                type="button"
-                                                onClick={e => this.handleClickUpdateOpen(user.userId)} > Bilgileri Güncelle  </button>
+                                        <button className="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            İşlemler
+                                        </button>
+                                        <ul className="dropdown-menu">
 
-                                            <button
-                                                className="dropdown-item btn-sm"
-                                                type="button"
-                                                onClick={e => this.handleClickOpen(user.userId)} > Şifre Güncelle  </button>
+                                            <li key={1} className="dropdown-item " >
+                                                <button
+                                                    className="dropdown-item btn btn-secondary btn-sm "
+                                                    type="button"
+                                                    onClick={e => loadSingUser(e, user)}> Aç </button> </li>
+                                            <li key={2} className="dropdown-item  " >
+                                                <button
+                                                    className="dropdown-item btn btn-secondary btn-sm "
+                                                    type="button"
+                                                    onClick={e => handleClickUpdateOpen(user.userId)} > Bilgileri Güncelle  </button></li>
 
-                                        </div>
+                                            <li key={3} className="dropdown-item " >
+                                                <button
+                                                    className="dropdown-item btn btn-secondary btn-sm "
+                                                    type="button"
+                                                    onClick={e => handleClickOpen(user.userId)} > Şifre Güncelle  </button></li>
+
+                                        </ul>
                                     </div>
+                                </li>
 
-                                    {user.isLoggedIn === 1 &&
-                                        <button
-                                            onClick={e => this.makeLogOut(e, user)}
-                                            type="button"
-                                            className="btn btn-sm btn-danger ml-2 float-right"
-                                        >Çıkış Yaptır</button>}
-                                </td>
-                            </tr>
-                        )
-                        }
-                    </tbody>
-                </table>
-
-                <UserCardModal title="Kullanıcı Bilgileri" user={this.state.singleUser} roles={this.props.roles} />
-
-                <Dialog
-                    fullWidth={true}
-                    maxWidth={"md"}
-                    open={this.state.openUpdateUserModal}
-                    onClose={this.handleUpdateUserClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <div className="card">
-
-                        <UserUpdatePage
-                            userId={this.state.currentUpdateUserId}
-                            closeUpdateUser={this.handleUpdateUserClose} />
-
-
-                        {
-                            this.state.pendingApiCall ? <Spinner /> :
-                                <div className="modal-footer">
+                                {user.isLoggedIn === 1 &&
                                     <button
-                                        className="btn btn-sm btn-dark"
+                                        onClick={e => makeLogOut(e, user)}
                                         type="button"
-                                        onClick={this.handleUpdateUserClose}>
-                                        <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
-                                    </button>
-                                </div>
-                        }
+                                        className="btn btn-sm btn-danger ml-2 float-right"
+                                    >Çıkış Yaptır</button>}
+                            </td>
+                        </tr >
+                    )
+                    }
+                </tbody >
+            </table >
+
+            <UserCardModal title="Kullanıcı Bilgileri" user={singleUser} roles={props.roles} />
+
+            <Dialog
+                fullWidth={true}
+                maxWidth={"md"}
+                open={openUpdateUserModal}
+                onClose={handleUpdateUserClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <div className="card">
+                    {
+                        singleUser &&
+                        <UserUpdatePage
+                            singleUser={singleUser}
+                            closeUpdateUser={handleUpdateUserClose} />
+                    }
+
+
+                    {
+                        isLoading ? <Spinner /> :
+                            <div className="modal-footer">
+                                <button
+                                    className="btn btn-sm btn-dark"
+                                    type="button"
+                                    onClick={handleUpdateUserClose}>
+                                    <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
+                                </button>
+                            </div>
+                    }
+                </div>
+            </Dialog>
+            <Dialog
+                fullWidth={true}
+                maxWidth={"sm"}
+                open={openChangePasswordModal}
+                onClose={handleClosePassword}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <div className="card">
+                    <div className="card-header">
+                        <h4>Şifreyi Güncelle</h4>
                     </div>
-                </Dialog>
-                <Dialog
-                    fullWidth={true}
-                    maxWidth={"sm"}
-                    open={this.state.openChangePasswordModal}
-                    onClose={this.handleClosePassword}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <div className="card">
-                        <div className="card-header">
-                            <h4>Şifreyi Güncelle</h4>
-                        </div>
 
-                        <div className="card-body">
-                            <div className="row">
-                                <div className="col-lg-12">
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col-lg-12">
 
-                                    <Input
-                                        label={"Yeni Şifre"}
-                                        type="password"
-                                        name="newPassword"
-                                        error={newPassword}
-                                        placeholder={"Yeni Şifre"}
-                                        valueName={this.state.newPassword}
-                                        onChangeData={this.onChangeData}
-                                    />
-                                </div>
-                                <div className="col-lg-12">
-                                    <Input
-                                        label={"Yeni Şifre (Tekrar)"}
-                                        type="password"
-                                        name="repeatNewPassword"
-                                        placeholder={"Yeni Şifre (Tekrar)"}
-                                        valueName={this.state.repeatNewPassword}
-                                        onChangeData={this.onChangeData}
-                                    />
-                                </div>
+                                <Input
+                                    label={"Yeni Şifre"}
+                                    type="password"
+                                    name="newPassword"
+                                    error={errors.newPassword}
+                                    placeholder={"Yeni Şifre"}
+                                    valueName={formPassword.newPassword}
+                                    onChangeData={onChangeData}
+                                />
+                            </div>
+                            <div className="col-lg-12">
+                                <Input
+                                    label={"Yeni Şifre (Tekrar)"}
+                                    type="password"
+                                    name="repeatNewPassword"
+                                    placeholder={"Yeni Şifre (Tekrar)"}
+                                    valueName={formPassword.repeatNewPassword}
+                                    onChangeData={onChangeData}
+                                />
                             </div>
                         </div>
-                        {
-                            this.state.pendingApiCall ? <Spinner /> :
-                                <div class="modal-footer">
-                                    <button
-                                        className="btn  btn-sm btn-primary"
-                                        type="button"
-                                        //disabled={!btnEnable}
-                                        onClick={this.onChangePassword}> <FontAwesomeIcon icon="save"></FontAwesomeIcon>  Güncelle</button>
-                                    <button
-                                        className="btn btn-sm btn-dark"
-                                        type="button"
-                                        onClick={this.handleClosePassword}>
-                                        <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
-                                    </button>
-                                </div>
-                        }
                     </div>
-                </Dialog>
-            </div>
-        )
-    }
-}
-
-
-const mapStateToProps = (store) => {
-    return {
-        isLoggedIn: store.isLoggedIn,
-        username: store.username,
-        jwttoken: store.jwttoken,
-        role: store.role
-    };
+                    {
+                        isLoading ? <Spinner /> :
+                            <div className="modal-footer">
+                                <button
+                                    className="btn  btn-sm btn-primary"
+                                    type="button"
+                                    //disabled={!btnEnable}
+                                    onClick={onChangePassword}> <FontAwesomeIcon icon="save"></FontAwesomeIcon>  Güncelle</button>
+                                <button
+                                    className="btn btn-sm btn-dark"
+                                    type="button"
+                                    onClick={handleClosePassword}>
+                                    <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
+                                </button>
+                            </div>
+                    }
+                </div>
+            </Dialog>
+        </div >
+    );
 };
 
-export default connect(mapStateToProps)(UserListTable);
+export default UserListTable;
+

@@ -24,36 +24,29 @@ class ApiService {
 
 
     get(url) {
-        console.log(axiosConfig)
         return axios.get(API_BASE_URL + url, axiosConfig);
     }
 
     post(url, data) {
-        console.log(axiosConfig)
         return axios.post(API_BASE_URL + url, data, axiosConfig);
     }
 
     put(url, data) {
-        console.log(axiosConfig)
         return axios.put(API_BASE_URL + url, data, axiosConfig);
     }
 
     delete(url) {
-        console.log(axiosConfig)
         return axios.delete(API_BASE_URL + url, axiosConfig);
     }
 
     login(data) {
-        console.log(axiosConfig)
         return axios.post(API_BASE_URL + LOGIN_URL, data, axiosConfig);
     }
 
     logout() {
-        console.log(axiosConfig)
         return axios.get(BACKEND_BASED_LINK + "/logout/user", axiosConfig);
     }
     defaultLogout(username) {
-        console.log(axiosConfig)
         return axios.get(BACKEND_BASED_LINK + "/logout/default/" + username, axiosConfig);
     }
 

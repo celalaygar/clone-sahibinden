@@ -15,12 +15,7 @@ const SideBarMenu = () => {
   const selectedAuth = useSelector(selectedAuthentication);
   const [triggerUseEffect, setTriggerUseEffect] = useState(0);
 
-  const clickc = (e) => {
-    console.log("selectedAuth " + selectedAuth);
-    console.log(selectedAuth);
-    console.log("secureLS " + secureLS.get("auth"));
-    console.log(secureLS.get("auth"));
-  }
+
 
   let links = null;
   if (selectedAuth.isLoggedIn) {
@@ -29,7 +24,7 @@ const SideBarMenu = () => {
         {linkList.map((link) =>
           link.role.some((personRole) => personRole === selectedAuth.role) ?
             link.submenu.length === 0 ?
-              <li onClick={e => clickc(e)} key={link.to} className={triggerUseEffect === link.to && "active"}>
+              <li key={link.to} className={triggerUseEffect === link.to && "active"}>
                 <Link to={link.to} onClick={() => setTriggerUseEffect(link.to)}>
                   <FontAwesomeIcon className="fa-sm" icon={link.icon} />
                   &nbsp;&nbsp; {link.name}

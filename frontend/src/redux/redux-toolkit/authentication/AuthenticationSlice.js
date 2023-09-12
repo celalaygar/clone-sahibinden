@@ -62,7 +62,6 @@ export const authenticationSlice = createSlice({
             state.email = undefined;
             state.role = undefined;
             state.image = undefined;
-            console.log("Üye çıkış işlemi yapılmıştır.")
 
         }
     },

@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import PaginationComponent from "../../components/PaginationComponent";
 import Preloader from "../../components/preloader/Preloader";
@@ -46,9 +46,10 @@ const UserListPage = () => {
   const getUsersWithPagination = async (number, size) => {
     setIsLoading(true);
     try {
+      console.log("response");
       const response = await UserService.getUsersWithPagination(number, size);
       setPage({ ...response.data });
-
+      console.log(response);
     } catch (error) {
       if (error.response) {
         console.log(error.response)
@@ -81,9 +82,12 @@ const UserListPage = () => {
       else console.log(error.message);
     }
   };
-  getUsersWithPagination(page.number, page.size);
-  loadRoles();
 
+
+  useEffect(() => {
+    getUsersWithPagination(page.number, page.size);
+    loadRoles();
+  }, []);
   return (
     <div className="row">
       <div className="col-lg-12">

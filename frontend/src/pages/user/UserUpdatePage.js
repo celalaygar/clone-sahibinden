@@ -12,7 +12,7 @@ import ApiService from '../../services/base/ApiService';
 
 const UserUpdatePage = (props) => {
     const [formData, setformData] = useState({
-        id: props.userId,
+        id: props.singleUser.userId,
         name: '',
         surname: '',
         username: '',
@@ -27,21 +27,21 @@ const UserUpdatePage = (props) => {
     const [roles, setRoles] = useState();
     const [error, setError] = useState(null);
     const [errors, setErrors] = useState({});
-    const [pendingApiCall, setPendingApiCall] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
 
     const loadRoles = async () => {
-        setPendingApiCall(true);
+        setIsLoading(true);
 
         try {
             const roles = await ApiService.get("/roles");
-            this.setState({ roles: roles.data })
+            setRoles(roles.data)
         } catch (error) {
             if (error.response) {
                 console.log(error.response)
                 if (error.response.status === 401 && error.response.data) {
                     console.log(error.response.data)
-                    this.setState({ error: error.response.data })
+                    setError(error.response.data)
                 }
                 console.log(error.response);
                 if (error.response.data.status === 500) {
@@ -53,13 +53,15 @@ const UserUpdatePage = (props) => {
             else
                 console.log(error.message);
         }
-        setPendingApiCall(false);
+        setIsLoading(false);
     }
     const loadUser = async (userId) => {
-        setPendingApiCall(true);
+        setIsLoading(true);
         try {
 
+            console.log("userId " + userId);
             const response = await AdminService.get("/user/find-by-id/" + userId);
+            console.log(response);
             setformData({ ...response.data })
 
         } catch (error) {
@@ -76,7 +78,7 @@ const UserUpdatePage = (props) => {
                 AlertifyService.alert(error.message);
             }
         };
-        setPendingApiCall(false);
+        setIsLoading(false);
     }
 
     const onChangeData = (name, value) => {
@@ -94,14 +96,10 @@ const UserUpdatePage = (props) => {
         loadRoles();
         loadUser(props.userId);
     }
-    useEffect(() => {
-        loadRoles();
-        loadUser(props.userId);
-    }, []);
 
 
     const updateUser = async (event) => {
-        setPendingApiCall(true);
+        setIsLoading(true);
         event.preventDefault();
         if (error) {
             setError(null);
@@ -144,14 +142,14 @@ const UserUpdatePage = (props) => {
             else
                 console.log(error.message);
         }
-        setPendingApiCall(false);
+        setIsLoading(false);
         this.refreshPage();
 
     }
 
     const clearState = () => {
 
-        this.setState({
+        setformData({
             name: '',
             surname: '',
             username: '',
@@ -159,12 +157,15 @@ const UserUpdatePage = (props) => {
             error: null,
             userId: 1,
             role: "ADMIN",
-            roles: [],
-            errors: {
-            },
-            pendingApiCall: false
         });
+        setErrors(null)
+        setIsLoading(false);
     }
+    useEffect(() => {
+        loadRoles();
+        loadUser(props.singleUser.userId);
+    }, []);
+
     return (
         <>
             <div className="m-3 card">
@@ -260,7 +261,7 @@ const UserUpdatePage = (props) => {
                                         value={formData.role}
                                         onChange={e => onChangeData("role", e.target.value)}>
                                         <option key={1} value={"Seçiniz"}>{"Seçiniz"}</option>
-                                        {roles.map((role, index) =>
+                                        {roles && !!roles.length && roles.map((role, index) =>
                                             <option key={index} value={role.role}>{role.value}</option>
                                         )
                                         }
@@ -270,7 +271,7 @@ const UserUpdatePage = (props) => {
 
                             </div>
                         </div>
-                        {pendingApiCall ? <Spinner /> :
+                        {isLoading ? <Spinner /> :
                             <div>
                                 <button
                                     className="btn"

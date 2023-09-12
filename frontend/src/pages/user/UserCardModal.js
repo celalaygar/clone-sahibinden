@@ -19,7 +19,10 @@ const UserCardModal = (props) => {
                         <div className="row">
 
                             <div className="col-lg-12">
-                                <UserCard user={user} roles={roles} />
+                                {
+                                    user &&
+                                    <UserCard user={user} roles={roles} />
+                                }
                             </div>
 
                         </div>
