@@ -143,18 +143,17 @@ const TopMenu = props => {
                                     <li key={3}><Link className="dropdown-item" to={"/update-my-account-password/"}> Şifremi Güncelle </Link></li>
                                     <li key={4}><span className="dropdown-item" onClick={onLogout} style={{ cursor: "pointer" }}> Çıkış </span></li>
                                     <li key={5}><span className="dropdown-item" onClick={onLogout} style={{ cursor: "pointer" }}> Çıkış </span></li>
-
                                 </ul>
                             </div>
                         </li>
-                        <li className="nav-item ">
-                            <div className="nav-link" onClick={onLogout} style={{ cursor: "pointer", marginLeft: "5px" }}>
-                                <img
-                                    style={{ height: "20px", marginRight: "5px" }}
-                                    src='https://icon-library.com/images/signout-icon/signout-icon-6.jpg' />
-                                Çıkış</div>
-                        </li>
                     </ul>
+                    <div className="nav-item float-right">
+                        <div className="nav-link" onClick={onLogout} style={{ cursor: "pointer", marginLeft: "5px" }}>
+                            <img
+                                style={{ height: "20px", marginRight: "5px" }}
+                                src='https://icon-library.com/images/signout-icon/signout-icon-6.jpg' />
+                            Çıkış</div>
+                    </div>
                 </div>
             </nav>
         );

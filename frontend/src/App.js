@@ -70,17 +70,13 @@ const App = () => {
   let view = null;
   if (!selectedAuth.isLoggedIn) {
     view = (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-12">
-            <BrowserRouter>
-              <Routes>
-                {routeList}
-              </Routes>
-            </BrowserRouter>
-          </div>
-        </div>
-      </div>
+      <>
+        <BrowserRouter>
+          <Routes>
+            {routeList}
+          </Routes>
+        </BrowserRouter>
+      </>
     );
   }
   if (selectedAuth.isLoggedIn) {
