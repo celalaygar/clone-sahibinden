@@ -30,7 +30,7 @@ const MyAccountEditPage = (props) => {
     const [roles, setRoles] = useState();
     const [error, setError] = useState(null);
     const [errors, setErrors] = useState({});
-    const [pendingApiCall, setPendingApiCall] = useState(false);
+    const [isloading, setIsloading] = useState(false);
 
     const loadUser = async () => {
         try {
@@ -62,7 +62,7 @@ const MyAccountEditPage = (props) => {
     }, []);
 
     const onClickUpdate = async (event) => {
-        setPendingApiCall(true);
+        setIsloading(true);
 
         event.preventDefault();
         if (error) {
@@ -89,7 +89,7 @@ const MyAccountEditPage = (props) => {
             else
                 console.log(error.message);
         }
-        setPendingApiCall(false);
+        setIsloading(false);
 
     }
     if (props.role === "ADMIN" || paramUsername === selectedAuth.username) {
@@ -167,7 +167,7 @@ const MyAccountEditPage = (props) => {
                                     onChangeData={onChangeData}
                                 />
                                 {
-                                    pendingApiCall ? <Spinner /> :
+                                    isloading ? <Spinner /> :
                                         <button
                                             className="btn"
                                             id="search-button"

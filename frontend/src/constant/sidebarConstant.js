@@ -47,13 +47,6 @@ export const linkList = [
                 role: [ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]
             }],
         role: [ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]
-    },
-    {
-        to: "/reporting-page",
-        icon: "chart-line",
-        name: "Raporlama İşlemleri",
-        submenu: [],
-        role: [ROLE.ROLE_ADMIN, ROLE.ROLE_MANAGER]
     }, {
         to: "/contact-page",
         icon: "phone",

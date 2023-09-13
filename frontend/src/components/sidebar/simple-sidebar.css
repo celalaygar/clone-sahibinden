@@ -18,7 +18,7 @@
 }
 
 #sidebar-wrapper {
-  background: #1d1919;
+  background: #22323d;
   min-height: 100vh;
   margin-left: -16rem;
   -webkit-transition: margin .25s ease-out;
@@ -64,7 +64,7 @@
 #sidebar {
   min-width: 16rem;
   max-width: 16rem;
-  background: #1d1919;
+  background: #22323d;
   color: #fff;
   -webkit-transition: all 0.3s;
   -o-transition: all 0.3s;

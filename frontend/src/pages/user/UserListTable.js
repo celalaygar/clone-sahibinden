@@ -156,7 +156,6 @@ const UserListTable = (props) => {
 
     return (
         <div>
-
             <table className="table table-hover table-sm">
                 <thead>
                     <tr>
@@ -178,14 +177,16 @@ const UserListTable = (props) => {
                                 {props.roles && props.roles.map((role, index) => role.role === user.role && role.value)}
                             </td >
                             <td className="d-flex">
-
                                 <li className="nav-item dropdown dropdown-item">
                                     <div className="dropdown">
-                                        <button className="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button
+                                            className="btn btn-secondary btn-sm dropdown-toggle"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false">
                                             İşlemler
                                         </button>
                                         <ul className="dropdown-menu">
-
                                             <li key={1} className="dropdown-item " >
                                                 <button
                                                     className="dropdown-item btn btn-secondary btn-sm "
@@ -231,24 +232,19 @@ const UserListTable = (props) => {
                 aria-describedby="alert-dialog-description"
             >
                 <div className="card">
-                    {
-                        singleUser &&
-                        <UserUpdatePage
-                            singleUser={singleUser}
-                            closeUpdateUser={handleUpdateUserClose} />
+                    {singleUser &&
+                        <UserUpdatePage singleUser={singleUser} closeUpdateUser={handleUpdateUserClose} />
                     }
 
-
-                    {
-                        isLoading ? <Spinner /> :
-                            <div className="modal-footer">
-                                <button
-                                    className="btn btn-sm btn-dark"
-                                    type="button"
-                                    onClick={handleUpdateUserClose}>
-                                    <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
-                                </button>
-                            </div>
+                    {isLoading ? <Spinner /> :
+                        <div className="modal-footer">
+                            <button
+                                className="btn btn-sm btn-dark"
+                                type="button"
+                                onClick={handleUpdateUserClose}>
+                                <FontAwesomeIcon icon="window-close"></FontAwesomeIcon> Kapat
+                            </button>
+                        </div>
                     }
                 </div>
             </Dialog>

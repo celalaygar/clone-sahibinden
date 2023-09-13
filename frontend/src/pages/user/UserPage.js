@@ -1,47 +1,45 @@
 
-import React, { Component } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import Spinner from '../../components/Spinner';
 import UserCard from './UserCard';
 import AdminService from '../../services/AdminService';
 import AlertifyService from '../../services/AlertifyService';
 import ApiService from '../../services/base/ApiService';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default class UserPage extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: this.props.match.params.userid,
-            name: '',
-            surname: '',
-            username: '',
-            email: '',
-            roles: [],
-            error: null,
-            errors: {
-            },
-            pendingApiCall: false
 
-        };
-    }
+const UserPage = () => {
 
-    componentDidMount() {
-        this.loadUser();
-        this.loadRoles();
+    const { userid } = useParams();
+    const [myAccountDetail, setMyAccountDetail] = useState({
+        id: userid,
+        name: "",
+        surname: "",
+        username: "",
+        email: null,
+        motherName: undefined,
+        fatherName: undefined,
+        tcNo: "",
+    });
+    const [error, setError] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [roles, setRoles] = useState();
+    let navigate = useNavigate();
 
-    }
-    loadRoles = async () => {
+
+    const loadRoles = async () => {
         try {
             const roles = await ApiService.get("/roles");
-            this.setState({ roles: roles.data })
+            setRoles(roles.data)
         } catch (error) {
             if (error.response) {
                 console.log(error.response)
                 if (error.response.status === 401 && error.response.data) {
                     console.log(error.response.data)
-                    this.setState({ error: error.response.data })
+                    setError(error.response.data)
                 }
-                console.log(error.response);
                 if (error.response.data.status === 500) {
                     console.log(error.response.data.status);
                 }
@@ -52,37 +50,38 @@ export default class UserPage extends Component {
                 console.log(error.message);
         }
     }
-    loadUser = async () => {
-        this.setState({ pendingApiCall: true });
-        console.log(this.props.match.params.userId)
+    const loadUser = async () => {
+        setIsLoading(true);
         try {
-            const response = await AdminService.get("/user/find-by-id/" + this.props.match.params.userid);
-            //console.log(response.data)
-            this.setState({ ...response.data })
+            const response = await AdminService.get("/user/find-by-id/" + userid);
+            setMyAccountDetail({ ...response.data })
         } catch (error) {
             if (error.response) {
-                console.log(error.response)
                 AlertifyService.alert(error.response.data.message)
-                this.props.history.push("/ndex");
+                //navigate("/index");
             }
             else if (error.request)
                 console.log(error.request);
             else
                 console.log(error.message);
         }
-        this.setState({ pendingApiCall: false });
+        setIsLoading(false);
     }
-
-    render() {
-        return (
-            <div className="row">
-                <div className="col-lg-6">
-                    {this.state.pendingApiCall ? <Spinner /> :
-
-                        <UserCard roles={this.state.roles} {...this.state} />
-                    }
-                </div>
+    useEffect(() => {
+        loadUser();
+        loadRoles();
+    }, []);
+    return (
+        <div className="row">
+            <div className="col-lg-6">
+                {isLoading ? <Spinner /> :
+                    myAccountDetail ? <UserCard roles={roles} user={myAccountDetail} /> : ""
+                }
             </div>
-        )
-    }
-}
+        </div>
+    );
+};
+
+export default UserPage;
+
+

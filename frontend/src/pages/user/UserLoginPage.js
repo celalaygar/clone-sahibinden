@@ -20,7 +20,7 @@ const UserLoginPage = (props) => {
     const [btnEnable, setBtnEnable] = useState(false);
     const [error, setError] = useState(null);
     const [errors, setErrors] = useState({});
-    const [pendingApiCall, setPendingApiCall] = useState(false);
+    const [isloading, setIsloading] = useState(false);
     const selectedAuth = useSelector(selectedAuthentication);
 
     const onChangeData = (type, event) => {
@@ -34,7 +34,7 @@ const UserLoginPage = (props) => {
         setBtnEnable(formData.username && formData.password)
     }
     const onClickLogin = async (event) => {
-        setPendingApiCall(true)
+        setIsloading(true)
 
         event.preventDefault();
         if (error) {
@@ -61,9 +61,9 @@ const UserLoginPage = (props) => {
             }
             console.log(error.config);
 
-            setPendingApiCall(false)
+            setIsloading(false)
         }
-        setPendingApiCall(false)
+        setIsloading(false)
 
     }
     const onKeyPressLogin = async (event) => {
@@ -71,40 +71,36 @@ const UserLoginPage = (props) => {
         if (event.key !== "Enter") {
             return;
         }
-        setPendingApiCall(true)
+        setIsloading(true)
+
+        event.preventDefault();
         if (error) {
             setError(null)
         }
         const { username, password } = formData;
         const creds = { username, password };
-
         try {
+
+            const response = await ApiService.login(creds)
             await dispatch(loginAsync({
-                ...creds
+                ...response
             }))
             navigate("/index");
         } catch (error) {
+            console.log(" error " + error)
             if (error.response) {
+                setError(error.response.data)
                 console.log(error.response)
-                if (error.response.status === 401 && error.response.data) {
-                    console.log(error.response.data)
-                    setError(error.response.data)
-                }
-                if (error.response.status === 409 && error.response.data) {
-                    console.log(error.response.data)
-                    setError(error.response.data)
-                }
-            }
-            else if (error.request) {
-                setError("NETWORK")
+            } else if (error.request) {
                 console.log(error.request);
+            } else {
+                console.log('Error', error.message);
             }
-            else {
-                setError("Hay Aksi ")
-                console.log(error.message);
-            }
+            console.log(error.config);
+
+            setIsloading(false)
         }
-        setPendingApiCall(false)
+        setIsloading(false)
 
     }
     return (
@@ -114,7 +110,7 @@ const UserLoginPage = (props) => {
                     <div className='col-lg-12'>
                         <div className="login-box">
                             <h2>Üye Giriş</h2>
-                            <form>
+                            <form onKeyPress={onKeyPressLogin}>
                                 <div className="user-box">
                                     <input
                                         onChange={event => onChangeData("username", event.target.value)}
@@ -136,7 +132,7 @@ const UserLoginPage = (props) => {
                                     <label>Password</label>
                                 </div>
                                 {
-                                    pendingApiCall ? <Spinner /> :
+                                    isloading ? <Spinner /> :
                                         <button href="#" onClick={onClickLogin} disabled={!btnEnable}>
                                             <span></span>
                                             <span></span>
