@@ -50,7 +50,6 @@ public class LoginApi {
 					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
 			if(!authentication.isAuthenticated()){
-				System.out.println("0 UNAUTHORIZED");
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
 			}
 			SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -69,7 +68,6 @@ public class LoginApi {
 			return ResponseEntity.ok(new JwtResponse(user.getUserId(), username,jwt,null,user.getRole()));
 		}catch (BadCredentialsException e) {
 			//ApiError error = new ApiError(401, "Unauthorized request : "+e.getMessage(), "/api/login");
-			System.out.println("1 UNAUTHORIZED");
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
 		}
 		catch (Exception e) {
