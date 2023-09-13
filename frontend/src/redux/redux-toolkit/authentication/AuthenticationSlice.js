@@ -32,7 +32,7 @@ getStateFromStorage();
 
 
 
-const updateStateInStorage = newState => {
+export const updateStateInStorage = newState => {
     secureLS.set("auth", newState);
     //localStorage.setItem("auth", JSON.stringify(newState));
 }
@@ -62,6 +62,7 @@ export const authenticationSlice = createSlice({
             state.email = undefined;
             state.role = undefined;
             state.image = undefined;
+            updateStateInStorage({ ...state });
 
         }
     },
@@ -70,14 +71,13 @@ export const authenticationSlice = createSlice({
 
 export const loginAsync = payload => async dispatch => {
 
-    const response = await ApiService.login(payload)
-    if (response) {
+    if (payload) {
         const authState = {
-            ...response.data,
+            ...payload.data,
             isLoggedIn: true,
             password: payload.password
         }
-        ApiService.changeAuthToken(response.data.jwttoken);
+        ApiService.changeAuthToken(payload.data.jwttoken);
         dispatch(login(authState));
     }
 
@@ -85,7 +85,6 @@ export const loginAsync = payload => async dispatch => {
 
 
 export const logoutAsync = payload => async dispatch => {
-    await updateStateInStorage(null);
     await dispatch(logout(payload));
 };
 

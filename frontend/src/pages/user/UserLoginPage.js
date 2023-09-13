@@ -6,6 +6,7 @@ import '../../assets/css/UserLoginPage.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { loginAsync, selectedAuthentication } from '../../redux/redux-toolkit/authentication/AuthenticationSlice';
 import { useNavigate } from 'react-router-dom';
+import ApiService from '../../services/base/ApiService';
 
 
 const UserLoginPage = (props) => {
@@ -41,28 +42,26 @@ const UserLoginPage = (props) => {
         }
         const { username, password } = formData;
         const creds = { username, password };
-
         try {
+
+            const response = await ApiService.login(creds)
             await dispatch(loginAsync({
-                ...creds
+                ...response
             }))
             navigate("/index");
         } catch (error) {
+            console.log(" error " + error)
             if (error.response) {
+                setError(error.response.data)
                 console.log(error.response)
-                if (error.response.status === 401 && error.response.data) {
-                    console.log(error.response.data)
-                    setError(error.response.data)
-                }
-                if (error.response.status === 409 && error.response.data) {
-                    console.log(error.response.data)
-                    setError(error.response.data)
-                }
-            }
-            else if (error.request)
+            } else if (error.request) {
                 console.log(error.request);
-            else
-                console.log(error.message);
+            } else {
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
+
+            setPendingApiCall(false)
         }
         setPendingApiCall(false)
 
@@ -108,18 +107,15 @@ const UserLoginPage = (props) => {
         setPendingApiCall(false)
 
     }
-    const { username, password } = errors;
     return (
         <div className="main">
             <div className="container">
                 <div className='row mt-5'>
-
                     <div className='col-lg-12'>
-
-                        <div class="login-box">
+                        <div className="login-box">
                             <h2>Üye Giriş</h2>
                             <form>
-                                <div class="user-box">
+                                <div className="user-box">
                                     <input
                                         onChange={event => onChangeData("username", event.target.value)}
                                         type="text"
@@ -129,7 +125,7 @@ const UserLoginPage = (props) => {
                                         required="" />
                                     <label>Username</label>
                                 </div>
-                                <div class="user-box">
+                                <div className="user-box">
                                     <input
                                         onChange={event => onChangeData("password", event.target.value)}
                                         type="password"
@@ -139,18 +135,21 @@ const UserLoginPage = (props) => {
                                         required="" />
                                     <label>Password</label>
                                 </div>
-                                <button href="#" onClick={onClickLogin} disabled={!btnEnable}>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    Submit
-                                </button>
+                                {
+                                    pendingApiCall ? <Spinner /> :
+                                        <button href="#" onClick={onClickLogin} disabled={!btnEnable}>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            Submit
+                                        </button>
+                                }
                             </form>
 
                             <div className='loginError'>
                                 {error &&
-                                    <>
+                                    <> {console.log(error)}
                                         {error === "UNAUTHORIZED" && "Hata : Kullanıcı Adı veya Şifre Hatalı"}
                                         {error === "CONFLICT" && "Hata : Üye Girişi Zaten Yapıldı"}
                                         {error === "NETWORK" && "Hata : Sistem ile İlgili Bir Problem Oluştu. Yetkiliye Başvurunuz"}
@@ -159,11 +158,7 @@ const UserLoginPage = (props) => {
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-
-
             </div>
         </div>
     );

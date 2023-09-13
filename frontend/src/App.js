@@ -11,7 +11,7 @@ import ApiService from './services/base/ApiService';
 import AlertifyService from './services/AlertifyService';
 import Axios from 'axios';
 import ProtectedRoute from './ProtectedRoute';
-import { logoutAsync, selectedAuthentication } from './redux/redux-toolkit/authentication/AuthenticationSlice';
+import { logoutAsync, selectedAuthentication, updateStateInStorage } from './redux/redux-toolkit/authentication/AuthenticationSlice';
 
 
 const App = () => {
@@ -29,6 +29,7 @@ const App = () => {
       // ApiService.defaultLogout(selectedAuth.username);
       // ApiService.logout();
 
+      dispatch(updateStateInStorage(null))
       ApiService.changeAuthToken(null);
       dispatch(logoutAsync(null))
       AlertifyService.alert("Lütfen Tekrar Giriş yapınız");
@@ -99,9 +100,7 @@ const App = () => {
   }
   return (
     <>
-      <>
-        {view}
-      </>
+      {view}
 
     </>
   )

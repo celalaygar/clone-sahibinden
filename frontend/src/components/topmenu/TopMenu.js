@@ -12,7 +12,7 @@ const TopMenu = props => {
     const selectedAuth = useSelector(selectedAuthentication);
     const { isLoggedIn, username, role } = selectedAuth;
 
-    const [navbarClassName, setNavbarClassName] = useState("navbar-toggler collapsed");
+    const [navbarClassName, setNavbarClassName] = useState("navbar-toggler ");
     const [ariaExpanded, setAriaExpanded] = useState("false");
     const [navbarTargetDivClassName, setNavbarTargetDivClassName] = useState("navbar-collapse collapse");
 
@@ -22,15 +22,13 @@ const TopMenu = props => {
         event.preventDefault();
         console.log(0)
         if (navbarClassName.includes("collapsed")) {
-            console.log(1)
-            setNavbarClassName("navbar-toggler");
+            setNavbarClassName("navbar-toggler ");
             setAriaExpanded("false");
             setNavbarTargetDivClassName("navbar-collapse collapse");
         } else {
             setNavbarClassName("navbar-toggler collapsed");
             setAriaExpanded("true");
             setNavbarTargetDivClassName("navbar-collapse collapse show");
-            console.log(2)
         }
     }
     const onLogout = async () => {
