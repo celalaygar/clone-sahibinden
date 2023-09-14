@@ -6,7 +6,7 @@ import ApiService from '../../services/base/ApiService';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import './TopMenu.css';
 import { logoutAsync, selectedAuthentication } from '../../redux/redux-toolkit/authentication/AuthenticationSlice';
-
+import * as alertify from 'alertifyjs';
 
 const TopMenu = props => {
     const selectedAuth = useSelector(selectedAuthentication);
@@ -32,7 +32,12 @@ const TopMenu = props => {
         }
     }
     const onLogout = async () => {
+        await alertify.confirm('Emin misiniz?', 'Çıkmak istediğinizden emin misiniz?',
+            logoutYes, logoutNo)
+            .set('labels', { ok: 'Evet', cancel: 'Hayır' });;
+    }
 
+    const logoutYes = async () => {
         try {
             await ApiService.logout();
             ApiService.changeAuthToken(null);
@@ -46,8 +51,11 @@ const TopMenu = props => {
             else
                 console.log(error.message);
         }
-
     }
+    const logoutNo = async () => {
+        return;
+    }
+
     let links = (
         <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom ">
 

@@ -22,7 +22,6 @@ class UserPersonelSearchPage extends Component {
             email: undefined,
             tcNo: undefined,
             role: undefined,
-            //companies: [],
             page: {
                 content: [],
                 number: 0,

@@ -19,6 +19,8 @@ import '@popperjs/core/dist/cjs/popper.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { createRoot } from 'react-dom/client'
 import { store } from './redux/redux-toolkit/ReduxStore';
+import "alertifyjs/build/css/alertify.css";
+import "alertifyjs/build/css/themes/default.css";
 
 
 //const store = configureStore();
