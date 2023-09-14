@@ -30,6 +30,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.7.4",
     "redux": "^4.2.1",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
     "secure-ls": "^1.2.6",
     "stream-browserify": "^3.0.0",

@@ -16,25 +16,15 @@ let initialLoginState = {
     image: undefined,
 }
 
-const getStateFromStorage = () => {
-    const auth = secureLS.get("auth");
-
-
-    if (auth) {
-        initialLoginState = { ...auth };
-    }
-    ApiService.changeAuthToken(auth.jwttoken);
-    return initialLoginState;
+const auth = secureLS.get("auth");
+if (auth) {
+    initialLoginState = { ...auth };
 }
-
-getStateFromStorage();
-
-
+ApiService.changeAuthToken(auth.jwttoken);
 
 
 export const updateStateInStorage = newState => {
     secureLS.set("auth", newState);
-    //localStorage.setItem("auth", JSON.stringify(newState));
 }
 
 export const authenticationSlice = createSlice({
@@ -43,6 +33,9 @@ export const authenticationSlice = createSlice({
     reducers: {
         login: (state, action) => {
 
+            const auth = secureLS.get("auth");
+            console.log("auth slice 39")
+            console.log(auth)
             state.isLoggedIn = true;
             state.userId = action.payload.userId;
             state.username = action.payload.username;
@@ -62,7 +55,6 @@ export const authenticationSlice = createSlice({
             state.email = undefined;
             state.role = undefined;
             state.image = undefined;
-            updateStateInStorage({ ...state });
 
         }
     },
@@ -70,7 +62,16 @@ export const authenticationSlice = createSlice({
 
 
 export const loginAsync = payload => async dispatch => {
-
+    await updateStateInStorage({
+        isLoggedIn: false,
+        userId: undefined,
+        username: undefined,
+        jwttoken: undefined,
+        password: undefined,
+        email: undefined,
+        role: undefined,
+        image: undefined,
+    });
     if (payload) {
         const authState = {
             ...payload.data,
@@ -85,6 +86,18 @@ export const loginAsync = payload => async dispatch => {
 
 
 export const logoutAsync = payload => async dispatch => {
+
+    await updateStateInStorage({
+        isLoggedIn: false,
+        userId: undefined,
+        username: undefined,
+        jwttoken: undefined,
+        password: undefined,
+        email: undefined,
+        role: undefined,
+        image: undefined,
+    });
+    await ApiService.changeAuthToken(null);
     await dispatch(logout(payload));
 };
 

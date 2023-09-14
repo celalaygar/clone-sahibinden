@@ -33,7 +33,7 @@ spring:
     platform: postgresql
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     generate-ddl: true
     properties:
       hibernate:

@@ -23,19 +23,29 @@ const App = () => {
 
   Axios.interceptors.response.use(response => {
     return response;
-  }, error => {
-
-    if (selectedAuth.isLoggedIn && error.response.status === 401) {
+  }, async error => {
+    console.log("isLoggedIn " + selectedAuth.isLoggedIn);
+    console.log("jwttoken " + selectedAuth.jwttoken);
+    if (selectedAuth && selectedAuth.isLoggedIn === true && error.response.status === 401) {
       // ApiService.defaultLogout(selectedAuth.username);
       // ApiService.logout();
 
-      dispatch(updateStateInStorage(null))
-      ApiService.changeAuthToken(null);
-      dispatch(logoutAsync(null))
+      await dispatch(logoutAsync(null));
       AlertifyService.alert("Lütfen Tekrar Giriş yapınız");
     }
+    // else if (!selectedAuth || !selectedAuth.isLoggedIn) {
+    //   await dispatch(updateStateInStorage({
+    //     isLoggedIn: false,
+    //     userId: undefined,
+    //     username: undefined,
+    //     jwttoken: undefined,
+    //     password: undefined,
+    //     email: undefined,
+    //     role: undefined,
+    //     image: undefined,
+    //   }));
+    // }
 
-    //console.log(error)
     throw error;
   });
 

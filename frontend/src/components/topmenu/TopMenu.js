@@ -40,7 +40,7 @@ const TopMenu = props => {
     const logoutYes = async () => {
         try {
             await ApiService.logout();
-            ApiService.changeAuthToken(null);
+            await ApiService.changeAuthToken(null);
             await dispatch(logoutAsync(null));
         } catch (error) {
             if (error.response) {

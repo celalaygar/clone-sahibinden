@@ -50,16 +50,13 @@ const UserLoginPage = (props) => {
             }))
             navigate("/index");
         } catch (error) {
-            console.log(" error " + error)
             if (error.response) {
                 setError(error.response.data)
-                console.log(error.response)
             } else if (error.request) {
                 console.log(error.request);
             } else {
                 console.log('Error', error.message);
             }
-            console.log(error.config);
 
             setIsloading(false)
         }
