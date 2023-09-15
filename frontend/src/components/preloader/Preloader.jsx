@@ -1,19 +1,20 @@
 
 import React from 'react'
-import preloader from "./preloader.gif" 
+import preloader from "./preloader.gif"
 
+import "./preloader.css"
 const Preloader = (props) => {
 
-    const {width, height } = props;
-    let source = preloader ;
+    const { width, height } = props;
+    let source = preloader;
     return (
         <div className="d-flex justify-content-center">
-            <img  
-                width={width} 
+            <img
+                width={width}
                 height={height}
-                src={ source }   
+                src={source}
                 alt={"menu-icon"} />
-                </div>
+        </div>
     )
 }
 

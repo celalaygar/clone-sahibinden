@@ -59,7 +59,7 @@ const SideBarMenu = () => {
   return (
     <div className="text-white " id="sidebar-wrapper">
       <div className="sidebar-heading ml-auto">
-        <LogoComponent source={ICON.rent100} width={"100px"} height={"100px"} />
+        <LogoComponent source={ICON.rent101} width={"100px"} />
       </div>
       <div className="list-group ">
         <nav id="sidebar" >
