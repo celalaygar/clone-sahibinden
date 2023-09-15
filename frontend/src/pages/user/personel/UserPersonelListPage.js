@@ -27,10 +27,7 @@ const UserPersonelListPage = (props) => {
         newPassword: undefined,
         repeatNewPassword: undefined,
     });
-    const [newPassword, setNewPassword] = useState();
-    const [repeatNewPassword, setRepeatNewPassword] = useState();
     const [currentUserId, setCurrentUserId] = useState();
-    const [isdisable, setIsdisable] = useState(true);
     const [users, setusers] = useState(props.page.content);
     const [roles, setroles] = useState(props.roles);
     const [error, setError] = useState(null);
@@ -104,27 +101,26 @@ const UserPersonelListPage = (props) => {
     const onChangeData = (type, event) => {
         if (error)
             setError(null)
-        const stateData = formPassword;
+        let stateData = formPassword;
+        let errorsData = errors;
         stateData[type] = event;
         if (stateData["newPassword"]) {
             if (stateData["newPassword"] === stateData["repeatNewPassword"]) {
-                stateData["isdisable"] = false;
-                stateData["errors"] = { newPassword: undefined }
+                errorsData["newPassword"] = undefined;
             } else {
-                stateData["errors"] = { newPassword: "Şifreler uyuşmuyor" }
+                errorsData["newPassword"] = "Şifreler uyuşmuyor";
             }
         } else if (stateData["newPassword"] || stateData["repeatNewPassword"]) {
-            stateData["errors"] = { newPassword: "Şifreler uyuşmuyor" }
+            errorsData["newPassword"] = { newPassword: "Şifreler uyuşmuyor" }
         } else if (!stateData["newPassword"] || !stateData["repeatNewPassword"]) {
-            stateData["errors"] = { newPassword: undefined }
+            errorsData["newPassword"] = undefined;
         }
 
         setFormPassword({
             newPassword: stateData["newPassword"],
             repeatNewPassword: stateData["repeatNewPassword"]
         });
-        setErrors({ ...stateData["errors"] });
-        setIsdisable(stateData["isdisable"]);
+        setErrors({ ...errorsData });
     }
 
     const makeLogOut = async (event, user) => {
@@ -300,9 +296,9 @@ const UserPersonelListPage = (props) => {
                                     label={"Yeni Şifre"}
                                     type="password"
                                     name="newPassword"
-                                    error={newPassword}
+                                    error={errors.newPassword}
                                     placeholder={"Yeni Şifre"}
-                                    valueName={newPassword}
+                                    valueName={formPassword.newPassword}
                                     onChangeData={onChangeData}
                                 />
                             </div>
@@ -312,7 +308,7 @@ const UserPersonelListPage = (props) => {
                                     type="password"
                                     name="repeatNewPassword"
                                     placeholder={"Yeni Şifre (Tekrar)"}
-                                    valueName={repeatNewPassword}
+                                    valueName={formPassword.repeatNewPassword}
                                     onChangeData={onChangeData}
                                 />
                             </div>
