@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { loginAsync, selectedAuthentication } from '../../redux/redux-toolkit/authentication/AuthenticationSlice';
 import { useNavigate } from 'react-router-dom';
 import ApiService from '../../services/base/ApiService';
+import { AutError, NETWORK } from '../../constant/AuthenticationConstant';
 
 
 const UserLoginPage = (props) => {
@@ -43,41 +44,6 @@ const UserLoginPage = (props) => {
         const { username, password } = formData;
         const creds = { username, password };
         try {
-
-            const response = await ApiService.login(creds)
-            await dispatch(loginAsync({
-                ...response
-            }))
-            navigate("/index");
-        } catch (error) {
-            if (error.response) {
-                setError(error.response.data)
-            } else if (error.request) {
-                console.log(error.request);
-            } else {
-                console.log('Error', error.message);
-            }
-
-            setIsloading(false)
-        }
-        setIsloading(false)
-
-    }
-    const onKeyPressLogin = async (event) => {
-
-        if (event.key !== "Enter") {
-            return;
-        }
-        setIsloading(true)
-
-        event.preventDefault();
-        if (error) {
-            setError(null)
-        }
-        const { username, password } = formData;
-        const creds = { username, password };
-        try {
-
             const response = await ApiService.login(creds)
             await dispatch(loginAsync({
                 ...response
@@ -90,12 +56,21 @@ const UserLoginPage = (props) => {
             } else if (error.request) {
                 console.log(error.request);
             } else {
-                console.log('Error', error.message);
+                console.log('Error', error);
+                setError(NETWORK)
             }
 
             setIsloading(false)
         }
         setIsloading(false)
+
+    }
+    const onKeyPressLogin = async (event) => {
+
+        if (event.key !== "Enter") {
+            return;
+        }
+        onClickLogin(event);
 
     }
     return (
@@ -141,9 +116,7 @@ const UserLoginPage = (props) => {
                             <div className='loginError'>
                                 {error &&
                                     <>
-                                        {error === "UNAUTHORIZED" && "Hata : Kullanıcı Adı veya Şifre Hatalı"}
-                                        {error === "CONFLICT" && "Hata : Üye Girişi Zaten Yapıldı"}
-                                        {error === "NETWORK" && "Hata : Sistem ile İlgili Bir Problem Oluştu. Yetkiliye Başvurunuz"}
+                                        {error && AutError[error]}
                                     </>
                                 }
                             </div>

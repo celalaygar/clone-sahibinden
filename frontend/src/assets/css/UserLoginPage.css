@@ -219,7 +219,7 @@ html {
 }
 
 .loginError {
-    font-size: 15px;
+    font: 18px bold;
     margin-top: 20px;
     color: white;
     justify-content: center;
