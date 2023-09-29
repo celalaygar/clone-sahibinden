@@ -33,9 +33,6 @@ export const authenticationSlice = createSlice({
     reducers: {
         login: (state, action) => {
 
-            const auth = secureLS.get("auth");
-            console.log("auth slice 39")
-            console.log(auth)
             state.isLoggedIn = true;
             state.userId = action.payload.userId;
             state.username = action.payload.username;
@@ -62,6 +59,8 @@ export const authenticationSlice = createSlice({
 
 
 export const loginAsync = payload => async dispatch => {
+
+    await ApiService.changeAuthToken(null);
     await updateStateInStorage({
         isLoggedIn: false,
         userId: undefined,

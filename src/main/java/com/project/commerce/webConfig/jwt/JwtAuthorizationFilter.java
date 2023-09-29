@@ -39,19 +39,19 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String header = req.getHeader(HEADER_STRING);
         String username = null;
         String authToken = null;
-        if(req.getRequestURI().equals("/api/login")){
-            res.setHeader("Access-Control-Allow-Origin", "*");
-            res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            res.setHeader("Access-Control-Max-Age", "3600");
-            res.setHeader("Access-Control-Allow-Headers", "authorization, isrefreshtoken, content-type, xsrf-token");
-            res.addHeader("Access-Control-Expose-Headers", "xsrf-token");
-            if ("OPTIONS".equals(req.getMethod())) {
-                res.setStatus(HttpServletResponse.SC_OK);
-            } else {
-                chain.doFilter(req, res);
-            }
-            return ;
-        }
+//        if(req.getRequestURI().equals("/api/login")){
+//            res.setHeader("Access-Control-Allow-Origin", "*");
+//            res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//            res.setHeader("Access-Control-Max-Age", "3600");
+//            res.setHeader("Access-Control-Allow-Headers", "authorization, isrefreshtoken, content-type, xsrf-token");
+//            res.addHeader("Access-Control-Expose-Headers", "xsrf-token");
+//            if ("OPTIONS".equals(req.getMethod())) {
+//                res.setStatus(HttpServletResponse.SC_OK);
+//            } else {
+//                chain.doFilter(req, res);
+//            }
+//            //return ;
+//        }
 
         Enumeration<String> headerNames = req.getHeaderNames();
 

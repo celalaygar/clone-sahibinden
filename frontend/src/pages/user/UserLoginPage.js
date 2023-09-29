@@ -84,7 +84,6 @@ const UserLoginPage = (props) => {
             }))
             navigate("/index");
         } catch (error) {
-            console.log(" error " + error)
             if (error.response) {
                 setError(error.response.data)
                 console.log(error.response)
@@ -93,7 +92,6 @@ const UserLoginPage = (props) => {
             } else {
                 console.log('Error', error.message);
             }
-            console.log(error.config);
 
             setIsloading(false)
         }
@@ -113,7 +111,7 @@ const UserLoginPage = (props) => {
                                         onChange={event => onChangeData("username", event.target.value)}
                                         type="text"
                                         name=""
-                                        autocomplete="off"
+                                        autoComplete="off"
                                         value={formData.username}
                                         required="" />
                                     <label>Username</label>
@@ -123,7 +121,7 @@ const UserLoginPage = (props) => {
                                         onChange={event => onChangeData("password", event.target.value)}
                                         type="password"
                                         name=""
-                                        autocomplete="off"
+                                        autoComplete="off"
                                         value={formData.password}
                                         required="" />
                                     <label>Password</label>
@@ -142,7 +140,7 @@ const UserLoginPage = (props) => {
 
                             <div className='loginError'>
                                 {error &&
-                                    <> {console.log(error)}
+                                    <>
                                         {error === "UNAUTHORIZED" && "Hata : Kullanıcı Adı veya Şifre Hatalı"}
                                         {error === "CONFLICT" && "Hata : Üye Girişi Zaten Yapıldı"}
                                         {error === "NETWORK" && "Hata : Sistem ile İlgili Bir Problem Oluştu. Yetkiliye Başvurunuz"}

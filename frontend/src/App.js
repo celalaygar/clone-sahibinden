@@ -24,27 +24,14 @@ const App = () => {
   Axios.interceptors.response.use(response => {
     return response;
   }, async error => {
-    console.log("isLoggedIn " + selectedAuth.isLoggedIn);
-    console.log("jwttoken " + selectedAuth.jwttoken);
-    if (selectedAuth && selectedAuth.isLoggedIn === true && error.response.status === 401) {
+    console.log(selectedAuth.jwttoken)
+    if (selectedAuth.jwttoken !== undefined && error.response.status === 401) {
       // ApiService.defaultLogout(selectedAuth.username);
       // ApiService.logout();
 
       await dispatch(logoutAsync(null));
-      AlertifyService.alert("Lütfen Tekrar Giriş yapınız");
+      AlertifyService.alert("Lütfen Tekrar Giriş yapınız !!!");
     }
-    // else if (!selectedAuth || !selectedAuth.isLoggedIn) {
-    //   await dispatch(updateStateInStorage({
-    //     isLoggedIn: false,
-    //     userId: undefined,
-    //     username: undefined,
-    //     jwttoken: undefined,
-    //     password: undefined,
-    //     email: undefined,
-    //     role: undefined,
-    //     image: undefined,
-    //   }));
-    // }
 
     throw error;
   });
@@ -66,7 +53,7 @@ const App = () => {
       {
         RouteBaseList.map((route, index) =>
 
-          <Route path={route.path} element={
+          <Route key={index} path={route.path} element={
             route.protectedRoute === true ?
               <ProtectedRoute roles={[...route.roles]}>
                 {route.element}
@@ -110,6 +97,7 @@ const App = () => {
   }
   return (
     <>
+      {"jwttoken " + selectedAuth.jwttoken}
       {view}
 
     </>

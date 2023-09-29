@@ -83,13 +83,17 @@ const TopMenu = props => {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className={navbarTargetDivClassName} id="navbarSupportedContent">
-                    <ul className="navbar-nav mr-auto">
-                        <li className="nav-item ">
+                    <div className="navbar-nav">
+                        <div className="nav-item ">
                             <Link className="nav-link" to="/index">Anasayfa </Link>
-                        </li>
-                        <li className="nav-item dropdown">
+                        </div>
+                        <div className="nav-item dropdown">
                             <div className="dropdown">
-                                <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button
+                                    className="btn dropdown-toggle"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
                                     {username}
                                 </button>
                                 <ul className="dropdown-menu">
@@ -102,15 +106,14 @@ const TopMenu = props => {
 
                                 </ul>
                             </div>
-                        </li>
-                        <li className="nav-item ">
-                            <div className="nav-link" onClick={onLogout} style={{ cursor: "pointer", marginLeft: "5px" }}>
-                                <img
-                                    style={{ height: "20px", marginRight: "5px" }}
-                                    src='https://icon-library.com/images/signout-icon/signout-icon-6.jpg' />
-                                Çıkış</div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
+                    <div className="nav-item ml-5" onClick={onLogout} >
+                        <img
+                            style={{ height: "20px", cursor: "pointer" }}
+                            src='https://icon-library.com/images/signout-icon/signout-icon-6.jpg' />
+                        Çıkış
+                    </div>
                 </div>
             </nav>
         );
@@ -144,21 +147,20 @@ const TopMenu = props => {
                                     {username}
                                 </button>
                                 <ul className="dropdown-menu">
-                                    <li key={1}><Link className="dropdown-item" to="/user-detail"> Hesabım </Link></li>
-                                    <li key={2}><Link className="dropdown-item" to={"/update-my-account/" + username}> Bilgilerimi Güncelle </Link></li>
-                                    <li key={3}><Link className="dropdown-item" to={"/update-my-account-password/"}> Şifremi Güncelle </Link></li>
-                                    <li key={4}><span className="dropdown-item" onClick={onLogout} style={{ cursor: "pointer" }}> Çıkış </span></li>
-                                    <li key={5}><span className="dropdown-item" onClick={onLogout} style={{ cursor: "pointer" }}> Çıkış </span></li>
+                                    <li key={11}><Link className="dropdown-item" to="/user-detail"> Hesabım </Link></li>
+                                    <li key={21}><Link className="dropdown-item" to={"/update-my-account/" + username}> Bilgilerimi Güncelle </Link></li>
+                                    <li key={31}><Link className="dropdown-item" to={"/update-my-account-password/"}> Şifremi Güncelle </Link></li>
+                                    <li key={41}><span className="dropdown-item" onClick={onLogout} style={{ cursor: "pointer" }}> Çıkış </span></li>
+                                    <li key={51}><span className="dropdown-item" onClick={onLogout} style={{ cursor: "pointer" }}> Çıkış </span></li>
                                 </ul>
                             </div>
                         </li>
                     </ul>
-                    <div className="nav-item float-right">
-                        <div className="nav-link" onClick={onLogout} style={{ cursor: "pointer", marginLeft: "5px" }}>
-                            <img
-                                style={{ height: "20px", marginRight: "5px" }}
-                                src='https://icon-library.com/images/signout-icon/signout-icon-6.jpg' />
-                            Çıkış</div>
+                    <div className="nav-link  ml-10 " onClick={onLogout} >
+                        <img
+                            style={{ height: "20px", marginLeft: "22px", cursor: "pointer" }}
+                            src='https://icon-library.com/images/signout-icon/signout-icon-6.jpg' />
+                        Çıkış
                     </div>
                 </div>
             </nav>
