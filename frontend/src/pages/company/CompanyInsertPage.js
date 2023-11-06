@@ -1,5 +1,4 @@
-
-import React, { Component } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import { connect } from 'react-redux';
 import Input from '../../components/Input';
 import Spinner from '../../components/Spinner';
@@ -9,39 +8,33 @@ import AlertifyService from '../../services/AlertifyService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
-class CompanyInsertPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            companyName: '',
-            taxNo: '',
-            address: '',
-            companyPhone: '',
-            companyFax: '',
-            companyMobilePhone: '',
-            currencyType: '',
-            emailAddress: '',
-            customerRepresentative: '',
-            corroborative: '',
-            countryId: 1,
-            city: '',
-            errors: {
-            },
-            pendingApiCall: false,
-            countries: []
-        };
-    }
 
-    componentDidMount() {
-        this.loadCountry();
-        this.setState({ errors: {} })
 
-    }
-    loadCountry = async () => {
-        this.setState({ pendingApiCall: true })
+const CompanyInsertPage = () => {
+
+    const [formData, setFormData] = useState({
+        companyName: '',
+        taxNo: '',
+        address: '',
+        companyPhone: '',
+        companyFax: '',
+        companyMobilePhone: '',
+        currencyType: '',
+        emailAddress: '',
+        countryId: 1,
+        city: '',
+    });
+    const [error, setError] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [countries, setCountries] = useState([]);
+
+    const loadCountry = async () => {
+        setIsLoading(true)
+
         try {
             const response = await CountryService.getAll();
-            this.setState({ countries: response.data });
+            setCountries(response.data)
         } catch (error) {
             if (error.response) {
                 console.log(error.response)
@@ -51,31 +44,34 @@ class CompanyInsertPage extends Component {
             else
                 console.log(error.message);
         }
-        this.setState({ pendingApiCall: false })
-    }
-    onChangeData = (type, event) => {
-        const errors = { ...this.state.errors }
-        errors[type] = undefined;
+        setIsLoading(false)
 
-        const stateData = this.state;
+    }
+    const onChangeData = (type, event) => {
+
+        const err = { ...errors }
+        err[type] = undefined;
+
+        const stateData = formData;
         if (event === "" || event === "Seçiniz")
             stateData[type] = undefined
         else
             stateData[type] = event
 
-        this.setState({ stateData, errors: errors });
+        setErrors({ ...err })
+        setFormData({ ...stateData })
     }
-    save = async (event) => {
-        this.setState({ pendingApiCall: true })
+    const save = async (event) => {
         event.preventDefault();
-        if (this.state.error) {
-            this.setState({ error: null });
+        setIsLoading(true)
+
+        if (error) {
+            setError(null)
         }
         try {
-            const response = await CompanyService.post(this.state);
-            console.log(response)
+            const response = await CompanyService.post(formData);
             if (response.data === true) {
-                this.clearState();
+                clearState();
                 AlertifyService.delaySuccessMessage(5, "Kayıt işlemi Başarılı")
             }
         } catch (error) {
@@ -86,7 +82,7 @@ class CompanyInsertPage extends Component {
                 }
                 if (error.response.data.validationErrors) {
                     console.log(error.response.data.validationErrors);
-                    this.setState({ errors: error.response.data.validationErrors })
+                    setErrors({ ...error.response.data.validationErrors })
                 }
             }
             else if (error.request)
@@ -94,11 +90,12 @@ class CompanyInsertPage extends Component {
             else
                 console.log(error.message);
         }
-        this.setState({ pendingApiCall: false })
+        setIsLoading(false)
+
 
     }
-    clearState = () => {
-        this.setState({
+    const clearState = () => {
+        setFormData({
             companyName: '',
             taxNo: '',
             address: '',
@@ -107,202 +104,169 @@ class CompanyInsertPage extends Component {
             companyMobilePhone: '',
             currencyType: '',
             emailAddress: '',
-            customerRepresentative: '',
-            corroborative: '',
             countryId: 1,
             city: '',
-            errors: {
-            },
-            pendingApiCall: false
         })
+        setErrors({})
+        setIsLoading(false)
     }
-    render() {
-        const { companyName, taxNo, address, companyPhone, companyFax, city, companyMobilePhone, currencyType, emailAddress } = this.state.errors;
-        const { countries } = this.state;
-        return (
-            <div className="row">
-                <div className="col-lg-12">
-                    <div className="card-header"><h5 clasName="mb-0" className="card-title">Şirket Ekle</h5></div>
 
-                    <p className="description-p ml-3 mt-2" style={{ color: "red" }}>  ( * ) Zorunlu alanlar </p>
-                    <form >
-                        <div className="row mx-1">
-                            <div className="col-lg-4">
-                                <Input
-                                    label={"Şirket Adı *"}
-                                    error={companyName && "Şirket Adı " + companyName}
-                                    type="text"
-                                    name="companyName"
-                                    placeholder={"Şirket Adı"}
-                                    valueName={this.state.companyName}
-                                    onChangeData={this.onChangeData}
-                                />
-                            </div>
+    useEffect(() => {
+        loadCountry();
+    }, []);
 
-                            <div className="col-lg-4">
-                                <Input
-                                    label={"Vergi No (123456789012)"}
-                                    error={taxNo && "Vergi No " + taxNo}
-                                    type="number"
-                                    name="taxNo"
-                                    placeholder={"Vergi No"}
-                                    valueName={this.state.taxNo}
-                                    onChangeData={this.onChangeData}
-                                />
-                            </div>
+    return (
+        <div className="row">
+            <div className="col-lg-12">
+                <div className="card-header"><h5 clasName="mb-0" className="card-title">Şirket Ekle</h5></div>
 
-
-                            {/* <div className="col-lg-4">
-                                <Input
-                                    label={"Döviz Cinsi"}
-                                    error={currencyType}
-                                    type="text"
-                                    name="currencyType"
-                                    placeholder={"Döviz Cinsi"}
-                                    valueName={this.state.currencyType}
-                                    onChangeData={this.onChangeData}
-                                />
-                            </div> */}
-
-                            <div className="col-lg-12">
-                                <p className="font-weight-bold"><u>Adres Bilgileri</u></p>
-                            </div>
-
-
-                            <div className="col-lg-4">
-                                <Input
-                                    label={"Açık Adres"}
-                                    error={address && "Şirket Adresi " + address}
-                                    type="text"
-                                    name="address"
-                                    placeholder={"Açık Adresi"}
-                                    valueName={this.state.address}
-                                    onChangeData={this.onChangeData}
-                                />
-                            </div>
-                            <div className="col-lg-4">
-                                <Input
-                                    label={"Şehir"}
-                                    error={city}
-                                    type="text"
-                                    name="city"
-                                    placeholder={"Şehir"}
-                                    valueName={this.state.city}
-                                    onChangeData={this.onChangeData}
-                                />
-                            </div>
-                            <div className="col-lg-4">
-                                <div className="form-group">
-                                    <label htmlFor="exampleInputEmail1">Şirketin Bulunduğu Ülke </label>
-                                    <select className="form-control" value={this.state.countryId} onChange={e => this.onChangeData("countryId", e.target.value)}>
-                                        {countries.map((country, index) =>
-                                            <option key={index} value={country.countryId}>{country.name}</option>
-                                        )
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row mx-1">
-
-                            <div className="col-lg-12">
-                                <p className="font-weight-bold"><u>İletişim Bilgileri</u></p>
-                            </div>
-
-
-                            <div className="col-lg-4">
-                                <Input
-                                    label={"Şirket Telefonu (+903124445566)"}
-                                    error={companyPhone && "Şirket Telefonu " + companyPhone}
-                                    type="text"
-                                    name="companyPhone"
-                                    placeholder={"Şirket Telefonu"}
-                                    valueName={this.state.companyPhone}
-                                    onChangeData={this.onChangeData}
-                                />
-                            </div>
-
-                            <div className="col-lg-4">
-                                <Input
-                                    label={"Şirket Fax No (+903124445566)"}
-                                    error={companyFax && "Şirket Fax No " + companyFax}
-                                    type="text"
-                                    name="companyFax"
-                                    placeholder={"Şirket Fax No"}
-                                    valueName={this.state.companyFax}
-                                    onChangeData={this.onChangeData}
-                                />
-                            </div>
-
-                            <div className="col-lg-4">
-                                <Input
-                                    label={"Cep Telefonu * (+905324445566)"}
-                                    error={companyMobilePhone && "Cep Telefonu " + companyMobilePhone}
-                                    type="text"
-                                    name="companyMobilePhone"
-                                    placeholder={"Cep Telefonu"}
-                                    valueName={this.state.companyMobilePhone}
-                                    onChangeData={this.onChangeData}
-                                />
-                            </div>
-
-
+                <p className="description-p ml-3 mt-2" style={{ color: "red" }}>  ( * ) Zorunlu alanlar </p>
+                <form >
+                    <div className="row mx-1">
+                        <div className="col-lg-4">
+                            <Input
+                                label={"Şirket Adı *"}
+                                error={errors.companyName && "Şirket Adı " + errors.companyName}
+                                type="text"
+                                name="companyName"
+                                placeholder={"Şirket Adı"}
+                                valueName={formData.companyName}
+                                onChangeData={onChangeData}
+                            />
                         </div>
 
-                        <div className="row">
-
-
-
-                        </div>
-                        <div className="row mx-1">
-                            <div className="col-lg-4">
-                                <Input
-                                    label={"Mail Adresi"}
-                                    error={emailAddress && "Mail Adresi " + emailAddress}
-                                    type="text"
-                                    name="emailAddress"
-                                    placeholder={"someone@example.com"}
-                                    valueName={this.state.emailAddress}
-                                    onChangeData={this.onChangeData}
-                                />
-                            </div>
-
+                        <div className="col-lg-4">
+                            <Input
+                                label={"Vergi No (123456789012)"}
+                                error={errors.taxNo && "Vergi No " + errors.taxNo}
+                                type="number"
+                                name="taxNo"
+                                placeholder={"Vergi No"}
+                                valueName={formData.taxNo}
+                                onChangeData={onChangeData}
+                            />
                         </div>
 
-                        {
-                            this.state.pendingApiCall ? <Spinner /> :
-                                <button
-                                    className="btn ml-3"
-                                    id="add-button"
-                                    type="button"
-                                    //disabled={!btnEnable}
-                                    onClick={this.save}><FontAwesomeIcon icon="save"></FontAwesomeIcon> Kaydet</button>
-                        }
-
-                    </form>
-                    <br />
-                    {this.state.error &&
-                        <div className="alert alert-danger" role="alert">
-                            {this.state.error}
+                        <div className="col-lg-12">
+                            <p className="font-weight-bold"><u>Adres Bilgileri</u></p>
                         </div>
 
 
+                        <div className="col-lg-4">
+                            <Input
+                                label={"Açık Adres"}
+                                error={errors.address && "Şirket Adresi " + errors.address}
+                                type="text"
+                                name="address"
+                                placeholder={"Açık Adresi"}
+                                valueName={formData.address}
+                                onChangeData={onChangeData}
+                            />
+                        </div>
+                        <div className="col-lg-4">
+                            <Input
+                                label={"Şehir"}
+                                error={errors.city}
+                                type="text"
+                                name="city"
+                                placeholder={"Şehir"}
+                                valueName={formData.city}
+                                onChangeData={onChangeData}
+                            />
+                        </div>
+                        <div className="col-lg-4">
+                            <div className="form-group">
+                                <label htmlFor="exampleInputEmail1">Şirketin Bulunduğu Ülke </label>
+                                <select className="form-control" value={formData.countryId} onChange={e => onChangeData("countryId", e.target.value)}>
+                                    {countries.map((country, index) =>
+                                        <option key={index} value={country.countryId}>{country.name}</option>
+                                    )
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row mx-1">
+
+                        <div className="col-lg-12">
+                            <p className="font-weight-bold"><u>İletişim Bilgileri</u></p>
+                        </div>
+
+
+                        <div className="col-lg-4">
+                            <Input
+                                label={"Şirket Telefonu (+903124445566)"}
+                                error={errors.companyPhone && "Şirket Telefonu " + errors.companyPhone}
+                                type="text"
+                                name="companyPhone"
+                                placeholder={"Şirket Telefonu"}
+                                valueName={formData.companyPhone}
+                                onChangeData={onChangeData}
+                            />
+                        </div>
+
+                        <div className="col-lg-4">
+                            <Input
+                                label={"Şirket Fax No (+903124445566)"}
+                                error={errors.companyFax && "Şirket Fax No " + errors.companyFax}
+                                type="text"
+                                name="companyFax"
+                                placeholder={"Şirket Fax No"}
+                                valueName={formData.companyFax}
+                                onChangeData={onChangeData}
+                            />
+                        </div>
+
+                        <div className="col-lg-4">
+                            <Input
+                                label={"Cep Telefonu * (+905324445566)"}
+                                error={errors.companyMobilePhone && "Cep Telefonu " + errors.companyMobilePhone}
+                                type="text"
+                                name="companyMobilePhone"
+                                placeholder={"Cep Telefonu"}
+                                valueName={formData.companyMobilePhone}
+                                onChangeData={onChangeData}
+                            />
+                        </div>
+                    </div>
+                    <div className="row">
+                    </div>
+                    <div className="row mx-1">
+                        <div className="col-lg-4">
+                            <Input
+                                label={"Mail Adresi"}
+                                error={errors.emailAddress && "Mail Adresi " + errors.emailAddress}
+                                type="text"
+                                name="emailAddress"
+                                placeholder={"someone@example.com"}
+                                valueName={formData.emailAddress}
+                                onChangeData={onChangeData}
+                            />
+                        </div>
+                    </div>
+
+                    {isLoading ? <Spinner /> :
+                        <button
+                            className="btn ml-3"
+                            id="add-button"
+                            type="button"
+                            //disabled={!btnEnable}
+                            onClick={save}><FontAwesomeIcon icon="save"></FontAwesomeIcon> Kaydet</button>
                     }
-                </div>
-                <div className="col-lg-12">
-                    <hr />
-                </div>
+
+                </form>
+                <br />
+                {error &&
+                    <div className="alert alert-danger" role="alert">
+                        {error}
+                    </div>
+                }
             </div>
-        )
-    }
-}
-const mapStateToProps = (store) => {
-    return {
-        isLoggedIn: store.isLoggedIn,
-        username: store.username,
-        jwttoken: store.jwttoken,
-        role: store.role
-    };
+            <div className="col-lg-12">
+                <hr />
+            </div>
+        </div>
+    );
 };
 
-export default connect(mapStateToProps)(CompanyInsertPage);
+export default CompanyInsertPage;

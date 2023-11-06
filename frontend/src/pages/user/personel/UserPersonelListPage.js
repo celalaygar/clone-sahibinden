@@ -1,7 +1,6 @@
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dialog } from "@material-ui/core";
 import React, { Component, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import Input from "../../../components/Input";
@@ -14,6 +13,7 @@ import ApiService from "../../../services/base/ApiService";
 import UserService from "../../../services/UserService";
 import UserUpdatePage from "../UserUpdatePage";
 import { selectedAuthentication } from "../../../redux/redux-toolkit/authentication/AuthenticationSlice";
+import { Dialog } from "@mui/material";
 
 
 const UserPersonelListPage = (props) => {

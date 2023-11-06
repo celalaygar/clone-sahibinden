@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 //import './bootstrap-override.scss';
-import 'popper.js/dist/umd/popper.min.js';
 import './components/FontawesomeIcons/FontawesomeIcons';
 import './assets/css/checkbox.css';
 import './assets/css/co-detail.css';

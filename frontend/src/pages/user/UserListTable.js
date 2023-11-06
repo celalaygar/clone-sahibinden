@@ -1,6 +1,5 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Dialog } from '@material-ui/core';
 import AlertifyService from '../../services/AlertifyService';
 import UserService from '../../services/UserService';
 import React, { Component, useState } from 'react'
@@ -10,6 +9,7 @@ import Spinner from '../../components/Spinner';
 import UserCardModal from './UserCardModal';
 import UserUpdatePage from './UserUpdatePage';
 import { selectedAuthentication } from '../../redux/redux-toolkit/authentication/AuthenticationSlice';
+import { Dialog } from '@mui/material';
 
 const UserListTable = (props) => {
 

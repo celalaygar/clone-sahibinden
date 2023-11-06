@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Dialog } from '@material-ui/core';
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PageSizeComponent from '../../components/PageSizeComponent';
@@ -7,6 +6,7 @@ import Preloader from '../../components/preloader/Preloader';
 import Spinner from '../../components/Spinner';
 import CompanyCardModal from './CompanyCardModal';
 import CompanyUpdatePage from './CompanyUpdatePage';
+import { Dialog } from '@mui/material';
 
 class CompanyListPage extends Component {
     constructor(props) {
@@ -24,10 +24,10 @@ class CompanyListPage extends Component {
         };
     }
     componentDidMount() {
-        
+
 
     }
-   
+
     loadSingCompany = (e, company) => {
         this.setState({ singleCompany: company })
     }
@@ -80,10 +80,10 @@ class CompanyListPage extends Component {
                                                     <tr key={index} className="d-flex">
                                                         <td scope="col" className="col-2">
                                                             <button type="button" onClick={e => this.loadSingCompany(e, company)} className="btn btn-sm" id="detail-button" data-toggle="modal" data-target="#openCompanyModal">
-                                                                <FontAwesomeIcon icon="id-card"></FontAwesomeIcon>  
+                                                                <FontAwesomeIcon icon="id-card"></FontAwesomeIcon>
                                                             </button>
                                                             <button type="button" onClick={e => this.openCompanyUpdatePanel(e, company)} className="btn btn-sm " id="drugCard-button" >
-                                                                <FontAwesomeIcon icon="edit"></FontAwesomeIcon>  
+                                                                <FontAwesomeIcon icon="edit"></FontAwesomeIcon>
                                                             </button>
 
                                                         </td>
