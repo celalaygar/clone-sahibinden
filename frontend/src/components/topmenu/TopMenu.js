@@ -108,9 +108,9 @@ const TopMenu = props => {
                             </div>
                         </div>
                     </div>
-                    <div className="nav-item ml-5" onClick={onLogout} >
+                    <div className="nav-item " onClick={onLogout} style={{ cursor: "pointer" }} >
                         <img
-                            style={{ height: "20px", cursor: "pointer" }}
+                            style={{ height: "20px", marginLeft: "12px" }}
                             src='https://icon-library.com/images/signout-icon/signout-icon-6.jpg' />
                         Çıkış
                     </div>
@@ -156,9 +156,9 @@ const TopMenu = props => {
                             </div>
                         </li>
                     </ul>
-                    <div className="nav-link  ml-10 " onClick={onLogout} >
+                    <div className="nav-link " onClick={onLogout} style={{ cursor: "pointer" }}>
                         <img
-                            style={{ height: "20px", marginLeft: "22px", cursor: "pointer" }}
+                            style={{ height: "20px", marginLeft: "12px" }}
                             src='https://icon-library.com/images/signout-icon/signout-icon-6.jpg' />
                         Çıkış
                     </div>
