@@ -1,18 +1,29 @@
-package com.project.commerce.error.exception;
+package com.project.commerce.error.controller;
 
 
-import com.project.commerce.error.exception.dto.ApiErrorDto;
-import com.project.commerce.error.exception.dto.ExceptionDetailDto;
+import com.project.commerce.error.exception.BaseException;
+import com.project.commerce.error.exception.HttpErrorType;
+import com.project.commerce.error.dto.ApiErrorDto;
+import com.project.commerce.error.dto.ExceptionDetailDto;
+import com.project.commerce.error.model.BaseStatusEnum;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,19 +31,38 @@ import java.util.Map;
 
 @RestController
 @ControllerAdvice
-public class BaseExceptionHandler implements ErrorController {
+public class BaseExceptionController implements ErrorController {
 
     @Autowired
     private ErrorAttributes errorAttributes;
 
     @ExceptionHandler(value = BaseException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ApiErrorDto> exception(BaseException exception) {
-        ApiErrorDto apiError = new ApiErrorDto(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),exception.getBaseStatus(),
-                "path", "error",HttpErrorType.SPECIFIC);
-        return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
+    //@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ApiErrorDto> exception(BaseException exception) throws IOException {
+        String json = readDataFromJson();
+        System.out.println(json);
+
+        if(exception.getBaseStatus() == BaseStatusEnum.UNAUTHORIZED.getValue()){
+            ApiErrorDto apiError = new ApiErrorDto(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    exception.getBaseStatus(),
+                    "path",
+                    BaseStatusEnum.UNAUTHORIZED.toString(),
+                    HttpErrorType.STANDART);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
+        }else {
+            ApiErrorDto apiError = new ApiErrorDto(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    exception.getBaseStatus(),
+                    "path",
+                    "error",
+                    HttpErrorType.SPECIFIC);
+            return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
+
+
 
     @RequestMapping("/error")
     ApiErrorDto handleError(WebRequest webRequest) {
@@ -63,5 +93,12 @@ public class BaseExceptionHandler implements ErrorController {
             apiError.setValidationErrors(validationErrors);
         }
         return apiError;
+    }
+
+    private String readDataFromJson() throws IOException {
+        File file = ResourceUtils.getFile("classpath:data/data.json");
+
+        Object content = new String(Files.readAllBytes(file.toPath()));
+        return content.toString();
     }
 }

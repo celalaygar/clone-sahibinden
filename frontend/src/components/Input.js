@@ -13,7 +13,7 @@ const Input = (props) => {
     }
     return (
         <div style={{ textAlign: "left", margin: "10px" }} className="form-group">
-            <label htmlFor="exampleInputEmail1">{label}</label>
+            <label htmlFor="inputLabel">{label}</label>
             <input
                 type={type}
                 className={className ? className + " mt-2 " : undefined}
@@ -22,6 +22,7 @@ const Input = (props) => {
                 onChange={event => onChangeData(name, type === "file" ? event : event.target.value)}
                 value={valueName ? valueName : ""}
                 defaultValue={defaultValue}
+                autocomplete="off"
                 placeholder={placeholder} />
             <div className="invalid-feedback">{error}</div>
         </div>

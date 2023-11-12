@@ -1,4 +1,4 @@
-package com.project.commerce.error.exception.dto;
+package com.project.commerce.error.dto;
 
 import com.project.commerce.error.exception.HttpErrorType;
 import lombok.Data;

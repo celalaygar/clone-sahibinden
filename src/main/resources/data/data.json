@@ -1,0 +1,12 @@
+{
+  "exceptionStatus":[
+    {
+      "statusType": "1000",
+      "value": "UNAUTHORIZED"
+    },
+    {
+      "statusType": "1001",
+      "value": "BAD CREDENTIAL"
+    }
+  ]
+}

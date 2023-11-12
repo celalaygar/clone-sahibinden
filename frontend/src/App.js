@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import UserLoginPage from './pages/user/UserLoginPage';
+import UserLoginPage from './pages/auth/UserLoginPage';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import SideBarMenu from './components/sidebar/Sidebar';
 import TopMenu from './components/topmenu/TopMenu';
@@ -97,7 +97,6 @@ const App = () => {
   }
   return (
     <>
-      {"jwttoken " + selectedAuth.jwttoken}
       {view}
 
     </>

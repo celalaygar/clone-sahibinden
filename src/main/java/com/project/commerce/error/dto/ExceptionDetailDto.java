@@ -1,4 +1,4 @@
-package com.project.commerce.error.exception.dto;
+package com.project.commerce.error.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

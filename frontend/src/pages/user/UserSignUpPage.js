@@ -13,7 +13,6 @@ const UserSignUpPage = () => {
 
     const { username: paramUsername } = useParams();
     const [bloodTypes, setBloodTypes] = useState([
-        { value: "Seçiniz", name: "Seçiniz" },
         { value: "0 RH -", name: "0 RH -" },
         { value: "0 RH +", name: "0 RH +" },
         { value: "A RH -", name: "A RH -" },
@@ -266,10 +265,12 @@ const UserSignUpPage = () => {
                                 </div>
 
                                 <div className="col-lg-3 ">
-                                    <div className="form-group">
+                                    <div className="form-group" style={{ textAlign: "left", margin: "15px" }} >
                                         <label htmlFor="exampleInputEmail1">Kan Grubu</label>
-                                        <select className="form-control" value={formData.bloodType} onChange={e => onChangeData("bloodType", e.target.value)}>
+                                        <select className="form-control"
+                                            value={formData.bloodType} onChange={e => onChangeData("bloodType", e.target.value)}>
 
+                                            <option key={1} value={"Seçiniz"}>{"Seçiniz"}</option>
                                             {bloodTypes.map((type, index) =>
                                                 <option key={index} value={type.value}>{type.name}</option>
                                             )
@@ -279,10 +280,11 @@ const UserSignUpPage = () => {
                                 </div>
 
                                 <div className="col-lg-3 ">
-                                    <div className="form-group">
+                                    <div className="form-group" style={{ textAlign: "left", margin: "15px" }} >
                                         <label htmlFor="exampleInputEmail1">Rol</label>
                                         <select className={errors.role ? "form-control is-invalid" : "form-control"}
                                             value={formData.role} onChange={e => onChangeData("role", e.target.value)}>
+
                                             <option key={1} value={"Seçiniz"}>{"Seçiniz"}</option>
                                             {roles && roles.map((role, index) =>
                                                 <option key={index} value={role.role}>{role.value}</option>

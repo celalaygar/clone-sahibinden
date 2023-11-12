@@ -85,19 +85,19 @@ const UserLoginPage = (props) => {
                                     <input
                                         onChange={event => onChangeData("username", event.target.value)}
                                         type="text"
-                                        name=""
-                                        autoComplete="off"
+                                        name="username"
                                         value={formData.username}
+                                        autocomplete="off"
                                         required="" />
-                                    <label>Username</label>
+                                    <label>Username 1</label>
                                 </div>
                                 <div className="user-box">
                                     <input
                                         onChange={event => onChangeData("password", event.target.value)}
                                         type="password"
-                                        name=""
-                                        autoComplete="off"
+                                        name="password"
                                         value={formData.password}
+                                        autocomplete="off"
                                         required="" />
                                     <label>Password</label>
                                 </div>
@@ -116,7 +116,7 @@ const UserLoginPage = (props) => {
                             <div className='loginError'>
                                 {error &&
                                     <>
-                                        {error && AutError[error]}
+                                        {error && AutError[error?.error]}
                                     </>
                                 }
                             </div>

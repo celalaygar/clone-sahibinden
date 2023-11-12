@@ -1,7 +1,7 @@
 package com.project.commerce.auth.service;
 
 import com.project.commerce.user.entity.User;
-import com.project.commerce.error.exception.dto.ApiErrorDto;
+import com.project.commerce.error.dto.ApiErrorDto;
 import com.project.commerce.webConfig.jwt.JwtTokenProvider;
 import com.project.commerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

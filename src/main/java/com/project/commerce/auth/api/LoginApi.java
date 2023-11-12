@@ -2,6 +2,7 @@ package com.project.commerce.auth.api;
 
 import com.project.commerce.auth.dto.AuthDto;
 import com.project.commerce.auth.service.ControlService;
+import com.project.commerce.error.exception.BaseException;
 import com.project.commerce.user.dto.RoleClass;
 import com.project.commerce.user.entity.Role;
 import com.project.commerce.user.entity.User;
@@ -68,10 +69,11 @@ public class LoginApi {
 			return ResponseEntity.ok(new JwtResponse(user.getUserId(), username,jwt,null,user.getRole()));
 		}catch (BadCredentialsException e) {
 			//ApiError error = new ApiError(401, "Unauthorized request : "+e.getMessage(), "/api/login");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+			//return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+			throw  new BaseException("1000");
 		}
 		catch (Exception e) {
-			throw e;
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new BaseException("201"));
 		}
 	
 	}
