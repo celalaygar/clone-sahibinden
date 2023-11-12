@@ -3,6 +3,7 @@ package com.project.commerce.auth.api;
 import com.project.commerce.auth.dto.AuthDto;
 import com.project.commerce.auth.service.ControlService;
 import com.project.commerce.error.exception.BaseException;
+import com.project.commerce.error.model.BaseStatusEnum;
 import com.project.commerce.user.dto.RoleClass;
 import com.project.commerce.user.entity.Role;
 import com.project.commerce.user.entity.User;
@@ -70,10 +71,10 @@ public class LoginApi {
 		}catch (BadCredentialsException e) {
 			//ApiError error = new ApiError(401, "Unauthorized request : "+e.getMessage(), "/api/login");
 			//return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
-			throw  new BaseException("1000");
+			throw  new BaseException(BaseStatusEnum.UNAUTHORIZED);
 		}
 		catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new BaseException("201"));
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new BaseException(BaseStatusEnum.BAD_CREDENTIAL));
 		}
 	
 	}

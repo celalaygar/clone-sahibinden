@@ -1,12 +1,16 @@
 {
   "exceptionStatus":[
     {
-      "statusType": "1000",
+      "statusType": "UNAUTHORIZED",
       "value": "UNAUTHORIZED"
+    },,
+    {
+      "statusType": "BAD_CREDENTIAL",
+      "value": "BAD CREDENTIAL"
     },
     {
-      "statusType": "1001",
-      "value": "BAD CREDENTIAL"
+      "statusType": "INTERNAL_SERVER_ERROR",
+      "value": "INTERNAL SERVER ERROR"
     }
   ]
 }

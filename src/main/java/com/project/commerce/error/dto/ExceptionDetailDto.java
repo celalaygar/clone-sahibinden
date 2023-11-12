@@ -16,6 +16,4 @@ public class ExceptionDetailDto {
     private String message;
     private String exceptionDetail;
     private String trace;
-    private String error;
-    private Date timestamp;
 }

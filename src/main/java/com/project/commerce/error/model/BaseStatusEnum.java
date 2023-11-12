@@ -2,8 +2,9 @@ package com.project.commerce.error.model;
 
 public enum BaseStatusEnum {
 
-    UNAUTHORIZED("1000"),
-    BAD_CREDENTIAL("1001");
+    UNAUTHORIZED("UNAUTHORIZED"),
+    BAD_CREDENTIAL("BAD CREDENTIAL"),
+    INTERNAL_SERVER_ERROR("INTERNAL SERVER ERROR");
 
 
     private String value;

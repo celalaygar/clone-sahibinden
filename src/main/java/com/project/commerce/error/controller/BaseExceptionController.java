@@ -42,18 +42,26 @@ public class BaseExceptionController implements ErrorController {
         String json = readDataFromJson();
         System.out.println(json);
 
-        if(exception.getBaseStatus() == BaseStatusEnum.UNAUTHORIZED.getValue()){
+        if(exception.getBaseStatus() == BaseStatusEnum.UNAUTHORIZED){
             ApiErrorDto apiError = new ApiErrorDto(
                     HttpStatus.UNAUTHORIZED.value(),
-                    exception.getBaseStatus(),
+                    exception.getBaseStatus().getValue(),
                     "path",
                     BaseStatusEnum.UNAUTHORIZED.toString(),
                     HttpErrorType.STANDART);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
-        }else {
+        } else if(exception.getBaseStatus() == BaseStatusEnum.BAD_CREDENTIAL){
+            ApiErrorDto apiError = new ApiErrorDto(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    exception.getBaseStatus().getValue(),
+                    "path",
+                    BaseStatusEnum.UNAUTHORIZED.toString(),
+                    HttpErrorType.STANDART);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
+        } else {
             ApiErrorDto apiError = new ApiErrorDto(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    exception.getBaseStatus(),
+                    exception.getBaseStatus().getValue(),
                     "path",
                     "error",
                     HttpErrorType.SPECIFIC);
@@ -78,7 +86,8 @@ public class BaseExceptionController implements ErrorController {
         ApiErrorDto apiError = new ApiErrorDto(status, message, path, error);
         apiError.setHttpErrorType(HttpErrorType.STANDART);
         apiError.setCreatedDate(timestamp);
-        ExceptionDetailDto detail = new ExceptionDetailDto(status,message, exception, null, error, timestamp);
+        //ExceptionDetailDto detail = new ExceptionDetailDto(status,message, exception, null, error, timestamp);
+        ExceptionDetailDto detail = new ExceptionDetailDto(status, message, exception, null);
         apiError.setDetail(detail);
         if(attributes.containsKey("errors")) {
             @SuppressWarnings("unchecked")
