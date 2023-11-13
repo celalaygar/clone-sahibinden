@@ -151,7 +151,6 @@ const TopMenu = props => {
                                     <li key={21}><Link className="dropdown-item" to={"/update-my-account/" + username}> Bilgilerimi Güncelle </Link></li>
                                     <li key={31}><Link className="dropdown-item" to={"/update-my-account-password/"}> Şifremi Güncelle </Link></li>
                                     <li key={41}><span className="dropdown-item" onClick={onLogout} style={{ cursor: "pointer" }}> Çıkış </span></li>
-                                    <li key={51}><span className="dropdown-item" onClick={onLogout} style={{ cursor: "pointer" }}> Çıkış </span></li>
                                 </ul>
                             </div>
                         </li>

@@ -1,12 +1,17 @@
 package com.project.commerce.error.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.commerce.error.exception.BaseException;
 import com.project.commerce.error.exception.HttpErrorType;
 import com.project.commerce.error.dto.ApiErrorDto;
 import com.project.commerce.error.dto.ExceptionDetailDto;
+import com.project.commerce.error.model.BaseExceptionStatus;
 import com.project.commerce.error.model.BaseStatusEnum;
+import com.project.commerce.error.service.JsonFileConverterService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -36,11 +41,16 @@ public class BaseExceptionController implements ErrorController {
     @Autowired
     private ErrorAttributes errorAttributes;
 
+    @Autowired
+    private ModelMapper mapper;
+
+    @Autowired
+    private JsonFileConverterService converter;
+
     @ExceptionHandler(value = BaseException.class)
     //@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ApiErrorDto> exception(BaseException exception) throws IOException {
-        String json = readDataFromJson();
-        System.out.println(json);
+    public ResponseEntity<ApiErrorDto> exception(BaseException exception, HttpServletRequest request) throws IOException {
+        BaseExceptionStatus json = converter.getBaseExceptionStatus();
 
         if(exception.getBaseStatus() == BaseStatusEnum.UNAUTHORIZED){
             ApiErrorDto apiError = new ApiErrorDto(
@@ -104,10 +114,4 @@ public class BaseExceptionController implements ErrorController {
         return apiError;
     }
 
-    private String readDataFromJson() throws IOException {
-        File file = ResourceUtils.getFile("classpath:data/data.json");
-
-        Object content = new String(Files.readAllBytes(file.toPath()));
-        return content.toString();
-    }
 }
