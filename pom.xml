@@ -137,7 +137,7 @@
 				<filtering>true</filtering>
 				<directory>src/main/resources</directory>
 				<excludes>
-					<exclude>frontend/**</exclude>
+					<exclude>frontend-panel/**</exclude>
 					<exclude>pharmacy-module/**</exclude>
 				</excludes>
 			</resource>

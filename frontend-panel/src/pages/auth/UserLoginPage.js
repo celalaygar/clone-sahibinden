@@ -99,15 +99,14 @@ const UserLoginPage = (props) => {
                                         required="" />
                                     <label>Password</label>
                                 </div>
-                                {
-                                    isloading ? <LoginSpinner /> :
-                                        <button className='loginButton' href="#" onClick={onClickLogin} disabled={!btnEnable}>
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
-                                            Submit
-                                        </button>
+                                {isloading ? <LoginSpinner /> :
+                                    <button className='loginButton' href="#" onClick={onClickLogin} disabled={!btnEnable}>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        Submit
+                                    </button>
                                 }
                             </form>
 
