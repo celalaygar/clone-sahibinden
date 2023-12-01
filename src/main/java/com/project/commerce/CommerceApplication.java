@@ -5,12 +5,17 @@ import com.project.commerce.user.entity.Role;
 import com.project.commerce.user.entity.User;
 import com.project.commerce.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.sql.DataSource;
 import java.util.Date;
 
 @SpringBootApplication
@@ -56,5 +61,15 @@ public class CommerceApplication {
 				System.out.println(e);
 			}
 		};
+	}
+
+	@Bean
+	public DataSourceInitializer dataSourceInitializer(@Qualifier("dataSource") final DataSource dataSource) {
+		ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
+		resourceDatabasePopulator.addScript(new ClassPathResource("/scripts/myscript_v1.sql"));
+		DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
+		dataSourceInitializer.setDataSource(dataSource);
+		dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
+		return dataSourceInitializer;
 	}
 }
