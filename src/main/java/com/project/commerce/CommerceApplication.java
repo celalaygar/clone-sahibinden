@@ -9,8 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
@@ -21,10 +19,6 @@ public class CommerceApplication {
 	@Autowired
 	private CountryRepository countryRepository;
 
-	@Autowired
-	private JavaMailSender javaMailSender;
-
-	SimpleMailMessage msg = new SimpleMailMessage();
 
 	public static void main(String[] args) { SpringApplication.run(CommerceApplication.class, args); }
 

@@ -7,37 +7,18 @@ server:
 spring:
   output:
     ansi:
-      enabled: always
-  mail:
-    properties:
-      mail:
-        transport:
-          protocol: smtps
-        smtp:
-          auth: true
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
-          starttls:
-            enable: true
-    host: smtp.gmail.com
-    port: 587
-    username: username
-    password: password
+      enabled: ALWAYS
   datasource:
-    url: jdbc:postgresql://localhost:5432/eczane
+    url: jdbc:postgresql://localhost:5432/commerce
     password: celal371
     username: postgres
     driver-class-name: org.postgresql.Driver
-    initialization-mode: never
     platform: postgresql
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     generate-ddl: true
     properties:
-      hibernate:
-        show_sql=false:
       jakarta:
         persistence:
           validation:
@@ -45,6 +26,9 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   main:
     allow-circular-references: true
+  sql:
+    init:
+      mode: NEVER
   data:
     web:
       pageable:
