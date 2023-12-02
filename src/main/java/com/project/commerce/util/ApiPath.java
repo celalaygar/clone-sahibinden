@@ -8,6 +8,7 @@ public class ApiPath {
 	private static final String COUNTRY_PATH = "/country";
 	private static final String COMPANY_PATH = "/company";
 	private static final String MYACCOUNT_PATH = "/my-account";
+	private static final String ROUTE = "/route";
 
 	public static final class AdminUserCtrl {
 		public static final String CTRL = BASE_PATH + ADMIN_PATH + USER_PATH;
@@ -24,4 +25,8 @@ public class ApiPath {
 	public static final class UserCtrl {
 		public static final String CTRL = BASE_PATH + USERPATH;
 	}
+	public static final class RouteCtrl {
+		public static final String CTRL = BASE_PATH + ROUTE;
+	}
 }
+

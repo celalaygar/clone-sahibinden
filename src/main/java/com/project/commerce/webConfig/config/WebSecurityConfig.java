@@ -49,7 +49,15 @@ public class WebSecurityConfig  {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/logout/default/**","/api/login","/refresh-token","/resources/**", "/error" ,"/image/barcode/**","/show-document/**").permitAll()
+                        .requestMatchers(
+                                "/logout/default/**",
+                                "/api/login",
+                                "/refresh-token",
+                                "/resources/**",
+                                "/error",
+                                "/image/barcode/**",
+                                "/show-document/**"
+                                ,"/api/route/**").permitAll()
                         .requestMatchers("/api/registration").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .requestMatchers("/api/admin/**","/api/admin/user/**").hasRole("ADMIN")
                         .requestMatchers("/api/manager/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MANAGER")
