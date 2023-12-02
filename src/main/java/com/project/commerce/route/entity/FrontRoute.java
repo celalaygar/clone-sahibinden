@@ -34,9 +34,19 @@ public class FrontRoute {
     @NotNull
     private String key;
 
-    @Column(name = "protected_route")
+    @Column(name = "is_protected_route")
     @NotEmpty
     @NotNull
-    private Boolean protectedRoute;
+    private Boolean isProtectedRoute;
+
+    @Column(name = "is_root")
+    @NotEmpty
+    @NotNull
+    private Boolean isRoot;
+
+    @Column(name = "is_leaf")
+    @NotEmpty
+    @NotNull
+    private Boolean isLeaf;
 
 }

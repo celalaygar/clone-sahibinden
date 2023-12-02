@@ -208,7 +208,23 @@ INSERT INTO public.country (country_id, "name", "english_name") VALUES(nextval('
 
 INSERT INTO public.role (role_id, "role_name", "description_tr", "description_en") VALUES(nextval('sq_role'), 'SUPER_ADMIN', 'SÜPER ADMİN', 'SUPER ADMIN');
 INSERT INTO public.role (role_id, "role_name", "description_tr", "description_en") VALUES(nextval('sq_role'), 'ADMIN', 'ADMİN', 'ADMIN');
+INSERT INTO public.role (role_id, "role_name", "description_tr", "description_en") VALUES(nextval('sq_role'), 'MANAGER', 'MÜDÜR', 'MANAGER');
 INSERT INTO public.role (role_id, "role_name", "description_tr", "description_en") VALUES(nextval('sq_role'), 'USER', 'KULLANICI', 'USER');
 INSERT INTO public.role (role_id, "role_name", "description_tr", "description_en") VALUES(nextval('sq_role'), 'TECHNICAL_SUPPORT_SPECIALIST', 'TEKNİK DESTEK UZMANI', 'TECHNICAL SUPPORT SPECIALIST');
 
-INSERT INTO public.front_route (front_route_id, "path", "key", "protected_route") VALUES(nextval('sq_front_route'), '/main', 'main', true);
+
+
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/', 'default', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/index', 'index', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/search-company', 'searchCompany', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/search-user', 'searchUser', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/contact-page', 'contactPage', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/info-page', 'infoPage', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/get-all-users', 'getAllUsers', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/save-users', 'saveUsers', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/user-detail', 'userDetail', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/user/:userid', 'userByUserId', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/edit-user/:userid', 'editUserByUserId', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/update-my-account-password', 'updateMyAccountPassword', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '/update-my-account/:username', 'updateMyAccountPasswordByUsername', true, true, false);
+INSERT INTO public.front_route (front_route_id, "path", "key", "is_protected_route", "is_root", "is_leaf") VALUES(nextval('sq_front_route'), '*', 'every', true, true, false);

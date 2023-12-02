@@ -21,10 +21,6 @@ import java.util.Date;
 @SpringBootApplication
 public class CommerceApplication {
 
-	@Autowired
-	private CountryRepository countryRepository;
-
-
 	public static void main(String[] args) { SpringApplication.run(CommerceApplication.class, args); }
 
 	@Bean
