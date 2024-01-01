@@ -9,16 +9,18 @@ spring:
     ansi:
       enabled: ALWAYS
   datasource:
+    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/commerce
     password: celal371
     username: postgres
-    driver-class-name: org.postgresql.Driver
     platform: postgresql
   jpa:
     hibernate:
       ddl-auto: create
     generate-ddl: true
     properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
       jakarta:
         persistence:
           validation:
