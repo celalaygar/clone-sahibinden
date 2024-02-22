@@ -1,6 +1,6 @@
 ### Clone a project like SAHİBİNDEN
 
-this project is building panel (backend and frontend) and customer-side (backend and frontend) 
+this project is building `panel` (backend and frontend) and `customer-side` (backend and frontend) 
 
 ### How to Run Backend
 There are several ways to run a Spring Boot application on your local machine. 
