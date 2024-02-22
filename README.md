@@ -39,6 +39,8 @@ Spring boot 3
 JPA
 Hiberbate
 React js
+Redux-Toolkit
+Material UI
 Javascript
 Html5
 CSS3
