@@ -2,6 +2,7 @@ package com.project.commerce.error.model;
 
 import lombok.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -10,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseExceptionStatus {
-    Object exceptionStatus;
+    HashMap<String, String> exceptionStatus;
 }

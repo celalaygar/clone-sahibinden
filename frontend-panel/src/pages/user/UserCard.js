@@ -6,7 +6,7 @@ const UserCard = (props) => {
     //const [user, setUser] = useState(props);
 
     const { roles, user } = props;
-    const { username, name, surname, email, role, tcNo, motherName, fatherName, bloodType, bornDate, phoneNumber } = user;
+    const { username, name, surname, email, role, tcNo, motherName, fatherName, bloodType, bornDate, phoneNumber, createdDate } = user;
     // setUserName(props.name);
 
     return (
@@ -15,7 +15,7 @@ const UserCard = (props) => {
                 <div className="card-header">
                     <h5 className="mb-0">{props.title ? props.title : "Hesap Bilgilerim"}</h5>
                 </div>
-                <table className="table table-sm">
+                <table className="table table-sm  table-striped">
                     <tbody>
                         <tr>
                             <td><b>Üye Adı :</b></td><td>{username}</td>
@@ -49,6 +49,10 @@ const UserCard = (props) => {
                         </tr>
                         <tr>
                             <td><b>Kan Grubu :</b></td><td>{bloodType}</td>
+                        </tr>
+                        <tr>
+
+                            <td><b>Kayıt Tarihi :</b></td><td>{createdDate}</td>
                         </tr>
                     </tbody>
                 </table>

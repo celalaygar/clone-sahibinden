@@ -12,7 +12,10 @@ import com.project.commerce.user.service.UserServiceImpl;
 import com.project.commerce.webConfig.jwt.JwtResponse;
 import com.project.commerce.webConfig.jwt.JwtTokenProvider;
 import io.jsonwebtoken.impl.DefaultClaims;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +48,21 @@ public class LoginApi {
     @Autowired
     private UserRepository repository;
 
+
+	private static Logger log = LoggerFactory.getLogger(LoginApi.class);
+
+	@PostConstruct
+	public void log() {
+		log.debug("debug");
+		log.info("info");
+		log.error("error");
+	}
+
 	@PostMapping("/api/login")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthDto authenticationRequest) throws Exception {
 		try {
+			log.info("Log4J2 Example Service info Level Logging!" );
+			log.debug("Log4J2 Example Service Debug Level Logging!" );
 			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
@@ -56,6 +71,8 @@ public class LoginApi {
 			}
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtTokenProvider.generateToken(authentication);
+			log.debug("jwt debug : " + jwt);
+			log.info("jwt info : " + jwt);
 			String username = authenticationRequest.getUsername();
 			Optional<User> opt = repository.findByUsername(username);
 
@@ -67,6 +84,8 @@ public class LoginApi {
 //				return ResponseEntity.status(HttpStatus.CONFLICT).body("CONFLICT");
 			user.setIsLoggedIn(1);
 			user = userRepository.save(user);
+			log.debug("user debug : " + user.toString());
+			log.info("user info : " + user.toString());
 			return ResponseEntity.ok(new JwtResponse(user.getUserId(), username,jwt,null,user.getRole()));
 		}catch (BadCredentialsException e) {
 			//ApiError error = new ApiError(401, "Unauthorized request : "+e.getMessage(), "/api/login");

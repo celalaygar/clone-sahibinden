@@ -2,6 +2,7 @@ package com.project.commerce.error.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.commerce.auth.api.LoginApi;
 import com.project.commerce.error.exception.BaseException;
 import com.project.commerce.error.exception.HttpErrorType;
 import com.project.commerce.error.dto.ApiErrorDto;
@@ -12,6 +13,8 @@ import com.project.commerce.error.service.JsonFileConverterService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -38,6 +41,8 @@ import java.util.Map;
 @ControllerAdvice
 public class BaseExceptionController implements ErrorController {
 
+    private static Logger log = LoggerFactory.getLogger(LoginApi.class);
+
     @Autowired
     private ErrorAttributes errorAttributes;
 
@@ -59,6 +64,9 @@ public class BaseExceptionController implements ErrorController {
                     "path",
                     BaseStatusEnum.UNAUTHORIZED.toString(),
                     HttpErrorType.STANDART);
+            log.info("UNAUTHORIZED info : " + json.getExceptionStatus().get(exception.getBaseStatus().name()));
+            log.info("UNAUTHORIZED info : " + exception.getBaseStatus().getValue());
+            log.debug("UNAUTHORIZED debug : " + exception.getBaseStatus().getValue());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
         } else if(exception.getBaseStatus() == BaseStatusEnum.BAD_CREDENTIAL){
             ApiErrorDto apiError = new ApiErrorDto(
@@ -67,6 +75,8 @@ public class BaseExceptionController implements ErrorController {
                     "path",
                     BaseStatusEnum.UNAUTHORIZED.toString(),
                     HttpErrorType.STANDART);
+            log.info("BAD_CREDENTIAL info : " + exception.getBaseStatus().getValue());
+            log.debug("BAD_CREDENTIAL debug : " + exception.getBaseStatus().getValue());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
         } else {
             ApiErrorDto apiError = new ApiErrorDto(
@@ -75,6 +85,8 @@ public class BaseExceptionController implements ErrorController {
                     "path",
                     "error",
                     HttpErrorType.SPECIFIC);
+            log.info("INTERNAL_SERVER_ERROR info : " + exception.getBaseStatus().getValue());
+            log.debug("INTERNAL_SERVER_ERROR debug : " + exception.getBaseStatus().getValue());
             return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

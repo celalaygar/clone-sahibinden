@@ -13,7 +13,7 @@ const Input = (props) => {
     }
     return (
         <div style={{ textAlign: "left", margin: "10px" }} className="form-group">
-            <label htmlFor="inputLabel">{label}</label>
+            <label htmlFor="inputLabel"><b>{label}</b></label>
             <input
                 type={type}
                 className={className ? className + " mt-2 " : undefined}
