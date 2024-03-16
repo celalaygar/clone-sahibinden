@@ -58,14 +58,14 @@ public class Company {
     private String emailAddress;
 
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "countryid", referencedColumnName = "country_id", nullable = false)
     private Country country;
 
     @Column(name = "created_date")
     private Date createdDate;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "userid", referencedColumnName = "user_id", nullable = true)
     private User user;
 

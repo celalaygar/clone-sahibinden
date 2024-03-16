@@ -5,21 +5,7 @@ const CompanyCard = (props) => {
     const [company, setcompany] = useState(props);
 
     return (
-
-
         <div className="col-sm-12 mt-3">
-
-
-
-            {/* <div className="card-header">
-                        <h5>Şirket Bilgileri</h5>
-                    </div> */}
-
-            {/* <div className="card-body">
-                        <h5 className="card-title"><b>{props.companyName}</b></h5>
-                    </div>
-                     */}
-
             <table className="table table-bordered table-sm">
                 <tbody>
                     <tr>

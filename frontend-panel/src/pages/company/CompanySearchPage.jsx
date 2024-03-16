@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component, useState } from 'react';
+import { connect, useSelector } from 'react-redux';
 import Input from '../../components/Input';
 import Preloader from '../../components/preloader/Preloader';
 import Spinner from '../../components/Spinner';
@@ -10,95 +10,97 @@ import CompanyInsertPage from './CompanyInsertPage';
 import CompanyListPage from './CompanyListPage';
 import PaginationComponent from '../../components/PaginationComponent';
 import { ROLE_ADMIN } from '../../constant/roleConstant';
+import { selectedAuthentication } from '../../redux/redux-toolkit/authentication/AuthenticationSlice';
 
 
-class CompanySearchPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            companyName: undefined,
-            createdDate: undefined,
-            countryId: undefined,
-            city: undefined,
-            countries: [],
-            users: [],
-            role: [],
-            userId: undefined,
-            //companies: [],
-            page: {
-                content: [],
-                number: 0,
-                size: 10,
-            },
-            isOpenCompanyListPanel: false,
-            isOpenCompanyInsertPanel: false,
-            pendingApiCall: false,
-        };
 
+
+const CompanySearchPage = () => {
+
+
+    const selectedAuth = useSelector(selectedAuthentication);
+    const [page, setPage] = useState({
+        content: [],
+        number: 0,
+        size: 10,
+    });
+    const [formBody, setFormBody] = useState({
+        countryId: undefined,
+        createdDate: undefined,
+        companyName: undefined,
+        city: undefined,
+        userId: undefined,
+
+    });
+    const [isOpenCompanyListPanel, setIsOpenCompanyListPanel] = useState([]);
+    const [isOpenCompanyInsertPanel, setIsOpenCompanyInsertPanel] = useState([]);
+    const [countries, setCountries] = useState([]);
+    const [error, setError] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+
+
+    const refreshPage = () => {
+        loadCountry();
+        loadCompanies();
     }
-    componentDidMount() {
-        this.loadCountry();
-        this.loadCompanies();
-
-    }
-    refreshPage = () => {
-        this.loadCountry();
-        this.loadCompanies();
-    }
-    onClickPagination = (event, value) => {
+    const onClickPagination = (event, value) => {
         event.preventDefault();
         if (value === "next") {
-            const nextPage = this.state.page.number + 1;
-            this.searchCompanies(nextPage, this.state.page.size);
+            const nextPage = page.number + 1;
+            searchCompanies(nextPage, page.size);
         }
         else if (value === "back") {
-            const nextPage = this.state.page.number - 1;
-            this.searchCompanies(nextPage, this.state.page.size);
+            const nextPage = page.number - 1;
+            searchCompanies(nextPage, page.size);
         }
         else if (value === "last") {
-            const nextPage = this.state.page.totalPages - 1;
-            this.searchCompanies(nextPage, this.state.page.size);
+            const nextPage = page.totalPages - 1;
+            searchCompanies(nextPage, page.size);
         }
         else if (value === "first") {
             const nextPage = 0;
-            this.searchCompanies(nextPage, this.state.page.size);
+            searchCompanies(nextPage, page.size);
         }
     }
-    loadCompanies = () => {
-        this.setState({ isOpenCompanyListPanel: true, isOpenCompanyInsertPanel: false });
+    const loadCompanies = () => {
+        setIsOpenCompanyListPanel(true);
+        setIsOpenCompanyInsertPanel(false);
         const nextPage = 0;
-        this.searchCompanies(nextPage, this.state.page.size);
+        searchCompanies(nextPage, page.size);
     }
-    openCompanyListPanel = (event) => {
-
-        this.setState({ isOpenCompanyListPanel: true, isOpenCompanyInsertPanel: false });
-        //const nextPage = this.state.page.number;
+    const openCompanyListPanel = (event) => {
+        setIsOpenCompanyListPanel(true);
+        setIsOpenCompanyInsertPanel(false);
         const nextPage = 0;
-        this.searchCompanies(nextPage, this.state.page.size);
-
+        searchCompanies(nextPage, page.size);
     }
-    openCompanyInsertPanel = () => {
-        this.setState({ isOpenCompanyInsertPanel: true, isOpenCompanyListPanel: false })
+    const openCompanyInsertPanel = () => {
+        setIsOpenCompanyListPanel(false);
+        setIsOpenCompanyInsertPanel(true);
     }
-    closePanels = () => {
-        this.setState({ isOpenCompanyInsertPanel: false, isOpenCompanyListPanel: false })
+    const closePanels = () => {
+        setIsOpenCompanyListPanel(true);
+        setIsOpenCompanyInsertPanel(false);
     }
-    clearState = () => {
-        this.setState({
+    const clearState = () => {
+        setFormBody({
             companyName: undefined,
             createdDate: undefined,
             countryId: "Seçiniz",
             city: undefined,
             userId: "Seçiniz"
         })
-        window.location.reload();
+        setIsOpenCompanyListPanel(true);
+        setIsOpenCompanyInsertPanel(false);
+        refreshPage()
     }
-    loadCountry = async () => {
+    const loadCountry = async () => {
 
-        this.setState({ pendingApiCall: true })
+        setIsLoading(true);
         try {
             const response = await CountryService.getAll();
-            this.setState({ countries: response.data });
+            setCountries(response.data);
         } catch (error) {
             if (error.response) {
                 console.log(error.response)
@@ -109,54 +111,40 @@ class CompanySearchPage extends Component {
                 console.log(error.message);
         }
 
-        this.setState({ pendingApiCall: false })
+        setIsLoading(false);
     }
-    onChangeData = (type, event) => {
-        if (this.state.error)
-            this.setState({ error: null })
-        const stateData = this.state;
+    const onChangeData = (type, event) => {
+        if (error)
+            setError(null)
+        const searchBody = formBody;
         if (event === "" || event === "Seçiniz") {
 
-            stateData[type] = undefined
+            searchBody[type] = undefined
         }
         else {
             if (type === "size") {
-
-                stateData["page"][type] = event
-
-                this.setState({ isOpenCompanyListPanel: true, isOpenCompanyInsertPanel: false });
+                page[type] = event;
+                setIsOpenCompanyListPanel(true);
+                setIsOpenCompanyInsertPanel(false);
                 const nextPage = 0;
-                this.searchCompanies(nextPage, stateData["page"][type]);
-                console.log(stateData["page"][type])
+                this.searchCompanies(nextPage, page[type]);
             }
             else
-                stateData[type] = event
-
+                searchBody[type] = event
         }
-
-        //İNPUT'A GÖRE OTOMATİK ARAMA BAŞLANGIÇ
-        if ((type === "companyName") || (type === "countryId") || (type === "userId") || (type === "city")) {
-            const nextPage = 0;
-            this.searchCompanies(nextPage, this.state.page.size);
-        }
-        //İNPUT'A GÖRE OTOMATİK ARAMA SON
-
-        this.setState({ stateData });
+        setFormBody({ ...searchBody });
     }
-    searchCompanies = async (number, size) => {
-        this.setState({ pendingApiCall: true })
+    const searchCompanies = async (number, size) => {
+        setIsLoading(true);
         try {
             let body = {
-                companyName: this.state.companyName,
-                //createdDate: this.state.createdDate,
-                countryId: this.state.countryId === "Seçiniz" ? undefined : this.state.countryId,
-                city: this.state.city,
-                userId: this.state.userId === "Seçiniz" ? undefined : this.state.userId,
+                companyName: formBody.companyName,
+                countryId: formBody.countryId === "Seçiniz" ? undefined : formBody.countryId,
+                city: formBody.city,
+                userId: formBody.userId === "Seçiniz" ? undefined : formBody.userId,
             }
-            //console.log(body)
             const response = await CompanyService.searchCompany(number, size, body);
-            this.setState({ page: response.data });
-            //console.log(response.data)
+            setPage(response.data);
 
         } catch (error) {
             if (error.response) {
@@ -167,12 +155,11 @@ class CompanySearchPage extends Component {
             else
                 console.log(error.message);
         }
-
-        this.setState({ pendingApiCall: false })
+        setIsLoading(false);
     }
 
-    searchCompaniesWithKeyPress = async (event) => {
-        this.setState({ pendingApiCall: true })
+    const searchCompaniesWithKeyPress = async (event) => {
+        setIsLoading(true);
         try {
             let body = {
                 companyName: this.state.companyName,
@@ -196,165 +183,125 @@ class CompanySearchPage extends Component {
                 console.log(error.message);
         }
 
-        this.setState({ pendingApiCall: false })
+        setIsLoading(false);
     }
-    render() {
-        const { countries, users } = this.state;
-        const { content: companies, first, last, number, totalPages } = this.state.page;
-        return (
-            <div className="row ">
-                <div className="col-sm-12 mt-2">
-                    <div className="card">
-                        <div className="card-header">
-                            <div className=" justify-content-center">
-                                <h5 className="mb-0" >Şirket Sorgula</h5>
-                            </div>
+
+    return (
+        <div className="row ">
+            <div className="col-sm-12 mt-2">
+                <div className="card">
+                    <div className="card-header">
+                        <div className=" justify-content-center">
+                            <h5 className="mb-0" >Şirket Sorgula</h5>
                         </div>
-                        <div className="card-body">
-                            <form onKeyPress={e => this.searchCompaniesWithKeyPress(e)}  >
-                                <div className="row">
-                                    <div className="col-lg-3">
-                                        <Input
-                                            label={"Şirket Adı"}
-                                            type="text"
-                                            name="companyName"
-                                            placeholder={"Şirket Adı"}
-                                            valueName={this.state.companyName}
-                                            onChangeData={this.onChangeData}
-                                        />
+                    </div>
+                    <div className="card-body">
+                        <form onKeyPress={e => searchCompaniesWithKeyPress(e)}  >
+                            <div className="row">
+                                <div className="col-lg-3">
+                                    <Input
+                                        label={"Şirket Adı"}
+                                        type="text"
+                                        name="companyName"
+                                        placeholder={"Şirket Adı"}
+                                        valueName={formBody.companyName}
+                                        onChangeData={onChangeData}
+                                    />
+                                </div>
+                                <div className="col-lg-3">
+                                    <div className="form-group">
+                                        <label htmlFor="exampleInputEmail1">Ülke </label>
+                                        <select className="form-control"
+                                            value={formBody.countryId}
+                                            onChange={e => onChangeData("countryId", e.target.value)}>
+                                            <option value={"Seçiniz"}>Seçiniz</option>
+                                            {countries.length > 0 && countries.map((country, index) =>
+                                                <option key={index} value={country.countryId}>{country.name}</option>
+                                            )
+                                            }
+                                        </select>
                                     </div>
-                                    <div className="col-lg-3">
-                                        <div className="form-group">
-                                            <label htmlFor="exampleInputEmail1">Ülke </label>
-                                            <select className="form-control" value={this.state.countryId} onChange={e => this.onChangeData("countryId", e.target.value)}>
-                                                <option value={"Seçiniz"}>Seçiniz</option>
-                                                {countries.length > 0 && countries.map((country, index) =>
-                                                    <option key={index} value={country.countryId}>{country.name}</option>
-                                                )
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-lg-3">
-                                        <Input
-                                            label={"Şehir"}
-                                            type="text"
-                                            name="city"
-                                            placeholder={"Şehir"}
-                                            valueName={this.state.city}
-                                            onChangeData={this.onChangeData}
-                                        />
-                                    </div>
-
-
-                                    {
-                                        this.props.role === ROLE_ADMIN &&
-
-                                        <div className="col-lg-3">
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Plasiyer</label>
-                                                <select className="form-control" value={this.state.userId} onChange={e => this.onChangeData("userId", e.target.value)}>
-                                                    <option value={"Seçiniz"}>Seçiniz</option>
-                                                    {users.length > 0 && users.map((user, index) =>
-                                                        <option key={index} value={user.userId}>{user.name} {user.surname}</option>
-                                                    )
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
+                                </div>
+                                <div className="col-lg-3">
+                                    <Input
+                                        label={"Şehir"}
+                                        type="text"
+                                        name="city"
+                                        placeholder={"Şehir"}
+                                        valueName={formBody.city}
+                                        onChangeData={onChangeData}
+                                    />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    {isLoading === true ? <Spinner /> :
+                                        <>
+                                            <button
+                                                type="button"
+                                                id="clear-button"
+                                                className="btn btn-sm"
+                                                onClick={e => clearState(e)}  >
+                                                <FontAwesomeIcon icon="backspace" > </FontAwesomeIcon> Sorgula
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm ml-2"
+                                                id="add-button"
+                                                onClick={e => openCompanyInsertPanel(e)}  >
+                                                <FontAwesomeIcon icon="plus" > </FontAwesomeIcon> Şirket Ekle
+                                            </button>
+                                        </>
                                     }
                                 </div>
-                                <div className="row">
-                                    <div className="col-lg-12">
-                                        {
-                                            this.state.pendingApiCall === true ? <Spinner /> :
-                                                <>
-                                                    <button
-                                                        type="button"
-                                                        id="clear-button"
-                                                        className="btn btn-sm"
-                                                        onClick={e => this.clearState(e)}  >
-                                                        <FontAwesomeIcon icon="backspace" > </FontAwesomeIcon> Temizle
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-sm ml-2"
-                                                        id="add-button"
-                                                        onClick={e => this.openCompanyInsertPanel(e)}  >
-                                                        <FontAwesomeIcon icon="plus" > </FontAwesomeIcon> Şirket Ekle
-                                                    </button>
-                                                </>
-                                        }
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        {this.state.pendingApiCall ?
-                            <Preloader width={50} height={50} />
-                            :
-                            <div className="row">
-                                {this.state.isOpenCompanyListPanel === true &&
-                                    <>
-                                        <div className="col">
-                                        </div>
-
-                                        <div className="col-lg-12">
-                                            <CompanyListPage
-                                                companies={companies}
-                                                onChangeData={this.onChangeData}
-                                                refreshPage={this.refreshPage}
-                                                page={this.state.page} />
-                                        </div>
-
-                                    </>
-                                }
-                                {this.state.isOpenCompanyInsertPanel === true &&
-                                    <>
-                                        <div className="col-lg-12">
-                                            <div className="card ">
-                                                <CompanyInsertPage />
-                                            </div>
-                                        </div>
-                                    </>
-                                }
-
-
                             </div>
-                        }
-
-                        {companies.length > 0 &&
-
-                            <div className="col-sm-12 ml-2 ">
-                                <PaginationComponent
-                                    first={first}
-                                    last={last}
-                                    number={number}
-                                    onClickPagination={this.onClickPagination}
-                                    totalPages={totalPages}
-                                />
-                            </div>
-                        }
+                        </form>
                     </div>
+                    {isLoading ?
+                        <Preloader width={50} height={50} />
+                        :
+                        <div className="row">
+                            {isOpenCompanyListPanel === true &&
+                                <>
+                                    <div className="col">
+                                    </div>
 
+                                    <div className="col-lg-12">
+                                        <CompanyListPage
+                                            companies={page.content}
+                                            onChangeData={onChangeData}
+                                            refreshPage={refreshPage}
+                                            page={page} />
+                                    </div>
 
-
+                                </>
+                            }
+                            {isOpenCompanyInsertPanel === true &&
+                                <>
+                                    <div className="col-lg-12">
+                                        <div className="card ">
+                                            <CompanyInsertPage />
+                                        </div>
+                                    </div>
+                                </>
+                            }
+                        </div>
+                    }
+                    {page.content.length > 0 &&
+                        <div className="col-sm-12 ml-2 ">
+                            <PaginationComponent
+                                first={page.first}
+                                last={page.last}
+                                number={page.number}
+                                onClickPagination={onClickPagination}
+                                totalPages={page.totalPages}
+                            />
+                        </div>
+                    }
                 </div>
-
-
             </div>
-        );
-    }
-}
-
-
-const mapStateToProps = (store) => {
-    return {
-        isLoggedIn: store.isLoggedIn,
-        username: store.username,
-        jwttoken: store.jwttoken,
-        role: store.role
-    };
+        </div>
+    );
 };
 
-export default connect(mapStateToProps)(CompanySearchPage);
+export default CompanySearchPage;
