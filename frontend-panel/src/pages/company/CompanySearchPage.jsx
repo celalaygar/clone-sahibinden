@@ -163,7 +163,6 @@ const CompanySearchPage = () => {
         try {
             let body = {
                 companyName: this.state.companyName,
-                //createdDate: this.state.createdDate,
                 countryId: this.state.countryId === "Seçiniz" ? undefined : this.state.countryId,
                 city: this.state.city,
                 userId: this.state.userId === "Seçiniz" ? undefined : this.state.userId
@@ -171,7 +170,6 @@ const CompanySearchPage = () => {
             if (event.charCode === 13) {
                 const response = await CompanyService.searchCompany(this.state.page.number, this.state.page.size, body);
                 this.setState({ page: response.data });
-                //console.log(response.data)
             }
         } catch (error) {
             if (error.response) {
@@ -257,9 +255,7 @@ const CompanySearchPage = () => {
                             </div>
                         </form>
                     </div>
-                    {isLoading ?
-                        <Preloader width={50} height={50} />
-                        :
+                    {isLoading ? <Preloader width={50} height={50} /> :
                         <div className="row">
                             {isOpenCompanyListPanel === true &&
                                 <>
