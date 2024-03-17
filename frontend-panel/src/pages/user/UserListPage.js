@@ -6,6 +6,7 @@ import UserListTable from "./UserListTable";
 import ApiService from "../../services/base/ApiService";
 import UserService from "../../services/UserService";
 import { selectedAuthentication } from "../../redux/redux-toolkit/authentication/AuthenticationSlice";
+import { BACK, FIRST, LAST, NEXT } from "../../constant/GeneralConstant";
 
 
 const UserListPage = () => {
@@ -28,16 +29,16 @@ const UserListPage = () => {
   }
   const onClickPagination = (event, value) => {
     event.preventDefault();
-    if (value === "next") {
+    if (value === NEXT) {
       const nextPage = page.number + 1;
       getUsersWithPagination(nextPage, page.size);
-    } else if (value === "back") {
+    } else if (value === BACK) {
       const nextPage = page.number - 1;
       getUsersWithPagination(nextPage, page.size);
-    } else if (value === "last") {
+    } else if (value === LAST) {
       const nextPage = page.totalPages - 1;
       getUsersWithPagination(nextPage, page.size);
-    } else if (value === "first") {
+    } else if (value === FIRST) {
       const nextPage = 0;
       getUsersWithPagination(nextPage, page.size);
     }
