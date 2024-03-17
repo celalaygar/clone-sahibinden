@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import Input from '../../components/Input';
 import Preloader from '../../components/preloader/Preloader';
@@ -11,6 +11,7 @@ import CompanyListPage from './CompanyListPage';
 import PaginationComponent from '../../components/PaginationComponent';
 import { ROLE_ADMIN } from '../../constant/roleConstant';
 import { selectedAuthentication } from '../../redux/redux-toolkit/authentication/AuthenticationSlice';
+import { FIRST, LAST, BACK, NEXT } from '../../constant/GeneralConstant';
 
 
 
@@ -39,6 +40,9 @@ const CompanySearchPage = () => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
 
+    useEffect(() => {
+        refreshPage();
+    }, []);
 
     const refreshPage = () => {
         loadCountry();
@@ -46,19 +50,19 @@ const CompanySearchPage = () => {
     }
     const onClickPagination = (event, value) => {
         event.preventDefault();
-        if (value === "next") {
+        if (value === NEXT) {
             const nextPage = page.number + 1;
             searchCompanies(nextPage, page.size);
         }
-        else if (value === "back") {
+        else if (value === BACK) {
             const nextPage = page.number - 1;
             searchCompanies(nextPage, page.size);
         }
-        else if (value === "last") {
+        else if (value === LAST) {
             const nextPage = page.totalPages - 1;
             searchCompanies(nextPage, page.size);
         }
-        else if (value === "first") {
+        else if (value === FIRST) {
             const nextPage = 0;
             searchCompanies(nextPage, page.size);
         }
@@ -69,19 +73,9 @@ const CompanySearchPage = () => {
         const nextPage = 0;
         searchCompanies(nextPage, page.size);
     }
-    const openCompanyListPanel = (event) => {
-        setIsOpenCompanyListPanel(true);
-        setIsOpenCompanyInsertPanel(false);
-        const nextPage = 0;
-        searchCompanies(nextPage, page.size);
-    }
     const openCompanyInsertPanel = () => {
         setIsOpenCompanyListPanel(false);
         setIsOpenCompanyInsertPanel(true);
-    }
-    const closePanels = () => {
-        setIsOpenCompanyListPanel(true);
-        setIsOpenCompanyInsertPanel(false);
     }
     const clearState = () => {
         setFormBody({
@@ -127,7 +121,7 @@ const CompanySearchPage = () => {
                 setIsOpenCompanyListPanel(true);
                 setIsOpenCompanyInsertPanel(false);
                 const nextPage = 0;
-                this.searchCompanies(nextPage, page[type]);
+                searchCompanies(nextPage, page[type]);
             }
             else
                 searchBody[type] = event
@@ -136,6 +130,7 @@ const CompanySearchPage = () => {
     }
     const searchCompanies = async (number, size) => {
         setIsLoading(true);
+        console.log("page")
         try {
             let body = {
                 companyName: formBody.companyName,
@@ -158,30 +153,13 @@ const CompanySearchPage = () => {
         setIsLoading(false);
     }
 
-    const searchCompaniesWithKeyPress = async (event) => {
-        setIsLoading(true);
-        try {
-            let body = {
-                companyName: this.state.companyName,
-                countryId: this.state.countryId === "Seçiniz" ? undefined : this.state.countryId,
-                city: this.state.city,
-                userId: this.state.userId === "Seçiniz" ? undefined : this.state.userId
-            }
-            if (event.charCode === 13) {
-                const response = await CompanyService.searchCompany(this.state.page.number, this.state.page.size, body);
-                this.setState({ page: response.data });
-            }
-        } catch (error) {
-            if (error.response) {
-                console.log(error.response)
-            }
-            else if (error.request)
-                console.log(error.request);
-            else
-                console.log(error.message);
-        }
+    const onKeyPressLogin = async (event) => {
 
-        setIsLoading(false);
+        if (event.key !== "Enter") {
+            return;
+        }
+        onClickPagination(event, FIRST);
+
     }
 
     return (
@@ -194,7 +172,7 @@ const CompanySearchPage = () => {
                         </div>
                     </div>
                     <div className="card-body">
-                        <form onKeyPress={e => searchCompaniesWithKeyPress(e)}  >
+                        <form onKeyPress={e => onKeyPressLogin(e)}  >
                             <div className="row">
                                 <div className="col-lg-3">
                                     <Input
@@ -259,9 +237,6 @@ const CompanySearchPage = () => {
                         <div className="row">
                             {isOpenCompanyListPanel === true &&
                                 <>
-                                    <div className="col">
-                                    </div>
-
                                     <div className="col-lg-12">
                                         <CompanyListPage
                                             companies={page.content}
@@ -269,7 +244,6 @@ const CompanySearchPage = () => {
                                             refreshPage={refreshPage}
                                             page={page} />
                                     </div>
-
                                 </>
                             }
                             {isOpenCompanyInsertPanel === true &&
